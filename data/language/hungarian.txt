@@ -976,15 +976,15 @@ STR_0971    :+495{DEGREE}
 STR_0972    :Mégse
 STR_0973    :OK
 STR_0974    :Rides
-STR_0975    :Shops and Stalls
+STR_0975    :Boltok és bódék
 STR_0976    :Restrooms and Information Kiosks
-STR_0977    :New Transport Rides
-STR_0978    :New Gentle Rides
-STR_0979    :New Roller Coasters
-STR_0980    :New Thrill Rides
-STR_0981    :New Water Rides
-STR_0982    :New Shops & Stalls
-STR_0983    :Research & Development
+STR_0977    :Új szállító járművek
+STR_0978    :Új enyhe építmények
+STR_0979    :Új hullámvasutak
+STR_0980    :Új izgalmas építmények
+STR_0981    :Új vízi építmények
+STR_0982    :Új boltok és bódék
+STR_0983    :Kutatás és fejlesztés
 STR_0984    :{WINDOW_COLOUR_2}{UP}{BLACK}  {CURRENCY2DP}
 STR_0985    :{WINDOW_COLOUR_2}{DOWN}{BLACK}  {CURRENCY2DP}
 STR_0986    :{BLACK}{CURRENCY2DP}
@@ -1074,7 +1074,7 @@ STR_1069    :Station to station mode
 STR_1070    :Single ride per admission
 STR_1071    :Unlimited rides per admission
 STR_1072    :Maze mode
-STR_1073    :Race mode
+STR_1073    :Verseny mód
 STR_1074    :Bumper-car mode
 STR_1075    :Swing mode
 STR_1076    :Shop stall mode
@@ -1084,7 +1084,7 @@ STR_1079    :Backward rotation
 STR_1080    :Film: {ENDQUOTES}Avenging aviators{ENDQUOTES}
 STR_1081    :3D film: {ENDQUOTES}Mouse tails{ENDQUOTES}
 STR_1082    :Space rings mode
-STR_1083    :Beginners mode
+STR_1083    :Kezdő mód
 STR_1084    :LIM-powered launch
 STR_1085    :Film: {ENDQUOTES}Thrill riders{ENDQUOTES}
 STR_1086    :3D film: {ENDQUOTES}Storm chasers{ENDQUOTES}
@@ -1123,32 +1123,32 @@ STR_1118    :Operating
 STR_1119    :Waiting for cable lift
 STR_1120    :Traveling at {VELOCITY}
 STR_1121    :Stopping
-STR_1122    :Waiting for passengers
+STR_1122    :Utasokra várakozás
 STR_1123    :Waiting to start
 STR_1124    :Starting
 STR_1125    :Operating
 STR_1126    :Stopping
 STR_1127    :Unloading passengers
 STR_1128    :Stopped by block brakes
-STR_1129    :All vehicles in same colors
-STR_1130    :Different colors per {STRINGID}
-STR_1131    :Different colors per vehicle
+STR_1129    :Minden jármű más színű
+STR_1130    :Minden {STRINGID} különböző színű
+STR_1131    :Minden jármű különböző színű
 STR_1132    :Vehicle {POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
 STR_1133    :Vehicle {POP16}{COMMA16}
 STR_1134    :{POP16}{POP16}{POP16}{POP16}{POP16}{STRINGID} {COMMA16}
 STR_1135    :{STRINGID} {COMMA16}
-STR_1136    :{SMALLFONT}{BLACK}Select main color
+STR_1136    :{SMALLFONT}{BLACK}Elsődleges szín kiválasztása
 STR_1137    :{SMALLFONT}{BLACK}Select additional color 1
 STR_1138    :{SMALLFONT}{BLACK}Select additional color 2
-STR_1139    :{SMALLFONT}{BLACK}Select support structure color
+STR_1139    :{SMALLFONT}{BLACK}Tartószerkezet színének kiválasztása
 STR_1140    :{SMALLFONT}{BLACK}Select vehicle color scheme option
 STR_1141    :{SMALLFONT}{BLACK}Select which vehicle/train to modify
 STR_1142    :{MOVE_X}{SMALLFONT}{STRINGID}
 STR_1143    :{RIGHTGUILLEMET}{MOVE_X}{SMALLFONT}{STRINGID}
 STR_1144    :Can't build/move entrance for this ride/attraction...
 STR_1145    :Can't build/move exit for this ride/attraction...
-STR_1146    :Entrance not yet built
-STR_1147    :Exit not yet built
+STR_1146    :Még nincs bejárat építve
+STR_1147    :Még nincs kijárat építve
 STR_1148    :Quarter load
 STR_1149    :Half load
 STR_1150    :Three-quarter load
@@ -1222,8 +1222,8 @@ STR_1217    :{COMMA16} seconds
 STR_1218    :{BLACK}{SMALLUP}
 STR_1219    :{BLACK}{SMALLDOWN}
 STR_1220    :Exit only
-STR_1221    :No entrance
-STR_1222    :No exit
+STR_1221    :Nincs bejárat
+STR_1222    :Nincs kijárat
 STR_1223    :{SMALLFONT}{BLACK}Szállító járművek
 STR_1224    :{SMALLFONT}{BLACK}Enyhe játékok
 STR_1225    :{SMALLFONT}{BLACK}Hullámvasutak
@@ -1464,12 +1464,12 @@ STR_1459    :Track style
 STR_1460    :{SMALLFONT}{BLACK}'U' shaped open track
 STR_1461    :{SMALLFONT}{BLACK}'O' shaped enclosed track
 STR_1462    :Too steep for lift hill
-STR_1463    :Guests
+STR_1463    :Vendégek
 STR_1464    :Helix up (small)
 STR_1465    :Helix up (large)
 STR_1466    :Helix down (small)
 STR_1467    :Helix down (large)
-STR_1468    :Staff
+STR_1468    :Személyzet
 STR_1469    :Ride must start and end with stations
 STR_1470    :Station not long enough
 STR_1471    :{WINDOW_COLOUR_2}Speed:
@@ -1694,9 +1694,9 @@ STR_1689    :Block brakes
 STR_1690    :{WINDOW_COLOUR_2}{STRINGID}{NEWLINE}{BLACK}{STRINGID}
 STR_1691    :{WINDOW_COLOUR_2}  Cost: {BLACK}{CURRENCY}
 STR_1692    :{WINDOW_COLOUR_2}  Cost: {BLACK}from {CURRENCY}
-STR_1693    :{SMALLFONT}{BLACK}Guests
-STR_1694    :{SMALLFONT}{BLACK}Staff
-STR_1695    :{SMALLFONT}{BLACK}Income and costs
+STR_1693    :{SMALLFONT}{BLACK}Vendégek
+STR_1694    :{SMALLFONT}{BLACK}Személyzet
+STR_1695    :{SMALLFONT}{BLACK}Bevétel és kiadás
 STR_1696    :{SMALLFONT}{BLACK}Customer information
 STR_1697    :Cannot place these on queue line area
 STR_1698    :Can only place these on queue area
@@ -1707,23 +1707,23 @@ STR_1702    :Új biztonsági őr felvétele
 STR_1703    :Új szórakoztató felvétele
 STR_1704    :Can't hire new staff...
 STR_1705    :{SMALLFONT}{BLACK}Sack this staff member
-STR_1706    :{SMALLFONT}{BLACK}Move this person to a new location
+STR_1706    :{SMALLFONT}{BLACK}Személy áthelyezése egy új helyre
 STR_1707    :Too many staff in game
-STR_1708    :{SMALLFONT}{BLACK}Set patrol area for this staff member
-STR_1709    :Sack staff
-STR_1710    :Yes
-STR_1711    :{WINDOW_COLOUR_1}Are you sure you want to sack {STRINGID}?
+STR_1708    :{SMALLFONT}{BLACK}Személyzeti tag járőrözési területének kijelölése
+STR_1709    :Kirúgás
+STR_1710    :Igen
+STR_1711    :{WINDOW_COLOUR_1}Biztosan ki akarod rúgni a következőt: {STRINGID}?
 STR_1712    :{INLINE_SPRITE}{247}{19}{00}{00}{WINDOW_COLOUR_2}Utak takarítása
 STR_1713    :{INLINE_SPRITE}{248}{19}{00}{00}{WINDOW_COLOUR_2}Kertek locsolása
 STR_1714    :{INLINE_SPRITE}{249}{19}{00}{00}{WINDOW_COLOUR_2}Kukák ürítése
 STR_1715    :{INLINE_SPRITE}{250}{19}{00}{00}{WINDOW_COLOUR_2}Fűnyírás
 STR_1716    :Invalid name for park
 STR_1717    :Can't rename park...
-STR_1718    :Park Name
-STR_1719    :Enter name for park:-
-STR_1720    :{SMALLFONT}{BLACK}Name park
-STR_1721    :Park closed
-STR_1722    :Park open
+STR_1718    :A park neve
+STR_1719    :Add meg a park nevét:-
+STR_1720    :{SMALLFONT}{BLACK}Park átnevezése
+STR_1721    :A park zárva
+STR_1722    :A park nyitva
 STR_1723    :Can't open park...
 STR_1724    :Can't close park...
 STR_1725    :Can't buy land...
@@ -1731,7 +1731,7 @@ STR_1726    :Land not for sale!
 STR_1727    :Construction rights not for sale!
 STR_1728    :Can't buy construction rights here...
 STR_1729    :Land not owned by park!
-STR_1730    :{RED}Closed - - 
+STR_1730    :{RED}Zárva - - 
 STR_1731    :{WHITE}{STRINGID} - - 
 STR_1732    :Build
 STR_1733    :Mode
@@ -1740,25 +1740,25 @@ STR_1735    :{SMALLFONT}{BLACK}Number of laps of circuit
 STR_1736    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
 STR_1737    :{COMMA16}
 STR_1738    :Can't change number of laps...
-STR_1739    :Race won by guest {INT32}
-STR_1740    :Race won by {STRINGID}
+STR_1739    :A versenyt {INT32}. vendég nyerte
+STR_1740    :A versenyt {STRINGID} nyerte
 STR_1741    :Not yet constructed !
 STR_1742    :{WINDOW_COLOUR_2}Max. people on ride:
 STR_1743    :{SMALLFONT}{BLACK}Maximum number of people allowed on this ride at one time
 STR_1744    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
 STR_1745    :{COMMA16}
 STR_1746    :Can't change this...
-STR_1747    :{WINDOW_COLOUR_2}Time limit:
+STR_1747    :{WINDOW_COLOUR_2}Időkorlát:
 STR_1748    :{SMALLFONT}{BLACK}Time limit for ride
 STR_1749    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{DURATION}
 STR_1750    :{DURATION}
 STR_1751    :Can't change time limit for ride...
 STR_1752    :{SMALLFONT}{BLACK}Show list of individual guests in park
 STR_1753    :{SMALLFONT}{BLACK}Show summarized list of guests in park
-STR_1754    :{BLACK}{COMMA16} guests
-STR_1755    :{BLACK}{COMMA16} guest
-STR_1756    :{WINDOW_COLOUR_2}Admission price:
-STR_1757    :{WINDOW_COLOUR_2}Reliability: {MOVE_X}{255}{BLACK}{COMMA16}%
+STR_1754    :{BLACK}{COMMA16} vendég
+STR_1755    :{BLACK}{COMMA16} vendég
+STR_1756    :{WINDOW_COLOUR_2}Belépő:
+STR_1757    :{WINDOW_COLOUR_2}Megbízhatóság: {MOVE_X}{255}{BLACK}{COMMA16}%
 STR_1758    :{SMALLFONT}{BLACK}Build mode
 STR_1759    :{SMALLFONT}{BLACK}Move mode
 STR_1760    :{SMALLFONT}{BLACK}Fill-in mode
@@ -1778,7 +1778,7 @@ STR_1773    :Only one on-ride photo section allowed per ride
 STR_1774    :Only one cable lift hill allowed per ride
 STR_1775    :Off
 STR_1776    :On
-STR_1777    :{WINDOW_COLOUR_2}Music:
+STR_1777    :{WINDOW_COLOUR_2}Zene:
 STR_1778    :{STRINGID} - - 
 STR_1779    :{INLINE_SPRITE}{254}{19}{00}{00} Pandakosztüm
 STR_1780    :{INLINE_SPRITE}{255}{19}{00}{00} Tigriskosztüm
@@ -1827,27 +1827,27 @@ STR_1822    :{WINDOW_COLOUR_2}Guests thinking about {POP16}{STRINGID}
 STR_1823    :{SMALLFONT}{BLACK}Show guests' thoughts about this ride/attraction
 STR_1824    :{SMALLFONT}{BLACK}Show guests on this ride/attraction
 STR_1825    :{SMALLFONT}{BLACK}Show guests queuing for this ride/attraction
-STR_1826    :Status
-STR_1827    :Popularity
-STR_1828    :Satisfaction
-STR_1829    :Profit
-STR_1830    :Queue length
-STR_1831    :Queue time
-STR_1832    :Reliability
-STR_1833    :Down-time
+STR_1826    :Állapot
+STR_1827    :Népszerűség
+STR_1828    :Megelégedettség
+STR_1829    :Haszon
+STR_1830    :Várósor hossza
+STR_1831    :Várakozási idő
+STR_1832    :Megbízhatóság
+STR_1833    :Állásidő
 STR_1834    :Guests favorite
-STR_1835    :Popularity: Unknown
-STR_1836    :Popularity: {COMMA16}%
-STR_1837    :Satisfaction: Unknown
-STR_1838    :Satisfaction: {COMMA16}%
-STR_1839    :Reliability: {COMMA16}%
-STR_1840    :Down-time: {COMMA16}%
-STR_1841    :Profit: {CURRENCY} per hour
-STR_1842    :Favorite of: {COMMA16} guest
-STR_1843    :Favorite of: {COMMA16} guests
+STR_1835    :Népszerűség: ismeretlen
+STR_1836    :Népszerűség: {COMMA16}%
+STR_1837    :Megelégedettség: ismeretlen
+STR_1838    :Megelégedettség: {COMMA16}%
+STR_1839    :Megbízhatóság: {COMMA16}%
+STR_1840    :Állásidő: {COMMA16}%
+STR_1841    :Haszon: {CURRENCY} óránként
+STR_1842    :{COMMA16} vendég kedvence
+STR_1843    :{COMMA16} vendég kedvence
 STR_1844    :{SMALLFONT}{BLACK}Select information type to show in ride/attraction list
 STR_1845    :{MONTHYEAR}
-STR_1846    :{COMMA16} guests
+STR_1846    :{COMMA16} vendég
 STR_1847    :{INLINE_SPRITE}{11}{20}{00}{00}{COMMA16} guests
 STR_1848    :{INLINE_SPRITE}{10}{20}{00}{00}{COMMA16} guests
 STR_1849    :{WINDOW_COLOUR_2}Play music
@@ -1998,19 +1998,19 @@ STR_1993    :Innivaló
 STR_1994    :Hamburger
 STR_1995    :Sült krumpli
 STR_1996    :Jégkrém
-STR_1997    :Cotton Candy
+STR_1997    :Vattacukor
 STR_1998    :Üres doboz
 STR_1999    :Szemét
-STR_2000    :Üres hamburgerdoboz
+STR_2000    :Üres hamburgeres doboz
 STR_2001    :Pizza
 STR_2002    :Kupon
 STR_2003    :Popcorn
 STR_2004    :Hotdog
-STR_2005    :Tentacle
+STR_2005    :Csáp
 STR_2006    :Kalap
-STR_2007    :Candy Apple
+STR_2007    :Cukros alma
 STR_2008    :Póló
-STR_2009    :Donut
+STR_2009    :Fánk
 STR_2010    :Kávé
 STR_2011    :Üres pohár
 STR_2012    :Sült csirke
@@ -2073,34 +2073,34 @@ STR_2068    :some Fried Chicken
 STR_2069    :some Lemonade
 STR_2070    :an Empty Box
 STR_2071    :an Empty Bottle
-STR_2072    :{OPENQUOTES}{STRINGID}{ENDQUOTES} Balloon
+STR_2072    :{OPENQUOTES}{STRINGID}{ENDQUOTES}-léggömb
 STR_2073    :{OPENQUOTES}{STRINGID}{ENDQUOTES} Cuddly Toy
-STR_2074    :Map of {STRINGID}
+STR_2074    :{STRINGID} térképe
 STR_2075    :On-Ride Photo of {STRINGID}
-STR_2076    :{OPENQUOTES}{STRINGID}{ENDQUOTES} Umbrella
-STR_2077    :Drink
-STR_2078    :Burger
-STR_2079    :Fries
-STR_2080    :Ice Cream
-STR_2081    :Cotton Candy
-STR_2082    :Empty Can
-STR_2083    :Rubbish
-STR_2084    :Empty Burger Box
+STR_2076    :{OPENQUOTES}{STRINGID}{ENDQUOTES}-esernyő
+STR_2077    :Innivaló
+STR_2078    :Hamburger
+STR_2079    :Sültkrumpli
+STR_2080    :Jégkrém
+STR_2081    :Vattacukor
+STR_2082    :Üres doboz
+STR_2083    :Szemét
+STR_2084    :Üres hamburgeres doboz
 STR_2085    :Pizza
-STR_2086    :Voucher for {STRINGID}
+STR_2086    :{STRINGID}-kupon
 STR_2087    :Popcorn
-STR_2088    :Hot Dog
-STR_2089    :Tentacle
-STR_2090    :{OPENQUOTES}{STRINGID}{ENDQUOTES} Hat
-STR_2091    :Candy Apple
-STR_2092    :{OPENQUOTES}{STRINGID}{ENDQUOTES} T-Shirt
-STR_2093    :Donut
-STR_2094    :Coffee
-STR_2095    :Empty Cup
-STR_2096    :Fried Chicken
-STR_2097    :Lemonade
-STR_2098    :Empty Box
-STR_2099    :Empty Bottle
+STR_2088    :Hotdog
+STR_2089    :Csáp
+STR_2090    :{OPENQUOTES}{STRINGID}{ENDQUOTES}-kalap
+STR_2091    :Cukros alma
+STR_2092    :{OPENQUOTES}{STRINGID}{ENDQUOTES}-póló
+STR_2093    :Fánk
+STR_2094    :Kávé
+STR_2095    :Üres pohár
+STR_2096    :Sült csirke
+STR_2097    :Limonádé
+STR_2098    :Üres doboz
+STR_2099    :Üres flakon
 STR_2100    :{WINDOW_COLOUR_2}On-Ride Photo price:
 STR_2101    :{WINDOW_COLOUR_2}On-Ride Photo price:
 STR_2102    :{WINDOW_COLOUR_2}On-Ride Photo price:
@@ -2211,10 +2211,10 @@ STR_2206    :Empty Drink Carton
 STR_2207    :Empty Juice Cup
 STR_2208    :Roast Sausage
 STR_2209    :Empty Bowl
-STR_2210    :{SMALLFONT}{BLACK}Show list of handymen in park
-STR_2211    :{SMALLFONT}{BLACK}Show list of mechanics in park
-STR_2212    :{SMALLFONT}{BLACK}Show list of security guards in park
-STR_2213    :{SMALLFONT}{BLACK}Show list of entertainers in park
+STR_2210    :{SMALLFONT}{BLACK}A parkban található mindenesek listájának megjelenítése
+STR_2211    :{SMALLFONT}{BLACK}A parkban található szerelők listájának megjelenítése
+STR_2212    :{SMALLFONT}{BLACK}A parkban található biztonsági őrök listájának megjelenítése
+STR_2213    :{SMALLFONT}{BLACK}A parkban található szórakoztatók listájának megjelenítése
 STR_2214    :Construction not possible while game is paused!
 STR_2215    :{STRINGID}{NEWLINE}({STRINGID})
 STR_2216    :{WINDOW_COLOUR_2}{COMMA16}{DEGREE}C
@@ -2297,15 +2297,15 @@ STR_2292    :{WINDOW_COLOUR_2}Rides been on:
 STR_2293    :{BLACK} Nothing
 STR_2294    :{SMALLFONT}{BLACK}Change base land style
 STR_2295    :{SMALLFONT}{BLACK}Change vertical edges of land
-STR_2296    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} paid to enter park
-STR_2297    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} ride
-STR_2298    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} rides
-STR_2299    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} item of food
-STR_2300    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} items of food
-STR_2301    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} drink
-STR_2302    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} drinks
-STR_2303    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} souvenir
-STR_2304    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2} spent on {BLACK}{COMMA16} souvenirs
+STR_2296    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött belépőre
+STR_2297    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} építményben/játékon
+STR_2298    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} építményben/játékon
+STR_2299    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} féle ételre
+STR_2300    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} féle ételre
+STR_2301    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} féle innivalóra
+STR_2302    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} féle innivalóra
+STR_2303    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} ajándéktárgyra
+STR_2304    :{BLACK}{CURRENCY2DP}{WINDOW_COLOUR_2}-t költött {BLACK}{COMMA16} ajándéktárgyra
 STR_2305    :Track design files
 STR_2306    :Save track design
 STR_2307    :Select {STRINGID} design
@@ -2315,13 +2315,13 @@ STR_2310    :Build custom design
 STR_2311    :{WINDOW_COLOUR_2}Excitement rating: {BLACK}{COMMA2DP32} (approx.)
 STR_2312    :{WINDOW_COLOUR_2}Intensity rating: {BLACK}{COMMA2DP32} (approx.)
 STR_2313    :{WINDOW_COLOUR_2}Nausea rating: {BLACK}{COMMA2DP32} (approx.)
-STR_2314    :{WINDOW_COLOUR_2}Ride length: {BLACK}{STRINGID}
-STR_2315    :{WINDOW_COLOUR_2}Cost: {BLACK}around {CURRENCY}
-STR_2316    :{WINDOW_COLOUR_2}Space required: {BLACK}{COMMA16} x {COMMA16} blocks
-STR_2317    :{WINDOW_COLOUR_2}Sound Quality:
-STR_2318    :Low
-STR_2319    :Medium
-STR_2320    :High
+STR_2314    :{WINDOW_COLOUR_2}Hossza: {BLACK}{STRINGID}
+STR_2315    :{WINDOW_COLOUR_2}Ár: {BLACK}körülbelül {CURRENCY}
+STR_2316    :{WINDOW_COLOUR_2}Szükséges hely: {BLACK}{COMMA16} x {COMMA16} blokk
+STR_2317    :{WINDOW_COLOUR_2}Hangminőség:
+STR_2318    :Alacsony
+STR_2319    :Közepes
+STR_2320    :Magas
 STR_2321    :{WINDOW_COLOUR_2}Number of rides/attractions: {BLACK}{COMMA16}
 STR_2322    :{WINDOW_COLOUR_2}Staff: {BLACK}{COMMA16}
 STR_2323    :{WINDOW_COLOUR_2}Park size: {BLACK}{COMMA32}m{SQUARED}
@@ -2385,12 +2385,12 @@ STR_2380    :{SMALLFONT}{BLACK}Adjust smaller area of water
 STR_2381    :{SMALLFONT}{BLACK}Adjust larger area of water
 STR_2382    :Land
 STR_2383    :Water
-STR_2384    :{WINDOW_COLOUR_2}Your objective:
-STR_2385    :{BLACK}None
-STR_2386    :{BLACK}To have at least {COMMA16} guests in your park at the end of {MONTHYEAR}, with a park rating of at least 600
-STR_2387    :{BLACK}To achieve a park value of at least {POP16}{POP16}{CURRENCY} at the end of {PUSH16}{PUSH16}{PUSH16}{MONTHYEAR}
+STR_2384    :{WINDOW_COLOUR_2}A teljesítendő feladat:
+STR_2385    :{BLACK}Nincs
+STR_2386    :{BLACK}Legalább {COMMA16} látogató {MONTHYEAR} végére és a park értékelése legalább 600 legyen
+STR_2387    :{BLACK}A park értéke legalább {POP16}{POP16}{CURRENCY} legyen {PUSH16}{PUSH16}{PUSH16}{MONTHYEAR} végére
 STR_2388    :{BLACK}Have Fun!
-STR_2389    :{BLACK}Build the best {STRINGID} you can!
+STR_2389    :{BLACK}Építsd meg a legjobbat a következőből: {STRINGID}!
 STR_2390    :{BLACK}To have 10 different types of roller coasters operating in your park, each with an excitement value of at least 6.00
 STR_2391    :{BLACK}To have at least {COMMA16} guests in your park. You must not let the park rating drop below 700 at any time!
 STR_2392    :{BLACK}To achieve a monthly income from ride tickets of at least {POP16}{POP16}{CURRENCY}
@@ -2563,10 +2563,10 @@ STR_2558    :PgUp
 STR_2559    :PgDn
 STR_2560    :End
 STR_2561    :Home
-STR_2562    :Left
-STR_2563    :Up
-STR_2564    :Right
-STR_2565    :Down
+STR_2562    :Balra
+STR_2563    :Fel
+STR_2564    :Jobbra
+STR_2565    :Le
 STR_2566    :Select
 STR_2567    :Print
 STR_2568    :Execute
@@ -2980,8 +2980,8 @@ STR_2973    :Alternative color scheme 2
 STR_2974    :Alternative color scheme 3
 STR_2975    :{SMALLFONT}{BLACK}Select which color scheme to change, or paint ride with
 STR_2976    :{SMALLFONT}{BLACK}Paint an individual area of this ride using the selected color scheme
-STR_2977    :Staff member name
-STR_2978    :Enter new name for this member of staff:-
+STR_2977    :Személyzeti tag neve
+STR_2978    :Add meg a személyzeti tag új nevét!-
 STR_2979    :Can't name staff member...
 STR_2980    :Too many banners in game
 STR_2981    :{RED}No entry - - 
@@ -3067,11 +3067,11 @@ STR_3060    :Ice blocks
 STR_3061    :Wooden fences
 STR_3062    :{SMALLFONT}{BLACK}Standard roller coaster track
 STR_3063    :{SMALLFONT}{BLACK}Water channel (track submerged)
-STR_3064    :Beginner Parks
-STR_3065    :Challenging Parks
-STR_3066    :Expert Parks
-STR_3067    :{OPENQUOTES}Real{ENDQUOTES} Parks
-STR_3068    :Other Parks
+STR_3064    :Parkok kezdőknek
+STR_3065    :Kihívást jelentő parkok
+STR_3066    :Parkok profiknak
+STR_3067    :{OPENQUOTES}Igazi{ENDQUOTES} parkok
+STR_3068    :Egyéb parkok
 STR_3069    :Top Section
 STR_3070    :Slope to Level
 STR_3071    :{WINDOW_COLOUR_2}Same price throughout park
@@ -3290,7 +3290,7 @@ STR_3283    :{SMALLFONT}{BLACK}Select rides to be preserved
 STR_3284    :Objective Selection
 STR_3285    :Preserved Rides
 STR_3286    :{SMALLFONT}{BLACK}Select objective for this scenario
-STR_3287    :{WINDOW_COLOUR_2}Objective:
+STR_3287    :{WINDOW_COLOUR_2}Teljesítendő feladat:
 STR_3288    :{SMALLFONT}{BLACK}Select climate
 STR_3289    :{WINDOW_COLOUR_2}Climate:
 STR_3290    :Cool and wet
@@ -3325,7 +3325,7 @@ STR_3318    :{SMALLFONT}{BLACK}Select which group this scenario appears in
 STR_3319    :{WINDOW_COLOUR_2}Scenario Group:
 STR_3320    :Unable to save scenario file...
 STR_3321    :New objects installed successfully
-STR_3322    :{WINDOW_COLOUR_2}Objective: {BLACK}{STRINGID}
+STR_3322    :{WINDOW_COLOUR_2}Teljesítendő feladat: {BLACK}{STRINGID}
 STR_3323    :Missing object data, ID: 
 STR_3324    :Requires Add-On Pack: 
 STR_3325    :Requires an Add-On Pack
