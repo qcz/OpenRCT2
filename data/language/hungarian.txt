@@ -1318,9 +1318,9 @@ STR_1313    :player
 STR_1314    :players
 STR_1315    :Player
 STR_1316    :Players
-STR_1317    :{COMMA16} player
-STR_1318    :{COMMA16} players
-STR_1319    :Player {COMMA16}
+STR_1317    :{COMMA16} játékos
+STR_1318    :{COMMA16} játékos
+STR_1319    :{COMMA16}. játékos
 STR_1320    :course
 STR_1321    :courses
 STR_1322    :Course
@@ -1791,7 +1791,7 @@ STR_1786    :{INLINE_SPRITE}{05}{20}{00}{00} Űrhajóskosztüm
 STR_1787    :{INLINE_SPRITE}{06}{20}{00}{00} Banditakosztüm
 STR_1788    :{INLINE_SPRITE}{07}{20}{00}{00} Seriffkosztüm
 STR_1789    :{INLINE_SPRITE}{08}{20}{00}{00} Kalózkosztüm
-STR_1790    :{SMALLFONT}{BLACK}Select uniform color for this type of staff
+STR_1790    :{SMALLFONT}{BLACK}A kiválasztott személyzettípus egyenruhája színének kiválasztása
 STR_1791    :{WINDOW_COLOUR_2}Egyenruha színe:
 STR_1792    :Responding to {STRINGID} breakdown call
 STR_1793    :Heading to {STRINGID} for an inspection
@@ -1859,7 +1859,7 @@ STR_1854    :{WINDOW_COLOUR_2}Built: {BLACK}Last Year
 STR_1855    :{WINDOW_COLOUR_2}Built: {BLACK}{COMMA16} Years Ago
 STR_1856    :{WINDOW_COLOUR_2}Profit per item sold: {BLACK}{CURRENCY2DP}
 STR_1857    :{WINDOW_COLOUR_2}Loss per item sold: {BLACK}{CURRENCY2DP}
-STR_1858    :{WINDOW_COLOUR_2}Cost: {BLACK}{CURRENCY} per month
+STR_1858    :{WINDOW_COLOUR_2}Bér: {BLACK}{CURRENCY} havonta
 STR_1859    :mindenes
 STR_1860    :szerelő
 STR_1861    :biztonsági őr
@@ -1947,9 +1947,9 @@ STR_1942    :{SMALLFONT}{BLACK}Show financial information about this guest
 STR_1943    :{SMALLFONT}{BLACK}Show guest's recent thoughts
 STR_1944    :{SMALLFONT}{BLACK}Show items guest is carrying
 STR_1945    :{SMALLFONT}{BLACK}Show orders and options for this staff member
-STR_1946    :{SMALLFONT}{BLACK}Select costume for this entertainer
-STR_1947    :{SMALLFONT}{BLACK}Show areas patrolled by selected staff type, and locate the nearest staff member
-STR_1948    :{SMALLFONT}{BLACK}Hire a new staff member of the selected type
+STR_1946    :{SMALLFONT}{BLACK}A szórakoztató kosztümjének kiválasztása
+STR_1947    :{SMALLFONT}{BLACK}A kiválasztott személyzettípus által járőrözött területek megjelenítése és a legközelebbi tag megkeresése
+STR_1948    :{SMALLFONT}{BLACK}Új személyzeti tag felvétele a kiválasztott típusból
 STR_1949    :Financial Summary
 STR_1950    :Financial Graph
 STR_1951    :Park Value Graph

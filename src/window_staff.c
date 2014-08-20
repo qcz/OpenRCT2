@@ -582,7 +582,7 @@ void window_staff_paint() {
 
 	if (!(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_11)) {
 		RCT2_GLOBAL(0x013CE952, uint32) = RCT2_ADDRESS(0x00992A00, uint16)[selectedTab];
-		gfx_draw_string_left(dpi, 1858, (void*)0x013CE952, 0, w->x + 0xA5, w->y + 0x20);
+		gfx_draw_string_left(dpi, STR_STAFF_WAGE, (void*)0x013CE952, 0, w->x + 0xA5, w->y + 0x20);
 	}
 
 	if (selectedTab < 3) {
