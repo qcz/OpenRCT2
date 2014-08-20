@@ -848,7 +848,7 @@ STR_0843    :Teljes képernyő, 800x600
 STR_0844    :Teljes képernyő, 1024x768
 STR_0845    :Teljes képernyő, 1152x864
 STR_0846    :Teljes képernyő, 1280x1024
-STR_0847    :About 'RollerCoaster Tycoon 2'
+STR_0847    :A RollerCoaster Tycoon 2 névjegye
 STR_0848    :RollerCoaster Tycoon 2
 STR_0849    :{WINDOW_COLOUR_2}Version 2.01.028
 STR_0850    :{WINDOW_COLOUR_2}Copyright {COPYRIGHT} 2002 Chris Sawyer, all rights reserved
@@ -977,7 +977,7 @@ STR_0972    :Mégse
 STR_0973    :OK
 STR_0974    :Rides
 STR_0975    :Boltok és bódék
-STR_0976    :Restrooms and Information Kiosks
+STR_0976    :Mellékhelyiségek és információs pavilonok
 STR_0977    :Új szállító járművek
 STR_0978    :Új enyhe építmények
 STR_0979    :Új hullámvasutak
@@ -1436,11 +1436,11 @@ STR_1431    :Sétál
 STR_1432    :A következő felé tart: {STRINGID}
 STR_1433    :Várakozik a következőre: {STRINGID}
 STR_1434    :Drowning
-STR_1435    :On {STRINGID}
-STR_1436    :In {STRINGID}
-STR_1437    :At {STRINGID}
+STR_1435    :A következőn van: {STRINGID}
+STR_1436    :A következőben van: {STRINGID}
+STR_1437    :A következőnél van: {STRINGID}
 STR_1438    :Ül
-STR_1439    :(select location)
+STR_1439    :(válassz helyet)
 STR_1440    :Füvet nyír
 STR_1441    :Utat takarít
 STR_1442    :Kukát ürít
@@ -1482,9 +1482,9 @@ STR_1477    :{WINDOW_COLOUR_2}Intensity rating: {OUTLINE}{RED}{COMMA2DP32}  ({ST
 STR_1478    :{WINDOW_COLOUR_2}Nausea rating: {BLACK}{COMMA2DP32}  ({STRINGID})
 STR_1479    :{WINDOW_COLOUR_2}Nausea rating: {BLACK}Not yet available
 STR_1480    :{SMALLFONT}{OPENQUOTES}I can't afford {STRINGID}{ENDQUOTES}
-STR_1481    :{SMALLFONT}{OPENQUOTES}I've spent all my money{ENDQUOTES}
-STR_1482    :{SMALLFONT}{OPENQUOTES}I feel sick{ENDQUOTES}
-STR_1483    :{SMALLFONT}{OPENQUOTES}I feel very sick{ENDQUOTES}
+STR_1481    :{SMALLFONT}{OPENQUOTES}Elköltöttem az összes pénzem{ENDQUOTES}
+STR_1482    :{SMALLFONT}{OPENQUOTES}Rosszul vagyok{ENDQUOTES}
+STR_1483    :{SMALLFONT}{OPENQUOTES}Nagyon rosszul vagyok{ENDQUOTES}
 STR_1484    :{SMALLFONT}{OPENQUOTES}I want to go on something more thrilling than {STRINGID}{ENDQUOTES}
 STR_1485    :{SMALLFONT}{OPENQUOTES}{STRINGID} looks too intense for me{ENDQUOTES}
 STR_1486    :{SMALLFONT}{OPENQUOTES}I haven't finished my {STRINGID} yet{ENDQUOTES}
@@ -1494,29 +1494,29 @@ STR_1489    :{SMALLFONT}{OPENQUOTES}I want to go home{ENDQUOTES}
 STR_1490    :{SMALLFONT}{OPENQUOTES}{STRINGID} is really good value{ENDQUOTES}
 STR_1491    :{SMALLFONT}{OPENQUOTES}I've already got {STRINGID}{ENDQUOTES}
 STR_1492    :{SMALLFONT}{OPENQUOTES}I can't afford {STRINGID}{ENDQUOTES}
-STR_1493    :{SMALLFONT}{OPENQUOTES}I'm not hungry{ENDQUOTES}
-STR_1494    :{SMALLFONT}{OPENQUOTES}I'm not thirsty{ENDQUOTES}
+STR_1493    :{SMALLFONT}{OPENQUOTES}Nem vagyok éhes{ENDQUOTES}
+STR_1494    :{SMALLFONT}{OPENQUOTES}Nem vagyok szomjas{ENDQUOTES}
 STR_1495    :{SMALLFONT}{OPENQUOTES}Help! I'm drowning!{ENDQUOTES}
-STR_1496    :{SMALLFONT}{OPENQUOTES}I'm lost!{ENDQUOTES}
-STR_1497    :{SMALLFONT}{OPENQUOTES}{STRINGID} was great{ENDQUOTES}
+STR_1496    :{SMALLFONT}{OPENQUOTES}Eltévedtem!{ENDQUOTES}
+STR_1497    :{SMALLFONT}{OPENQUOTES}{STRINGID} nagyon jó volt{ENDQUOTES}
 STR_1498    :{SMALLFONT}{OPENQUOTES}I've been queuing for {STRINGID} for ages{ENDQUOTES}
-STR_1499    :{SMALLFONT}{OPENQUOTES}I'm tired{ENDQUOTES}
-STR_1500    :{SMALLFONT}{OPENQUOTES}I'm hungry{ENDQUOTES}
-STR_1501    :{SMALLFONT}{OPENQUOTES}I'm thirsty{ENDQUOTES}
+STR_1499    :{SMALLFONT}{OPENQUOTES}Fáradt vagyok{ENDQUOTES}
+STR_1500    :{SMALLFONT}{OPENQUOTES}Éhes vagyok{ENDQUOTES}
+STR_1501    :{SMALLFONT}{OPENQUOTES}Szomjas vagyok{ENDQUOTES}
 STR_1502    :{SMALLFONT}{OPENQUOTES}I need to go to the bathroom{ENDQUOTES}
 STR_1503    :{SMALLFONT}{OPENQUOTES}I can't find {STRINGID}{ENDQUOTES}
 STR_1504    :{SMALLFONT}{OPENQUOTES}I'm not paying that much to use {STRINGID}{ENDQUOTES}
 STR_1505    :{SMALLFONT}{OPENQUOTES}I'm not going on {STRINGID} while it's raining{ENDQUOTES}
 STR_1506    :{SMALLFONT}{OPENQUOTES}The litter here is really bad{ENDQUOTES}
-STR_1507    :{SMALLFONT}{OPENQUOTES}I can't find the park exit{ENDQUOTES}
+STR_1507    :{SMALLFONT}{OPENQUOTES}Nem találom a park kijáratát{ENDQUOTES}
 STR_1508    :{SMALLFONT}{OPENQUOTES}I want to get off {STRINGID}{ENDQUOTES}
 STR_1509    :{SMALLFONT}{OPENQUOTES}I want to get out of {STRINGID}{ENDQUOTES}
 STR_1510    :{SMALLFONT}{OPENQUOTES}I'm not going on {STRINGID} - It isn't safe{ENDQUOTES}
-STR_1511    :{SMALLFONT}{OPENQUOTES}This path is disgusting{ENDQUOTES}
-STR_1512    :{SMALLFONT}{OPENQUOTES}It's too crowded here{ENDQUOTES}
+STR_1511    :{SMALLFONT}{OPENQUOTES}Az út gusztustalan{ENDQUOTES}
+STR_1512    :{SMALLFONT}{OPENQUOTES}Túl nagy a tömeg{ENDQUOTES}
 STR_1513    :{SMALLFONT}{OPENQUOTES}The vandalism here is really bad{ENDQUOTES}
 STR_1514    :{SMALLFONT}{OPENQUOTES}Great scenery!{ENDQUOTES}
-STR_1515    :{SMALLFONT}{OPENQUOTES}This park is really clean and tidy{ENDQUOTES}
+STR_1515    :{SMALLFONT}{OPENQUOTES}Ez a park igazán tiszta és rendezett{ENDQUOTES}
 STR_1516    :{SMALLFONT}{OPENQUOTES}The jumping fountains are great{ENDQUOTES}
 STR_1517    :{SMALLFONT}{OPENQUOTES}The music is nice here{ENDQUOTES}
 STR_1518    :{SMALLFONT}{OPENQUOTES}This balloon from {STRINGID} is really good value{ENDQUOTES}
@@ -1650,8 +1650,8 @@ STR_1645    :
 STR_1646    :
 STR_1647    :
 STR_1648    :{SMALLFONT}{OPENQUOTES}Help! Put me down!{ENDQUOTES}
-STR_1649    :{SMALLFONT}{OPENQUOTES}I'm running out of cash!{ENDQUOTES}
-STR_1650    :{SMALLFONT}{OPENQUOTES}Wow! A new ride being built!{ENDQUOTES}
+STR_1649    :{SMALLFONT}{OPENQUOTES}Hamarosan elfogyik a pénzem!{ENDQUOTES}
+STR_1650    :{SMALLFONT}{OPENQUOTES}Wow! Egy új építményt építenek!{ENDQUOTES}
 STR_1651    :{SMALLFONT}{OPENQUOTES}Nice ride! But not as good as the Phoenix...{ENDQUOTES}
 STR_1652    :{SMALLFONT}{OPENQUOTES}I'm so excited - It's an Intamin ride!{ENDQUOTES}
 STR_1653    :{SMALLFONT}{OPENQUOTES}...and here we are on {STRINGID}!{ENDQUOTES}
@@ -1776,8 +1776,8 @@ STR_1771    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COM
 STR_1772    :{COMMA16}
 STR_1773    :Only one on-ride photo section allowed per ride
 STR_1774    :Only one cable lift hill allowed per ride
-STR_1775    :Off
-STR_1776    :On
+STR_1775    :Letiltva
+STR_1776    :Engedélyezve
 STR_1777    :{WINDOW_COLOUR_2}Zene:
 STR_1778    :{STRINGID} - - 
 STR_1779    :{INLINE_SPRITE}{254}{19}{00}{00} Pandakosztüm
@@ -1815,8 +1815,8 @@ STR_1810    :{WINDOW_COLOUR_2}Carrying:
 STR_1811    :Can't build this here...
 STR_1812    :{SMALLFONT}{BLACK}{STRINGID}
 STR_1813    :Miscellaneous Objects
-STR_1814    :Actions
-STR_1815    :Thoughts
+STR_1814    :Cselekvések
+STR_1815    :Gondolatok
 STR_1816    :{SMALLFONT}{BLACK}Select information type to show in guest list
 STR_1817    :({COMMA16})
 STR_1818    :{WINDOW_COLOUR_2}All guests
@@ -1955,7 +1955,7 @@ STR_1950    :Financial Graph
 STR_1951    :Park Value Graph
 STR_1952    :Profit Graph
 STR_1953    :Marketing
-STR_1954    :Research Funding
+STR_1954    :Kutatás finanszírozása
 STR_1955    :{WINDOW_COLOUR_2}Number of circuits:
 STR_1956    :{SMALLFONT}{BLACK}Number of circuits of track per ride
 STR_1957    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
@@ -2221,10 +2221,10 @@ STR_2216    :{WINDOW_COLOUR_2}{COMMA16}{DEGREE}C
 STR_2217    :{WINDOW_COLOUR_2}{COMMA16}F
 STR_2218    :{RED}{STRINGID} on {STRINGID} hasn't returned to the {STRINGID} yet!{NEWLINE}Check whether it is stuck or has stalled
 STR_2219    :{RED}{COMMA16} people have died in an accident on {STRINGID}
-STR_2220    :{WINDOW_COLOUR_2}Park Rating: {BLACK}{COMMA16}
-STR_2221    :{SMALLFONT}{BLACK}Park Rating: {COMMA16}
+STR_2220    :{WINDOW_COLOUR_2}Park értékelése: {BLACK}{COMMA16}
+STR_2221    :{SMALLFONT}{BLACK}Park értékelése: {COMMA16}
 STR_2222    :{SMALLFONT}{BLACK}{STRINGID}
-STR_2223    :{WINDOW_COLOUR_2}Guests in park: {BLACK}{COMMA16}
+STR_2223    :{WINDOW_COLOUR_2}Vendégek a parkban: {BLACK}{COMMA16}
 STR_2224    :{WINDOW_COLOUR_2}Cash: {BLACK}{CURRENCY2DP}
 STR_2225    :{WINDOW_COLOUR_2}Cash: {RED}{CURRENCY2DP}
 STR_2226    :{WINDOW_COLOUR_2}Park value: {BLACK}{CURRENCY}
@@ -2254,42 +2254,42 @@ STR_2249    :{BABYBLUE}New ride/attraction now available:-{NEWLINE}{STRINGID}
 STR_2250    :{BABYBLUE}New scenery/themeing now available:-{NEWLINE}{STRINGID}
 STR_2251    :Can only be built on paths!
 STR_2252    :Can only be built across paths!
-STR_2253    :Transport Rides
-STR_2254    :Gentle Rides
-STR_2255    :Roller Coasters
-STR_2256    :Thrill Rides
-STR_2257    :Water Rides
-STR_2258    :Shops & Stalls
-STR_2259    :Scenery & Themeing
-STR_2260    :No funding
-STR_2261    :Minimum funding
-STR_2262    :Normal funding
-STR_2263    :Maximum funding
-STR_2264    :Research funding
-STR_2265    :{WINDOW_COLOUR_2}Cost: {BLACK}{CURRENCY} per month
-STR_2266    :Research priorities
-STR_2267    :Currently in development
-STR_2268    :Last development
-STR_2269    :{WINDOW_COLOUR_2}Type: {BLACK}{STRINGID}
-STR_2270    :{WINDOW_COLOUR_2}Progress: {BLACK}{STRINGID}
-STR_2271    :{WINDOW_COLOUR_2}Expected: {BLACK}{STRINGID}
-STR_2272    :{WINDOW_COLOUR_2}Ride/attraction:{NEWLINE}{BLACK}{STRINGID}
-STR_2273    :{WINDOW_COLOUR_2}Scenery/themeing:{NEWLINE}{BLACK}{STRINGID}
+STR_2253    :Szállító járművek
+STR_2254    :Enyhe építmények
+STR_2255    :Hullámvasutak
+STR_2256    :Izgalmas építmények
+STR_2257    :Vízi építmények
+STR_2258    :Boltok és bódék
+STR_2259    :Díszletek és témák
+STR_2260    :Nincs finanszírozás
+STR_2261    :Minimális ffinanszírozás
+STR_2262    :Átlagos finanszírozás
+STR_2263    :Maximális finanszírozás
+STR_2264    :Kutatás finanszírozása
+STR_2265    :{WINDOW_COLOUR_2}Ár: {BLACK}{CURRENCY} havonta
+STR_2266    :Prioritásos kutatások
+STR_2267    :Jelenleg fejlesztés alatt
+STR_2268    :Legutóbbi fejlesztés
+STR_2269    :{WINDOW_COLOUR_2}Típus: {BLACK}{STRINGID}
+STR_2270    :{WINDOW_COLOUR_2}Állapot: {BLACK}{STRINGID}
+STR_2271    :{WINDOW_COLOUR_2}Elkészülés várható ideje: {BLACK}{STRINGID}
+STR_2272    :{WINDOW_COLOUR_2}Építmény vagy látványosság:{NEWLINE}{BLACK}{STRINGID}
+STR_2273    :{WINDOW_COLOUR_2}Díszlet vagy téma:{NEWLINE}{BLACK}{STRINGID}
 STR_2274    :{SMALLFONT}{BLACK}Show details of this invention or development
 STR_2275    :{SMALLFONT}{BLACK}Show funding and options for research & development
 STR_2276    :{SMALLFONT}{BLACK}Show research & development status
-STR_2277    :Unknown
-STR_2278    :Transport Ride
-STR_2279    :Gentle Ride
-STR_2280    :Roller Coaster
-STR_2281    :Thrill Ride
-STR_2282    :Water Ride
-STR_2283    :Shop/Stall
-STR_2284    :Scenery/Themeing
-STR_2285    :Initial research
-STR_2286    :Designing
-STR_2287    :Completing design
-STR_2288    :Unknown
+STR_2277    :Ismeretlen
+STR_2278    :Szállító jármű
+STR_2279    :Enyhe építmény
+STR_2280    :Hullámvasút
+STR_2281    :Izgalmas építmény
+STR_2282    :Vízi építmény
+STR_2283    :Bolt vagy bódé
+STR_2284    :Díszlet vagy téma
+STR_2285    :Kutatás elindítva
+STR_2286    :Tervezés
+STR_2287    :Tervezés befejezése
+STR_2288    :Ismeretlen
 STR_2289    :{STRINGID} {STRINGID}
 STR_2290    :{SMALLFONT}{BLACK}{STRINGID} {STRINGID}
 STR_2291    :Select scenario for new game
@@ -2322,18 +2322,18 @@ STR_2317    :{WINDOW_COLOUR_2}Hangminőség:
 STR_2318    :Alacsony
 STR_2319    :Közepes
 STR_2320    :Magas
-STR_2321    :{WINDOW_COLOUR_2}Number of rides/attractions: {BLACK}{COMMA16}
-STR_2322    :{WINDOW_COLOUR_2}Staff: {BLACK}{COMMA16}
-STR_2323    :{WINDOW_COLOUR_2}Park size: {BLACK}{COMMA32}m{SQUARED}
-STR_2324    :{WINDOW_COLOUR_2}Park size: {BLACK}{COMMA32}sq.ft.
-STR_2325    :{SMALLFONT}{BLACK}Buy land to extend park
-STR_2326    :{SMALLFONT}{BLACK}Buy construction rights to allow construction above or below land outside the park
-STR_2327    :Options
-STR_2328    :{WINDOW_COLOUR_2}Currency:
-STR_2329    :{WINDOW_COLOUR_2}Distance and Speed:
-STR_2330    :{WINDOW_COLOUR_2}Temperature:
-STR_2331    :{WINDOW_COLOUR_2}Height Labels:
-STR_2332    :Units
+STR_2321    :{WINDOW_COLOUR_2}Építmények és látványosságok száma: {BLACK}{COMMA16}
+STR_2322    :{WINDOW_COLOUR_2}Személyzet: {BLACK}{COMMA16}
+STR_2323    :{WINDOW_COLOUR_2}Park mérete: {BLACK}{COMMA32}m{SQUARED}
+STR_2324    :{WINDOW_COLOUR_2}Park mérete: {BLACK}{COMMA32} négyzetmérföld
+STR_2325    :{SMALLFONT}{BLACK}Föld vásárlása a park kiterjesztéséhez
+STR_2326    :{SMALLFONT}{BLACK}Építési jogok megvétele, ami lehetővé teszi a parkon kívüli területek felett vagy alatt történő építkezést
+STR_2327    :Beállítások
+STR_2328    :{WINDOW_COLOUR_2}Pénznem:
+STR_2329    :{WINDOW_COLOUR_2}Távolság és sebesség:
+STR_2330    :{WINDOW_COLOUR_2}Hőmérséklet:
+STR_2331    :{WINDOW_COLOUR_2}Magasságcímkék:
+STR_2332    :Egység
 STR_2333    :Hang
 STR_2334    :Font ({POUND})
 STR_2335    :Dollár ($)
@@ -2360,8 +2360,8 @@ STR_2355    :{WINDOW_COLOUR_2}Rides fixed: {BLACK}{COMMA16}
 STR_2356    :{WINDOW_COLOUR_2}Rides inspected: {BLACK}{COMMA16}
 STR_2357    :House
 STR_2358    :Units
-STR_2359    :Real Values
-STR_2360    :{WINDOW_COLOUR_2}Display Resolution:
+STR_2359    :Valós érték
+STR_2360    :{WINDOW_COLOUR_2}Képernyőfelbontás:
 STR_2361    :Landscape Smoothing
 STR_2362    :{SMALLFONT}{BLACK}Toggle landscape tile edge smoothing on/off
 STR_2363    :Gridlines on Landscape
@@ -2486,23 +2486,23 @@ STR_2481    :{SMALLFONT}{BLACK}Show graph of lateral acceleration against time
 STR_2482    :{SMALLFONT}{BLACK}Profit: {CURRENCY} per week,  Park Value: {CURRENCY}
 STR_2483    :{WINDOW_COLOUR_2}Weekly profit: {BLACK}+{CURRENCY2DP}
 STR_2484    :{WINDOW_COLOUR_2}Weekly profit: {RED}{CURRENCY2DP}
-STR_2485    :Controls
-STR_2486    :General
-STR_2487    :Show 'real' names of guests
+STR_2485    :Vezérlők
+STR_2486    :Általános
+STR_2487    :A vendégek 'igazi' nevének megjelenítése
 STR_2488    :{SMALLFONT}{BLACK}Toggle between showing 'real' names of guests and guest numbers
-STR_2489    :Shortcut keys...
-STR_2490    :Keyboard shortcuts
-STR_2491    :Reset keys
+STR_2489    :Gyorsbillentyűk...
+STR_2490    :Gyorsbillentyűk
+STR_2491    :Billentyűk visszaállítása
 STR_2492    :{SMALLFONT}{BLACK}Set all keyboard shortcuts back to default settings
-STR_2493    :Close top-most window
-STR_2494    :Close all floating windows
-STR_2495    :Cancel construction mode
+STR_2493    :Legfelső ablak bezárása
+STR_2494    :Összes lebegő ablak bezárása
+STR_2495    :Építés megszakítása
 STR_2496    :Játék megállítása
-STR_2497    :Zoom view out
-STR_2498    :Zoom view in
-STR_2499    :Rotate view
-STR_2500    :Rotate construction object
-STR_2501    :Underground view toggle
+STR_2497    :Kicsinyítés
+STR_2498    :Nagyítás
+STR_2499    :Forgatás
+STR_2500    :Építendő objektum forgatása
+STR_2501    :Földalatti nézet be- és kikapcsolása
 STR_2502    :Remove base land toggle
 STR_2503    :Remove vertical land toggle
 STR_2504    :See-through rides toggle
@@ -2521,11 +2521,11 @@ STR_2516    :Show financial information
 STR_2517    :Show research information
 STR_2518    :Show rides list
 STR_2519    :Show park information
-STR_2520    :Show guest list
-STR_2521    :Show staff list
-STR_2522    :Show recent messages
-STR_2523    :Show map
-STR_2524    :Screenshot
+STR_2520    :Vendéglista megjelenítése
+STR_2521    :Személyzeti lista megjelenítése
+STR_2522    :Legutóbbi üzenetek megjelenítése
+STR_2523    :Térkép megjelenítése
+STR_2524    :Képernyőfotó
 STR_2525    :???
 STR_2526    :???
 STR_2527    :???
@@ -2775,9 +2775,9 @@ STR_2769    :Open Park
 STR_2770    :Close Park
 STR_2771    :Slower Gamespeed
 STR_2772    :Faster Gamespeed
-STR_2773    :Windowed
-STR_2774    :Fullscreen
-STR_2775    :Fullscreen (desktop)
+STR_2773    :Ablakban
+STR_2774    :Teljes képernyő
+STR_2775    :Teljes képernyő (asztal)
 STR_2776    :Nyelv
 STR_2777    :{MOVE_X}{SMALLFONT}{STRING}
 STR_2778    :{RIGHTGUILLEMET}{MOVE_X}{SMALLFONT}{STRING}
@@ -2798,14 +2798,14 @@ STR_2791    :Enter name
 STR_2792    :Please enter your name for the scenario chart:-
 STR_2793    :{SMALLFONT}(Completed by {STRINGID})
 STR_2794    :{WINDOW_COLOUR_2}Completed by: {BLACK}{STRINGID}{NEWLINE}{WINDOW_COLOUR_2} with a company value of: {BLACK}{CURRENCY}
-STR_2795    :Sort
-STR_2796    :{SMALLFONT}{BLACK}Sort the ride list into order using the information type displayed
-STR_2797    :Scroll view when pointer at screen edge
+STR_2795    :Rendezés
+STR_2796    :{SMALLFONT}{BLACK}Az építmények listájának rendezése a megjelenített információtípus alapján
+STR_2797    :Nézet mozgatása, ha a mutató a képernyő szélén van
 STR_2798    :{SMALLFONT}{BLACK}Select whether to scroll the view when the mouse pointer is at the screen edge
-STR_2799    :{SMALLFONT}{BLACK}View or change control key assignments
-STR_2800    :{WINDOW_COLOUR_2}Total admissions: {BLACK}{COMMA32}
-STR_2801    :{WINDOW_COLOUR_2}Income from admissions: {BLACK}{CURRENCY2DP}
-STR_2802    :Map
+STR_2799    :{SMALLFONT}{BLACK}Vezérlőbillentyű-hozzárendelések megtekintése vagy módosítása
+STR_2800    :{WINDOW_COLOUR_2}Belépők száma: {BLACK}{COMMA32}
+STR_2801    :{WINDOW_COLOUR_2}Bevétel a belépőkből: {BLACK}{CURRENCY2DP}
+STR_2802    :Térkép
 STR_2803    :{SMALLFONT}{BLACK}Show these guests highlighted on map
 STR_2804    :{SMALLFONT}{BLACK}Show these staff members highlighted on map
 STR_2805    :{SMALLFONT}{BLACK}Show map of park
@@ -3058,9 +3058,9 @@ STR_3051    :Golf hole C
 STR_3052    :Golf hole D
 STR_3053    :Golf hole E
 STR_3054    :Loading...
-STR_3055    :White
-STR_3056    :Translucent
-STR_3057    :{WINDOW_COLOUR_2}Construction Marker:
+STR_3055    :Fehér
+STR_3056    :Átlátszó
+STR_3057    :{WINDOW_COLOUR_2}Építési jelölő:
 STR_3058    :Brick walls
 STR_3059    :Hedges
 STR_3060    :Ice blocks
