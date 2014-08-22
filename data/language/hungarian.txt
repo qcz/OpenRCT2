@@ -978,12 +978,12 @@ STR_0973    :OK
 STR_0974    :Rides
 STR_0975    :Boltok és bódék
 STR_0976    :Mellékhelyiségek és információs pavilonok
-STR_0977    :Új szállító járművek
-STR_0978    :Új enyhe építmények
-STR_0979    :Új hullámvasutak
-STR_0980    :Új izgalmas építmények
-STR_0981    :Új vízi építmények
-STR_0982    :Új boltok és bódék
+STR_0977    :Új szállító jármű
+STR_0978    :Új enyhe építmény
+STR_0979    :Új hullámvasút
+STR_0980    :Új izgalmas építmény
+STR_0981    :Új vízi építmény
+STR_0982    :Új bolt vagy bódé
 STR_0983    :Kutatás és fejlesztés
 STR_0984    :{WINDOW_COLOUR_2}{UP}{BLACK}  {CURRENCY2DP}
 STR_0985    :{WINDOW_COLOUR_2}{DOWN}{BLACK}  {CURRENCY2DP}
@@ -1692,8 +1692,8 @@ STR_1687    :Water splash
 STR_1688    :Base size 4 x 1
 STR_1689    :Block brakes
 STR_1690    :{WINDOW_COLOUR_2}{STRINGID}{NEWLINE}{BLACK}{STRINGID}
-STR_1691    :{WINDOW_COLOUR_2}  Cost: {BLACK}{CURRENCY}
-STR_1692    :{WINDOW_COLOUR_2}  Cost: {BLACK}from {CURRENCY}
+STR_1691    :{WINDOW_COLOUR_2}  Ár: {BLACK}{CURRENCY}
+STR_1692    :{WINDOW_COLOUR_2}  Ár: {BLACK}minimum {CURRENCY}
 STR_1693    :{SMALLFONT}{BLACK}Vendégek
 STR_1694    :{SMALLFONT}{BLACK}Személyzet
 STR_1695    :{SMALLFONT}{BLACK}Bevétel és kiadás
@@ -2311,7 +2311,7 @@ STR_2306    :Save track design
 STR_2307    :Select {STRINGID} design
 STR_2308    :{STRINGID} Track Designs
 STR_2309    :Install New Track Design
-STR_2310    :Build custom design
+STR_2310    :Egyedi modell tervezése
 STR_2311    :{WINDOW_COLOUR_2}Excitement rating: {BLACK}{COMMA2DP32} (approx.)
 STR_2312    :{WINDOW_COLOUR_2}Intensity rating: {BLACK}{COMMA2DP32} (approx.)
 STR_2313    :{WINDOW_COLOUR_2}Nausea rating: {BLACK}{COMMA2DP32} (approx.)
@@ -3341,9 +3341,9 @@ STR_3334    :{SMALLFONT}{BLACK}Select whether to save any additional plug-in obj
 STR_3335    :Roller Coaster Designer - Select Ride Types & Vehicles
 STR_3336    :Track Designs Manager - Select Ride Type
 STR_3337    :Six Flags Park
-STR_3338    :{BLACK}Custom-designed layout
-STR_3339    :{BLACK}{COMMA16} design available, or custom-designed layout
-STR_3340    :{BLACK}{COMMA16} designs available, or custom-designed layout
+STR_3338    :{BLACK}Egyedileg tervezhető
+STR_3339    :{BLACK}{COMMA16} modell áll rendelkezésre vagy egyedileg tervezhető
+STR_3340    :{BLACK}{COMMA16} modell áll rendelkezésre vagy egyedileg tervezhető
 STR_3341    :{SMALLFONT}{BLACK}Game tools
 STR_3342    :Scenario Editor
 STR_3343    :Convert Saved Game to Scenario
