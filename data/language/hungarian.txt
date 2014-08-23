@@ -997,7 +997,7 @@ STR_0992    :{SMALLFONT}{BLACK}Demolish entire ride/attraction
 STR_0993    :Demolish ride/attraction
 STR_0994    :Demolish
 STR_0995    :{WINDOW_COLOUR_1}Are you sure you want to completely demolish {STRINGID}?
-STR_0996    :Overall view
+STR_0996    :Áttekintés
 STR_0997    :{SMALLFONT}{BLACK}View selection
 STR_0998    :No more stations allowed on this ride
 STR_0999    :Requires a station platform
@@ -1457,9 +1457,9 @@ STR_1452    :Vendég neve
 STR_1453    :Add meg a vendég nevét:-
 STR_1454    :Can't name guest...
 STR_1455    :Invalid name for guest
-STR_1456    :{WINDOW_COLOUR_2}Cash spent: {BLACK}{CURRENCY2DP}
-STR_1457    :{WINDOW_COLOUR_2}Cash in pocket: {BLACK}{CURRENCY2DP}
-STR_1458    :{WINDOW_COLOUR_2}Time in park: {BLACK}{REALTIME}
+STR_1456    :{WINDOW_COLOUR_2}Elköltött pénz: {BLACK}{CURRENCY2DP}
+STR_1457    :{WINDOW_COLOUR_2}Nála lévő pénz: {BLACK}{CURRENCY2DP}
+STR_1458    :{WINDOW_COLOUR_2}Parkban töltött idő: {BLACK}{REALTIME}
 STR_1459    :Track style
 STR_1460    :{SMALLFONT}{BLACK}'U' shaped open track
 STR_1461    :{SMALLFONT}{BLACK}'O' shaped enclosed track
@@ -1655,31 +1655,31 @@ STR_1650    :{SMALLFONT}{OPENQUOTES}Wow! Egy új építményt építenek!{ENDQUO
 STR_1651    :{SMALLFONT}{OPENQUOTES}Nice ride! But not as good as the Phoenix...{ENDQUOTES}
 STR_1652    :{SMALLFONT}{OPENQUOTES}I'm so excited - It's an Intamin ride!{ENDQUOTES}
 STR_1653    :{SMALLFONT}{OPENQUOTES}...and here we are on {STRINGID}!{ENDQUOTES}
-STR_1654    :{WINDOW_COLOUR_2}Recent thoughts:
+STR_1654    :{WINDOW_COLOUR_2}Legutóbbi gondolatok:
 STR_1655    :{SMALLFONT}{BLACK}Construct footpath on land
 STR_1656    :{SMALLFONT}{BLACK}Construct bridge or tunnel footpath
-STR_1657    :{WINDOW_COLOUR_2}Preferred ride
-STR_1658    :{WINDOW_COLOUR_2}intensity: {BLACK}less than {COMMA16}
-STR_1659    :{WINDOW_COLOUR_2}intensity: {BLACK}between {COMMA16} and {COMMA16}
-STR_1660    :{WINDOW_COLOUR_2}intensity: {BLACK}more than {COMMA16}
+STR_1657    :{WINDOW_COLOUR_2}Előnyben részesített
+STR_1658    :{WINDOW_COLOUR_2}intenzitás: {BLACK}kevesebb, mint {COMMA16}
+STR_1659    :{WINDOW_COLOUR_2}intenzitás: {BLACK}{COMMA16} és {COMMA16} között
+STR_1660    :{WINDOW_COLOUR_2}intenzitás: {BLACK}nagyobb, mint {COMMA16}
 STR_1661    :{WINDOW_COLOUR_2}Nausea tolerance: {BLACK}{STRINGID}
-STR_1662    :{WINDOW_COLOUR_2}Happiness:
-STR_1663    :{WINDOW_COLOUR_2}Nausea:
-STR_1664    :{WINDOW_COLOUR_2}Energy:
-STR_1665    :{WINDOW_COLOUR_2}Hunger:
-STR_1666    :{WINDOW_COLOUR_2}Thirst:
+STR_1662    :{WINDOW_COLOUR_2}Boldogság:
+STR_1663    :{WINDOW_COLOUR_2}Émelygés:
+STR_1664    :{WINDOW_COLOUR_2}Energia:
+STR_1665    :{WINDOW_COLOUR_2}Éhség:
+STR_1666    :{WINDOW_COLOUR_2}Szomj:
 STR_1667    :{WINDOW_COLOUR_2}Bathroom:
-STR_1668    :{WINDOW_COLOUR_2}Satisfaction: {BLACK}Unknown
-STR_1669    :{WINDOW_COLOUR_2}Satisfaction: {BLACK}{COMMA16}%
-STR_1670    :{WINDOW_COLOUR_2}Total customers: {BLACK}{COMMA32}
-STR_1671    :{WINDOW_COLOUR_2}Total profit: {BLACK}{CURRENCY2DP}
+STR_1668    :{WINDOW_COLOUR_2}Megelégedettség: {BLACK}ismeretlen
+STR_1669    :{WINDOW_COLOUR_2}Megelégedettség: {BLACK}{COMMA16}%
+STR_1670    :{WINDOW_COLOUR_2}Összes vásárló: {BLACK}{COMMA32}
+STR_1671    :{WINDOW_COLOUR_2}Teljes bevétel: {BLACK}{CURRENCY2DP}
 STR_1672    :Brakes
 STR_1673    :Spinning Control Toggle Track
-STR_1674    :Brake speed
+STR_1674    :Fék sebessége
 STR_1675    :{POP16}{VELOCITY}
 STR_1676    :{SMALLFONT}{BLACK}Set speed limit for brakes
-STR_1677    :{WINDOW_COLOUR_2}Popularity: {BLACK}Unknown
-STR_1678    :{WINDOW_COLOUR_2}Popularity: {BLACK}{COMMA16}%
+STR_1677    :{WINDOW_COLOUR_2}Népszerűség: {BLACK}ismeretlen
+STR_1678    :{WINDOW_COLOUR_2}Népszerűség: {BLACK}{COMMA16}%
 STR_1679    :Helix up (left)
 STR_1680    :Helix up (right)
 STR_1681    :Helix down (left)
@@ -1739,22 +1739,22 @@ STR_1734    :{WINDOW_COLOUR_2}Number of laps:
 STR_1735    :{SMALLFONT}{BLACK}Number of laps of circuit
 STR_1736    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
 STR_1737    :{COMMA16}
-STR_1738    :Can't change number of laps...
-STR_1739    :A versenyt {INT32}. vendég nyerte
-STR_1740    :A versenyt {STRINGID} nyerte
+STR_1738    :A körök száma nem változtatható...
+STR_1739    :{INT32}. vendég nyerte a versenyt
+STR_1740    :{STRINGID} nyerte a versenyt
 STR_1741    :Not yet constructed !
 STR_1742    :{WINDOW_COLOUR_2}Max. people on ride:
 STR_1743    :{SMALLFONT}{BLACK}Maximum number of people allowed on this ride at one time
 STR_1744    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{COMMA16}
 STR_1745    :{COMMA16}
-STR_1746    :Can't change this...
+STR_1746    :Ez nem változtatható meg...
 STR_1747    :{WINDOW_COLOUR_2}Időkorlát:
-STR_1748    :{SMALLFONT}{BLACK}Time limit for ride
+STR_1748    :{SMALLFONT}{BLACK}Az építményben eltölthető maximális időtartam
 STR_1749    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{DURATION}
 STR_1750    :{DURATION}
-STR_1751    :Can't change time limit for ride...
-STR_1752    :{SMALLFONT}{BLACK}Show list of individual guests in park
-STR_1753    :{SMALLFONT}{BLACK}Show summarized list of guests in park
+STR_1751    :Az építmény időkorlátja nem módosítható...
+STR_1752    :{SMALLFONT}{BLACK}A parkban található vendégek egyénenkénti listája
+STR_1753    :{SMALLFONT}{BLACK}A parkban található vendégek csoportosított listája
 STR_1754    :{BLACK}{COMMA16} vendég
 STR_1755    :{BLACK}{COMMA16} vendég
 STR_1756    :{WINDOW_COLOUR_2}Belépő:
@@ -1811,7 +1811,7 @@ STR_1806    :Brakes failure
 STR_1807    :Control failure
 STR_1808    :{WINDOW_COLOUR_2}Last breakdown: {BLACK}{STRINGID}
 STR_1809    :{WINDOW_COLOUR_2}Current breakdown: {OUTLINE}{RED}{STRINGID}
-STR_1810    :{WINDOW_COLOUR_2}Carrying:
+STR_1810    :{WINDOW_COLOUR_2}Nála van:
 STR_1811    :Can't build this here...
 STR_1812    :{SMALLFONT}{BLACK}{STRINGID}
 STR_1813    :Miscellaneous Objects
@@ -1850,7 +1850,7 @@ STR_1845    :{MONTHYEAR}
 STR_1846    :{COMMA16} vendég
 STR_1847    :{INLINE_SPRITE}{11}{20}{00}{00}{COMMA16} guests
 STR_1848    :{INLINE_SPRITE}{10}{20}{00}{00}{COMMA16} guests
-STR_1849    :{WINDOW_COLOUR_2}Play music
+STR_1849    :{WINDOW_COLOUR_2}Zene játszása
 STR_1850    :{SMALLFONT}{BLACK}Select whether music should be played for this ride
 STR_1851    :{WINDOW_COLOUR_2}Running cost: {BLACK}{CURRENCY2DP} per hour
 STR_1852    :{WINDOW_COLOUR_2}Running cost: {BLACK}Unknown
@@ -1888,9 +1888,9 @@ STR_1883    :Minden órában
 STR_1884    :Minden második órában
 STR_1885    :Soha
 STR_1886    :Inspecting {STRINGID}
-STR_1887    :{WINDOW_COLOUR_2}Time since last inspection: {BLACK}{COMMA16} minutes
-STR_1888    :{WINDOW_COLOUR_2}Time since last inspection: {BLACK}more than 4 hours
-STR_1889    :{WINDOW_COLOUR_2}Down-Time: {MOVE_X}{255}{BLACK}{COMMA16}%
+STR_1887    :{WINDOW_COLOUR_2}A legutóbbi vizsgálat óta eltelt idő: {BLACK}{COMMA16} perc
+STR_1888    :{WINDOW_COLOUR_2}A legutóbbi vizsgálat óta eltelt idő: {BLACK}több, mint 4 óra
+STR_1889    :{WINDOW_COLOUR_2}Állásidő: {MOVE_X}{255}{BLACK}{COMMA16}%
 STR_1890    :{SMALLFONT}{BLACK}Select how often a mechanic should check this ride
 STR_1891    :No {STRINGID} in park yet!
 STR_1892    :RollerCoaster Tycoon 2
@@ -1917,18 +1917,18 @@ STR_1912    :{MONTH}
 STR_1913    :{BLACK}+{CURRENCY2DP}
 STR_1914    :{BLACK}{CURRENCY2DP}
 STR_1915    :{RED}{CURRENCY2DP}
-STR_1916    :{WINDOW_COLOUR_2}Loan:
+STR_1916    :{WINDOW_COLOUR_2}Kölcsön:
 STR_1917    :{POP16}{POP16}{POP16}{CURRENCY}
-STR_1918    :Can't borrow any more money!
-STR_1919    :Not enough cash available!
-STR_1920    :Can't pay back loan!
-STR_1921    :{SMALLFONT}{BLACK}Start a new game
+STR_1918    :Nem lehet több kölcsönt kérni!
+STR_1919    :Nincs elég pénz!
+STR_1920    :Nem lehet visszafizetni a kölcsönt!
+STR_1921    :{SMALLFONT}{BLACK}Új játék indítása
 STR_1922    :{SMALLFONT}{BLACK}Continue playing a saved game
 STR_1923    :{SMALLFONT}{BLACK}Show tutorial
-STR_1924    :{SMALLFONT}{BLACK}Exit
+STR_1924    :{SMALLFONT}{BLACK}Kilépés
 STR_1925    :Can't place person here...
 STR_1926    :{SMALLFONT}
-STR_1927    :{YELLOW}{STRINGID} has broken down
+STR_1927    :{YELLOW}{STRINGID} lerobbant
 STR_1928    :{RED}{STRINGID} has crashed!
 STR_1929    :{RED}{STRINGID} still hasn't been fixed{NEWLINE}Check where your mechanics are and consider organizing them better
 STR_1930    :{SMALLFONT}{BLACK}Turn on/off tracking information for this guest - (If tracking is on, guest's movements will be reported in the message area)
@@ -1936,7 +1936,7 @@ STR_1931    :{STRINGID} has joined the queue line for {STRINGID}
 STR_1932    :{STRINGID} is on {STRINGID}
 STR_1933    :{STRINGID} is in {STRINGID}
 STR_1934    :{STRINGID} has left {STRINGID}
-STR_1935    :{STRINGID} has left the park
+STR_1935    :{STRINGID} elhagyta a pparkot
 STR_1936    :{STRINGID} has bought {STRINGID}
 STR_1937    :{SMALLFONT}{BLACK}Show information about the subject of this message
 STR_1938    :{SMALLFONT}{BLACK}Show view of guest
@@ -1950,8 +1950,8 @@ STR_1945    :{SMALLFONT}{BLACK}Show orders and options for this staff member
 STR_1946    :{SMALLFONT}{BLACK}A szórakoztató kosztümjének kiválasztása
 STR_1947    :{SMALLFONT}{BLACK}A kiválasztott személyzettípus által járőrözött területek megjelenítése és a legközelebbi tag megkeresése
 STR_1948    :{SMALLFONT}{BLACK}Új személyzeti tag felvétele a kiválasztott típusból
-STR_1949    :Financial Summary
-STR_1950    :Financial Graph
+STR_1949    :Pénzügyi összesítés
+STR_1950    :Pénzügyi grafikon
 STR_1951    :Park Value Graph
 STR_1952    :Profit Graph
 STR_1953    :Marketing
@@ -2293,7 +2293,7 @@ STR_2288    :Ismeretlen
 STR_2289    :{STRINGID} {STRINGID}
 STR_2290    :{SMALLFONT}{BLACK}{STRINGID} {STRINGID}
 STR_2291    :Select scenario for new game
-STR_2292    :{WINDOW_COLOUR_2}Rides been on:
+STR_2292    :{WINDOW_COLOUR_2}Meglátogatott építmények:
 STR_2293    :{BLACK} Nothing
 STR_2294    :{SMALLFONT}{BLACK}Change base land style
 STR_2295    :{SMALLFONT}{BLACK}Change vertical edges of land
@@ -2383,8 +2383,8 @@ STR_2378    :{SMALLFONT}{BLACK}Adjust smaller area of land
 STR_2379    :{SMALLFONT}{BLACK}Adjust larger area of land
 STR_2380    :{SMALLFONT}{BLACK}Adjust smaller area of water
 STR_2381    :{SMALLFONT}{BLACK}Adjust larger area of water
-STR_2382    :Land
-STR_2383    :Water
+STR_2382    :Szárazföld
+STR_2383    :Víz
 STR_2384    :{WINDOW_COLOUR_2}A teljesítendő feladat:
 STR_2385    :{BLACK}Nincs
 STR_2386    :{BLACK}Legalább {COMMA16} látogató {MONTHYEAR} végére és a park értékelése legalább 600 legyen
@@ -2762,23 +2762,23 @@ STR_2757    :???
 STR_2758    :???
 STR_2759    :???
 # New strings used in the cheats window previously these were ???
-STR_2760    :+5K Money
-STR_2761    :Pay For Entrance
-STR_2762    :Pay For Rides
+STR_2760    :+5K pénz
+STR_2761    :Fizetés a belépőért
+STR_2762    :Fizetés az építményekben
 STR_2763    :???
-STR_2764    :Happy Guests
-STR_2765    :Large Tram
+STR_2764    :Boldog vendégek
+STR_2765    :Nagy villamos
 STR_2766    :???
-STR_2767    :Freeze Climate
-STR_2768    :Unfreeze Climate
-STR_2769    :Open Park
-STR_2770    :Close Park
-STR_2771    :Slower Gamespeed
-STR_2772    :Faster Gamespeed
+STR_2767    :Éghajlat befagyasztása
+STR_2768    :Éghajlat feloldása
+STR_2769    :Park megnyitása
+STR_2770    :Park bezárása
+STR_2771    :Játék lassítása
+STR_2772    :Játék gyorsítása
 STR_2773    :Ablakban
 STR_2774    :Teljes képernyő
 STR_2775    :Teljes képernyő (asztal)
-STR_2776    :Nyelv
+STR_2776    :Nyelv:
 STR_2777    :{MOVE_X}{SMALLFONT}{STRING}
 STR_2778    :{RIGHTGUILLEMET}{MOVE_X}{SMALLFONT}{STRING}
 # End of new strings
@@ -3096,8 +3096,8 @@ STR_3089    :Space entrance
 STR_3090    :{SMALLFONT}{BLACK}Select style of entrance, exit, and station
 STR_3091    :You are not allowed to remove this section!
 STR_3092    :You are not allowed to move or modify the station for this ride!
-STR_3093    :{WINDOW_COLOUR_2}Favorite: {BLACK}{STRINGID}
-STR_3094    :N/A
+STR_3093    :{WINDOW_COLOUR_2}Kedvenc: {BLACK}{STRINGID}
+STR_3094    :nincs
 STR_3095    :{WINDOW_COLOUR_2}Lift hill chain speed:
 STR_3096    :{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{POP16}{VELOCITY}
 STR_3097    :{SMALLFONT}{BLACK}Select lift hill chain speed
@@ -3145,7 +3145,7 @@ STR_3138    :Reset Selection
 STR_3139    :Cable lift unable to work in this operating mode
 STR_3140    :Cable lift hill must start immediately after station
 STR_3141    :Multi-circuit per ride not possible with cable lift hill
-STR_3142    :{WINDOW_COLOUR_2}Capacity: {BLACK}{STRINGID}
+STR_3142    :{WINDOW_COLOUR_2}Kapacitás: {BLACK}{STRINGID}
 STR_3143    :{SMALLFONT}{BLACK}Show people on map
 STR_3144    :{SMALLFONT}{BLACK}Show rides and stalls on map
 STR_3145    :{SMALLFONT}{BLACK}Scroll {STRINGID} left
