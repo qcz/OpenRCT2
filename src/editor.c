@@ -70,7 +70,8 @@ void editor_load()
 	RCT2_GLOBAL(0x0141F571, uint8) = 4;
 	viewport_init_all();
 	news_item_init_queue();
-	RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
+	window_editor_main_open();
+	//RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
 	mainWindow = window_get_main();
 	window_scroll_to_location(mainWindow, 2400, 2400, 112);
 	mainWindow->flags &= ~WF_SCROLLING_TO_LOCATION;
@@ -117,7 +118,8 @@ void trackdesigner_load()
 	window_new_ride_init_vars();
 	viewport_init_all();
 	news_item_init_queue();
-	RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
+	window_editor_main_open();
+	//RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
 	mainWindow = window_get_main();
 	window_scroll_to_location(mainWindow, 2400, 2400, 112);
 	mainWindow->flags &= ~WF_SCROLLING_TO_LOCATION;
@@ -155,7 +157,8 @@ void trackmanager_load()
 	window_new_ride_init_vars();
 	viewport_init_all();
 	news_item_init_queue();
-	RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
+	window_editor_main_open();
+	//RCT2_CALLPROC_EBPSAFE(0x0066EF38); // window_main_editor_create
 	mainWindow = window_get_main();
 	window_scroll_to_location(mainWindow, 2400, 2400, 112);
 	mainWindow->flags &= ~WF_SCROLLING_TO_LOCATION;

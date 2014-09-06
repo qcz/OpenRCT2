@@ -465,6 +465,10 @@ void window_cheats_open();
 void window_research_open();
 void window_scenery_open();
 
+void window_editor_main_open();
+void window_editor_top_toolbar_open();
+void window_editor_bottom_toolbar_open();
+
 void window_guest_list_init_vars_a();
 void window_guest_list_init_vars_b();
 void window_bubble_list_item(rct_window* w, int item_position);

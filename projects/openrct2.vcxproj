@@ -110,11 +110,14 @@
     <ClCompile Include="..\src\window_banner.c" />
     <ClCompile Include="..\src\window_cheats.c" />
     <ClCompile Include="..\src\window_clear_scenery.c" />
+    <ClCompile Include="..\src\window_editor_bottom_toolbar.c" />
+    <ClCompile Include="..\src\window_editor_top_toolbar.c" />
     <ClCompile Include="..\src\window_error.c" />
     <ClCompile Include="..\src\window_game_bottom_toolbar.c" />
     <ClCompile Include="..\src\window_dropdown.c" />
     <ClCompile Include="..\src\window_guest_list.c" />
     <ClCompile Include="..\src\window_land.c" />
+    <ClCompile Include="..\src\window_editor_main.c" />
     <ClCompile Include="..\src\window_new_campaign.c" />
     <ClCompile Include="..\src\window_news.c" />
     <ClCompile Include="..\src\window_park.c" />

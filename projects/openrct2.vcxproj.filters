@@ -395,6 +395,15 @@
     <ClCompile Include="..\src\window_ride.c">
       <Filter>Windows</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\window_editor_top_toolbar.c">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\window_editor_bottom_toolbar.c">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\window_editor_main.c">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\openrct2.exe">
