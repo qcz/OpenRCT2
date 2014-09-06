@@ -18,16 +18,20 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
+#include <stdbool.h>
 #include "addresses.h"
+#include "editor.h"
+#include "sprites.h"
+#include "string_ids.h"
 #include "viewport.h"
 #include "widget.h"
 #include "window.h"
 
 enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
-	WIDX_IMGBUTTON1,		// 1
-	WIDX_FLATBUTTON1,		// 2
-	WIDX_IMGBUTTON2,		// 4
-	WIDX_FLATBUTTON2,		// 8
+	WIDX_PREVIOUS_IMAGE,		// 1
+	WIDX_PREVIOUS_STEP_BUTTON,	// 2
+	WIDX_NEXT_IMAGE,			// 4
+	WIDX_NEXT_STEP_BUTTON,		// 8
 };
 
 static rct_widget window_editor_bottom_toolbar_widgets[] = {
@@ -82,24 +86,24 @@ void window_editor_bottom_toolbar_open()
 {
 	rct_window* window;
 
-	window = window_create(0, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16) - 32,
+	window = window_create(0, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_HEIGHT, sint16) - 32,
 		RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16), 32,
 		(uint32*)window_editor_bottom_toolbar_events,
 		WC_BOTTOM_TOOLBAR, WF_STICK_TO_FRONT | WF_TRANSPARENT | WF_5);
 	window->widgets = window_editor_bottom_toolbar_widgets;
 
 	window->enabled_widgets |=
-		(1 << WIDX_FLATBUTTON1) |
-		(1 << WIDX_FLATBUTTON2) |
-		(1 << WIDX_IMGBUTTON1) |
-		(1 << WIDX_IMGBUTTON2);
+		(1 << WIDX_PREVIOUS_STEP_BUTTON) |
+		(1 << WIDX_NEXT_STEP_BUTTON) |
+		(1 << WIDX_PREVIOUS_IMAGE) |
+		(1 << WIDX_NEXT_IMAGE);
 
 	window_init_scroll_widgets(window);
 	window->colours[0] = 150;
 	window->colours[1] = 150;
 	window->colours[2] = 141;
 
-	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
 		window->colours[0] = 135;
 		window->colours[1] = 135;
 		window->colours[2] = 135;
@@ -107,13 +111,13 @@ void window_editor_bottom_toolbar_open()
 }
 
 void hide_previous_step_button() {
-	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON1].type = WWT_EMPTY;
-	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_STEP_BUTTON].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].type = WWT_EMPTY;
 }
 
 void hide_next_step_button() {
-	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON2].type = WWT_EMPTY;
-	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_NEXT_STEP_BUTTON].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].type = WWT_EMPTY;
 }
 
 /**
@@ -125,22 +129,22 @@ void window_editor_bottom_toolbar_invalidate() {
 
 	window_get_register(w);
 
-	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON1].type = WWT_FLATBTN;
-	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON2].type = WWT_FLATBTN;
-	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_IMGBTN;
-	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_IMGBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_STEP_BUTTON].type = WWT_FLATBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_NEXT_STEP_BUTTON].type = WWT_FLATBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].type = WWT_IMGBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].type = WWT_IMGBTN;
 
-	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
 		hide_previous_step_button();
 		hide_next_step_button();
 	} else {
-		if (RCT2_GLOBAL(0x0141F570, uint8) == 0) {
+		if (g_editor_step == EDITOR_STEP_OBJECT_SELECTION) {
 			hide_previous_step_button();
-		} else if (RCT2_GLOBAL(0x0141F570, uint8) == 6) {
+		} else if (g_editor_step == EDITOR_STEP_ROLLERCOASTER_DESIGNER) {
 			hide_next_step_button();
-		} else if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_2)) {
-			if (RCT2_GLOBAL(0x13573C8, uint16) == 0x2710 || RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
-				hide_next_step_button();
+		} else if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER)) {
+			if (RCT2_GLOBAL(0x13573C8, uint16) != 0x2710 || RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
+				hide_previous_step_button();
 			}
 		}
 	}
@@ -156,31 +160,98 @@ void window_editor_bottom_toolbar_paint() {
 
 	window_paint_get_registers(w, dpi);
 
-	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
 		// TODO
 	}
 
 	window_draw_widgets(w, dpi);
 
-	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION)) {
-		// TODO
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
+		bool drawPreviousButton = false;
+		bool drawNextButton = false;
 
-		gfx_fill_rect_inset(dpi,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].left + 1 + w->x,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].top + 1 + w->y,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].right - 1 + w->x,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].bottom - 1 + w-> y,
-			w->colours[1], 0x30);
+		if (g_editor_step == EDITOR_STEP_OBJECT_SELECTION) {
+			drawNextButton = true;
+		} else if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
+			drawPreviousButton = true;
+		} else if (RCT2_GLOBAL(0x13573C8, uint16) != 0x2710) {
+			drawNextButton = true;
+		} else if (RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
+			drawNextButton = true;
+		} else {
+			drawPreviousButton = true;
+		}
 
-		// TODO
+		if (drawPreviousButton) {
+			gfx_fill_rect_inset(dpi,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].left + 1 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].top + 1 + w->y,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].right - 1 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].bottom - 1 + w->y,
+				w->colours[1], 0x30);
+		}
 
-		gfx_fill_rect_inset(dpi,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].left + 1 + w->x,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].top + 1 + w->y,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].right - 1 + w->x,
-			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].bottom - 1 + w->y,
-			w->colours[1], 0x30);
+		if ((drawPreviousButton || drawNextButton) && g_editor_step != EDITOR_STEP_ROLLERCOASTER_DESIGNER) {
+			gfx_fill_rect_inset(dpi,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].left + 1 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].top + 1 + w->y,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].right - 1 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].bottom - 1 + w->y,
+				w->colours[1], 0x30);
+		}
 
-		// TODO
+		short stateX =
+			(window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].right +
+			window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].left) / 2 + w->x;
+		short stateY = w->height - 0x0C + w->y;
+		gfx_draw_string_centred(dpi, STR_OBJECT_SELECTION_STEP + g_editor_step,
+			stateX, stateY, (w->colours[2] & 0x7F) | 0x20, 0);
+
+		if (drawPreviousButton) {
+			gfx_draw_sprite(dpi, SPR_PREVIOUS,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].left + 6 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].top + 6 + w->y, 0);
+
+			int textColour = w->colours[1] & 0x7F;
+
+			if (RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, uint8) == WC_BOTTOM_TOOLBAR &&
+				RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, uint8) == WIDX_PREVIOUS_STEP_BUTTON)
+				textColour = 2;
+
+			short textX = (window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].left + 30 +
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].right) / 2 + w->x;
+			short textY = window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].top + 6 + w->y;
+
+			short stringId = STR_OBJECT_SELECTION_STEP + g_editor_step - 1;
+			if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER)
+				stringId = STR_OBJECT_SELECTION_STEP;
+
+			gfx_draw_string_centred(dpi, STR_BACK_TO_PREVIOUS_STEP, textX, textY, textColour, 0);
+			gfx_draw_string_centred(dpi, stringId, textX, textY + 10, textColour, 0);
+		}
+
+		if ((drawPreviousButton || drawNextButton) && g_editor_step != EDITOR_STEP_ROLLERCOASTER_DESIGNER) {
+			gfx_draw_sprite(dpi, SPR_NEXT,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].right - 29 + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].top + 6 + w->y, 0);
+
+			int textColour = w->colours[1] & 0x7F;
+
+			if (RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, uint8) == WC_BOTTOM_TOOLBAR &&
+				RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, uint8) == WIDX_NEXT_STEP_BUTTON)
+				textColour = 2;
+
+			short textX = (window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].left +
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].right - 30) / 2 + w->x;
+			short textY = window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].top + 6 + w->y;
+			
+			short stringId = STR_OBJECT_SELECTION_STEP + g_editor_step + 1;
+			if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER)
+				stringId = STR_ROLLERCOASTER_DESIGNER_STEP;
+
+			gfx_draw_string_centred(dpi, STR_FORWARD_TO_NEXT_STEP, textX, textY, textColour, 0);
+			gfx_draw_string_centred(dpi, stringId, textX, textY + 10, textColour, 0);
+
+		}
 	}
 }
