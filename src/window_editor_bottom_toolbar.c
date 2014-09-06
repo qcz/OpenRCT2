@@ -103,7 +103,7 @@ void window_editor_bottom_toolbar_open()
 	window->colours[1] = 150;
 	window->colours[2] = 141;
 
-	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
 		window->colours[0] = 135;
 		window->colours[1] = 135;
 		window->colours[2] = 135;
@@ -160,27 +160,43 @@ void window_editor_bottom_toolbar_paint() {
 
 	window_paint_get_registers(w, dpi);
 
-	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
-		// TODO
+	bool drawPreviousButton = false;
+	bool drawNextButton = false;
+
+	if (g_editor_step == EDITOR_STEP_OBJECT_SELECTION) {
+		drawNextButton = true;
+	} else if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
+		drawPreviousButton = true;
+	} else if (RCT2_GLOBAL(0x13573C8, uint16) != 0x2710) {
+		drawNextButton = true;
+	} else if (RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
+		drawNextButton = true;
+	} else {
+		drawPreviousButton = true;
+	}
+
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
+		if (drawPreviousButton) {
+			gfx_fill_rect(dpi,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].left + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].top + w->y,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].right + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_PREVIOUS_IMAGE].bottom + w->y, 0x2000033);
+		}
+
+		if ((drawPreviousButton || drawNextButton) && g_editor_step != EDITOR_STEP_ROLLERCOASTER_DESIGNER) {
+			gfx_fill_rect(dpi,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].left + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].top + w->y,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].right + w->x,
+				window_editor_bottom_toolbar_widgets[WIDX_NEXT_IMAGE].bottom + w->y, 0x2000033);
+		}
 	}
 
 	window_draw_widgets(w, dpi);
 
 	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
-		bool drawPreviousButton = false;
-		bool drawNextButton = false;
-
-		if (g_editor_step == EDITOR_STEP_OBJECT_SELECTION) {
-			drawNextButton = true;
-		} else if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
-			drawPreviousButton = true;
-		} else if (RCT2_GLOBAL(0x13573C8, uint16) != 0x2710) {
-			drawNextButton = true;
-		} else if (RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
-			drawNextButton = true;
-		} else {
-			drawPreviousButton = true;
-		}
+		
 
 		if (drawPreviousButton) {
 			gfx_fill_rect_inset(dpi,
