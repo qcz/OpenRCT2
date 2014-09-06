@@ -25,11 +25,12 @@
 #include "news_item.h"
 #include "ride.h"
 #include "string_ids.h"
+#include "scenery.h"
 #include "track.h"
 #include "widget.h"
 #include "window.h"
 
-#define _window_new_ride_current_tab RCT2_GLOBAL(0x00F43824, uint8)
+#define _window_new_ride_current_tab RCT2_GLOBAL(RCT2_ADDRESS_WINDOW_RIDE_LIST_SELECTED_TAB, uint8)
 
 typedef struct {
 	uint8 type;
@@ -374,7 +375,7 @@ static void window_new_ride_scroll_to_focused_ride(rct_window *w)
 	
 	// Find row index of the focused ride type
 	rct_widget *listWidget = &window_new_ride_widgets[WIDX_RIDE_LIST];
-	int focusRideType = RCT2_ADDRESS(0x00F43825, uint16)[_window_new_ride_current_tab];
+	int focusRideType = RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, uint16)[_window_new_ride_current_tab];
 	int count = 0, row = 0;
 	ride_list_item *listItem = (ride_list_item*)0x00F43523;
 	while (listItem->type != 255 || listItem->entry_index != 255) {
@@ -436,7 +437,7 @@ void window_new_ride_open()
 	
 	window_new_ride_populate_list();
 	
-	w->new_ride.highlighted_ride_id = RCT2_ADDRESS(0x00F43825, sint16)[_window_new_ride_current_tab];
+	w->new_ride.highlighted_ride_id = RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, sint16)[_window_new_ride_current_tab];
 	if (w->new_ride.highlighted_ride_id == -1)
 		w->new_ride.highlighted_ride_id = RCT2_GLOBAL(0x00F43523, sint16);
 	
@@ -468,7 +469,7 @@ static void window_new_ride_refresh_widget_sizing(rct_window *w)
 		window_new_ride_widgets[WIDX_CURRENTLY_IN_DEVELOPMENT_GROUP].type = WWT_GROUPBOX;
 		window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_GROUP].type = WWT_GROUPBOX;
 		window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_BUTTON].type = WWT_FLATBTN;
-		if (!(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_11))
+		if (!(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY))
 			window_new_ride_widgets[WIDX_RESEARCH_FUNDING_BUTTON].type = WWT_FLATBTN;
 
 		width = 300;
@@ -579,7 +580,7 @@ static void window_new_ride_mousedown(int widgetIndex, rct_window *w, rct_widget
 	w->new_ride.selected_ride_countdown = -1;
 	window_new_ride_populate_list();
 	if (page < WINDOW_NEW_RIDE_PAGE_RESEARCH) {
-		w->new_ride.highlighted_ride_id = RCT2_ADDRESS(0x00F43825, sint16)[page];
+		w->new_ride.highlighted_ride_id = RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, sint16)[page];
 		if (w->new_ride.highlighted_ride_id == -1)
 			w->new_ride.highlighted_ride_id = RCT2_GLOBAL(0x00F43523, sint16);
 	}
@@ -654,7 +655,7 @@ static void window_new_ride_scrollmousedown()
 	if (item.type == 255 && item.entry_index == 255)
 		return;
 
-	RCT2_ADDRESS(0x00F43825, ride_list_item)[_window_new_ride_current_tab] = item;
+	RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, ride_list_item)[_window_new_ride_current_tab] = item;
 	w->new_ride.selected_ride_id = *((sint16*)&item);
 
 	sound_play_panned(SOUND_CLICK_1, w->x + (w->width / 2));
@@ -683,7 +684,7 @@ static void window_new_ride_scrollmouseover()
 		return;
 
 	w->new_ride.highlighted_ride_id = *((sint16*)&item);
-	RCT2_ADDRESS(0x00F43825, ride_list_item)[_window_new_ride_current_tab] = item;
+	RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, ride_list_item)[_window_new_ride_current_tab] = item;
 	window_invalidate(w);
 }
 
@@ -715,7 +716,7 @@ static void window_new_ride_invalidate()
 
 	if (_window_new_ride_current_tab == WINDOW_NEW_RIDE_PAGE_RESEARCH) {
 		window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_BUTTON].type = WWT_EMPTY;
-		uint32 typeId = RCT2_GLOBAL(0x01357CF4, uint32);
+		uint32 typeId = RCT2_GLOBAL(RCT2_ADDRESS_LAST_RESEARCHED_ITEM_SUBJECT, uint32);
 		if (typeId != 0xFFFFFFFF) {
 			window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_BUTTON].type = WWT_FLATBTN;
 			window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_BUTTON].image = typeId >= 0x10000 ? 5189 : 5191;
@@ -761,8 +762,7 @@ static void window_new_ride_paint()
 					rideEntry->name :
 					(typeId & 0xFF00) + 2;
 			} else {
-				uint8 *sceneryEntry = RCT2_GLOBAL(0x009ADA90 + (typeId & 0xFFFF) * 4, uint8*);
-				stringId = RCT2_GLOBAL(sceneryEntry, uint16);
+				stringId = g_scenerySetEntries[typeId]->name;
 			}
 		}
 	}
@@ -790,7 +790,7 @@ static void window_new_ride_paint()
 	x = w->x + 10;
 	y = w->y + window_new_ride_widgets[WIDX_LAST_DEVELOPMENT_GROUP].top + 12;
 
-	uint32 typeId = RCT2_GLOBAL(0x01357CF4, uint32);
+	uint32 typeId = RCT2_GLOBAL(RCT2_ADDRESS_LAST_RESEARCHED_ITEM_SUBJECT, uint32);
 	if (typeId != 0xFFFFFFFF) {
 		if (typeId >= 0x10000) {
 			rct_ride_type *rideEntry = RCT2_GLOBAL(0x009ACFA4 + (typeId & 0xFF) * 4, rct_ride_type*);
@@ -798,8 +798,7 @@ static void window_new_ride_paint()
 				rideEntry->name :
 				(typeId & 0xFF00) + 2;
 		} else {
-			uint8 *sceneryEntry = RCT2_GLOBAL(0x009ADA90 + (typeId & 0xFFFF) * 4, uint8*);
-			stringId = RCT2_GLOBAL(sceneryEntry, uint16);
+			stringId = g_scenerySetEntries[typeId]->name;
 		}
 		gfx_draw_string_left_wrapped(dpi, &stringId, x, y, 266, STR_RESEARCH_RIDE_LABEL, 0);
 	}
@@ -944,7 +943,7 @@ static void window_new_ride_paint_ride_information(rct_window *w, rct_drawpixeli
 	}
 
 	// Price
-	if (!(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_11)) {
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY)) {
 		// Get price of ride
 		int unk2 = RCT2_GLOBAL(0x0097CC68 + (item.type * 2), uint8);
 		money32 price = RCT2_GLOBAL(0x0097DD78 + (item.type * 4), uint16);
@@ -989,5 +988,6 @@ static void window_new_ride_select(rct_window *w)
 	}
 
 	// Show ride construction window
-	RCT2_CALLPROC_X(0x006B4800, *((sint16*)&item), 0, 0, 0, 0, 0, 0);
+	//RCT2_CALLPROC_X(0x006B4800, *((sint16*)&item), 0, 0, 0, 0, 0, 0);
+	ride_construct_new(*((sint16*)&item));
 }

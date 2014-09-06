@@ -330,7 +330,7 @@ void peep_update_crowd_noise()
 	if (visiblePeeps < 0) {
 		// Mute crowd noise
 		if (RCT2_GLOBAL(0x009AF5FC, uint32) != 1) {
-			RCT2_CALLPROC_1(0x00401A05, int, 2);
+			sound_channel_stop(2); //RCT2_CALLPROC_1(0x00401A05, int, 2);
 			RCT2_GLOBAL(0x009AF5FC, uint32) = 1;
 		}
 	} else {
@@ -345,14 +345,14 @@ void peep_update_crowd_noise()
 		// Check if crowd noise is already playing
 		if (RCT2_GLOBAL(0x009AF5FC, uint32) == 1) {
 			// Load and play crowd noise
-			if (RCT2_CALLFUNC_3(0x0040194E, int, int, char*, int, 2, (char*)get_file_path(PATH_ID_CSS2), 0)) {
-				RCT2_CALLPROC_5(0x00401999, int, int, int, int, int, 2, 1, volume, 0, 0);
+			if (sound_channel_load_file2(2, (char*)get_file_path(PATH_ID_CSS2), 0)) {
+				sound_channel_play(2, 1, volume, 0, 0);
 				RCT2_GLOBAL(0x009AF5FC, uint32) = volume;
 			}
 		} else {
 			// Alter crowd noise volume
 			if (RCT2_GLOBAL(0x009AF5FC, uint32) != volume) {
-				RCT2_CALLPROC_2(0x00401AD3, int, int, 2, volume);
+				sound_channel_set_volume(2, volume);//RCT2_CALLPROC_2(0x00401AD3, int, int, 2, volume);
 				RCT2_GLOBAL(0x009AF5FC, uint32) = volume;
 			}
 		}
@@ -437,20 +437,20 @@ void get_arguments_from_action(rct_peep* peep, uint32 *argument_1, uint32* argum
 		if (RCT2_GLOBAL(RCT2_ADDRESS_RIDE_FLAGS + ride.type * 8, uint32) & 0x400000){
 			*argument_1 = STR_IN_RIDE;
 		}
-		*argument_1 |= (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 |= (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	case PEEP_STATE_BUYING:
 		ride = g_ride_list[peep->current_ride];
-		*argument_1 = STR_AT_RIDE | (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 = STR_AT_RIDE | (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	case PEEP_STATE_WALKING:
 	case 0x14:
 		if (peep->var_C5 != 0xFF){
 			ride = g_ride_list[peep->var_C5];
-			*argument_1 = STR_HEADING_FOR | (ride.var_04A << 16);
-			*argument_2 = ride.var_04C;
+			*argument_1 = STR_HEADING_FOR | (ride.name << 16);
+			*argument_2 = ride.name_arguments;
 		}
 		else{
 			*argument_1 = peep->flags & PEEP_FLAGS_LEAVING_PARK ? STR_LEAVING_PARK : STR_WALKING;
@@ -460,8 +460,8 @@ void get_arguments_from_action(rct_peep* peep, uint32 *argument_1, uint32* argum
 	case PEEP_STATE_QUEUING_FRONT:
 	case PEEP_STATE_QUEUING:
 		ride = g_ride_list[peep->current_ride];
-		*argument_1 = STR_QUEUING_FOR | (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 = STR_QUEUING_FOR | (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	case PEEP_STATE_SITTING:
 		*argument_1 = STR_SITTING;
@@ -470,12 +470,12 @@ void get_arguments_from_action(rct_peep* peep, uint32 *argument_1, uint32* argum
 	case PEEP_STATE_WATCHING:
 		if (peep->current_ride != 0xFF){
 			ride = g_ride_list[peep->current_ride];
-			*argument_1 = STR_WATCHING_RIDE | (ride.var_04A << 16);
-			*argument_2 = ride.var_04C;
+			*argument_1 = STR_WATCHING_RIDE | (ride.name << 16);
+			*argument_2 = ride.name_arguments;
 			if (peep->current_seat & 0x1)
-				*argument_1 = STR_WATCHING_CONSTRUCTION_OF | (ride.var_04A << 16);
+				*argument_1 = STR_WATCHING_CONSTRUCTION_OF | (ride.name << 16);
 			else
-				*argument_1 = STR_WATCHING_RIDE | (ride.var_04A << 16);
+				*argument_1 = STR_WATCHING_RIDE | (ride.name << 16);
 		}
 		else{
 			*argument_1 = peep->current_seat & 0x1 ? STR_WATCHING_NEW_RIDE_BEING_CONSTRUCTED : STR_LOOKING_AT_SCENERY;
@@ -519,27 +519,65 @@ void get_arguments_from_action(rct_peep* peep, uint32 *argument_1, uint32* argum
 		}
 		else{
 			ride = g_ride_list[peep->current_ride];
-			*argument_1 = STR_RESPONDING_TO_RIDE_BREAKDOWN_CALL | (ride.var_04A << 16);
-			*argument_2 = ride.var_04C;
+			*argument_1 = STR_RESPONDING_TO_RIDE_BREAKDOWN_CALL | (ride.name << 16);
+			*argument_2 = ride.name_arguments;
 		}
 		break;
 	case PEEP_STATE_FIXING:
 		ride = g_ride_list[peep->current_ride];
-		*argument_1 = STR_FIXING_RIDE | (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 = STR_FIXING_RIDE | (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	case PEEP_STATE_HEADING_TO_INSPECTION:
 		ride = g_ride_list[peep->current_ride];
-		*argument_1 = STR_HEADING_TO_RIDE_FOR_INSPECTION | (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 = STR_HEADING_TO_RIDE_FOR_INSPECTION | (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	case PEEP_STATE_INSPECTING:
 		ride = g_ride_list[peep->current_ride];
-		*argument_1 = STR_INSPECTING_RIDE | (ride.var_04A << 16);
-		*argument_2 = ride.var_04C;
+		*argument_1 = STR_INSPECTING_RIDE | (ride.name << 16);
+		*argument_2 = ride.name_arguments;
 		break;
 	}
 
+}
+
+/**
+* rct2: 0x00698342
+* thought.item (eax)
+* thought.type (ebx)
+* argument_1 (esi & ebx)
+* argument_2 (esi+2)
+*/
+void get_arguments_from_thought(rct_peep_thought thought, uint32* argument_1, uint32* argument_2){
+	int esi = 0x9AC86C;
+
+	if ((RCT2_ADDRESS(0x981DB1, uint16)[thought.type] & 0xFF) & 1){
+		rct_ride* ride = &g_ride_list[thought.item];
+		esi = (int)(&(ride->name));
+	}
+	else if ((RCT2_ADDRESS(0x981DB1, uint16)[thought.type] & 0xFF) & 2){
+		if (thought.item < 0x20){
+			RCT2_GLOBAL(0x9AC86C, uint16) = thought.item + STR_ITEM_START;
+		}
+		else{
+			RCT2_GLOBAL(0x9AC86C, uint16) = thought.item + STR_ITEM2_START;
+		}
+	}
+	else if ((RCT2_ADDRESS(0x981DB1, uint16)[thought.type] & 0xFF) & 4){
+		if (thought.item < 0x20){
+			RCT2_GLOBAL(0x9AC86C, uint16) = thought.item + STR_ITEM_SINGULAR_START;
+		}
+		else
+		{
+			RCT2_GLOBAL(0x9AC86C, uint16) = thought.item + STR_ITEM2_SINGULAR_START;
+		}
+	}
+	else{
+		esi = 0x9AC864; //No thought?
+	}
+	*argument_1 = ((thought.type + STR_THOUGHT_START) & 0xFFFF) | (*((uint16*)esi) << 16);
+	*argument_2 = *((uint32*)(esi + 2)); //Always 0 apart from on rides?
 }
 
 /**

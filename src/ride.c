@@ -20,6 +20,7 @@
 
 #include <windows.h>
 #include "addresses.h"
+#include "game.h"
 #include "map.h"
 #include "news_item.h"
 #include "sprite.h"
@@ -241,16 +242,16 @@ void ride_entrance_exit_connected(rct_ride* ride, int ride_idx)
 			continue;
 		if (entrance != -1 && !ride_entrance_exit_is_reachable(entrance, ride, i)) {
 			// name of ride is parameter of the format string
-			RCT2_GLOBAL(0x013CE952, uint16) = ride->var_04A;
-			RCT2_GLOBAL(0x013CE954, uint32) = ride->var_04C;			
+			RCT2_GLOBAL(0x013CE952, uint16) = ride->name;
+			RCT2_GLOBAL(0x013CE954, uint32) = ride->name_arguments;			
 			news_item_add_to_queue(1, STR_ENTRANCE_NOT_CONNECTED, ride_idx);
 			ride->connected_message_throttle = 3;
 		}
 			
 		if (exit != -1 && !ride_entrance_exit_is_reachable(exit, ride, i)) {
 			// name of ride is parameter of the format string
-			RCT2_GLOBAL(0x013CE952, uint16) = ride->var_04A;
-			RCT2_GLOBAL(0x013CE954, uint32) = ride->var_04C;
+			RCT2_GLOBAL(0x013CE952, uint16) = ride->name;
+			RCT2_GLOBAL(0x013CE954, uint32) = ride->name_arguments;
 			news_item_add_to_queue(1, STR_EXIT_NOT_CONNECTED, ride_idx);
 			ride->connected_message_throttle = 3;
 		}
@@ -314,8 +315,8 @@ void ride_shop_connected(rct_ride* ride, int ride_idx)
     }    
     
 	// name of ride is parameter of the format string
-    RCT2_GLOBAL(0x013CE952, uint16) = ride->var_04A;
-	RCT2_GLOBAL(0x013CE954, uint32) = ride->var_04C;
+    RCT2_GLOBAL(0x013CE952, uint16) = ride->name;
+	RCT2_GLOBAL(0x013CE954, uint32) = ride->name_arguments;
 	news_item_add_to_queue(1, STR_ENTRANCE_NOT_CONNECTED, ride_idx);
 
     ride->connected_message_throttle = 3;
@@ -344,3 +345,132 @@ void ride_check_all_reachable()
 	}
 }
 
+/**
+ * 
+ * rct2: 0x006CAF80
+ * ax result x
+ * bx result y
+ * dl ride index
+ * esi result map element
+ */
+rct_map_element *sub_6CAF80(int rideIndex, int *outX, int *outY)
+{
+	rct_map_element *resultMapElement, *mapElement;
+	int foundSpecialTrackPiece;
+
+	resultMapElement = (rct_map_element*)-1;
+	foundSpecialTrackPiece = 0;
+
+	uint16 x, y;
+	for (x = 0; x < 256; x++) {
+		for (y = 0; y < 256; y++) {
+			// Iterate through map elements on tile
+			int tileIndex = (y << 8) | x;
+			mapElement = TILE_MAP_ELEMENT_POINTER(tileIndex);
+			do {
+				if ((mapElement->type & MAP_ELEMENT_TYPE_MASK) != MAP_ELEMENT_TYPE_TRACK)
+					continue;
+				if (rideIndex != mapElement->properties.track.ride_index)
+					continue;
+
+				// Found a track piece for target ride
+
+				// Check if its a ???
+				int specialTrackPiece = (
+					(mapElement->properties.track.type != 2 && mapElement->properties.track.type != 3) &&
+					(RCT2_ADDRESS(0x0099BA64, uint8)[mapElement->properties.track.type * 16] & 0x10)
+				);
+
+				// Set result tile to this track piece if first found track or a ???
+				if (resultMapElement == (rct_map_element*)-1 || specialTrackPiece) {
+					resultMapElement = mapElement;
+
+					if (outX != NULL) *outX = x * 32;
+					if (outY != NULL) *outY = y * 32;
+				}
+
+				if (specialTrackPiece) {
+					foundSpecialTrackPiece = 1;
+					return resultMapElement;
+				}
+			} while (!(mapElement->flags & MAP_ELEMENT_FLAG_LAST_TILE) && mapElement++);
+		}
+	}
+	return resultMapElement;
+}
+
+/**
+ * 
+ * rct2: 0x006CB02F
+ * ax result x
+ * bx result y
+ * esi input / output map element
+ */
+rct_map_element *ride_find_track_gap(rct_map_element *startTrackElement, int *outX, int *outY)
+{
+	int eax, ebx, ecx, edx, esi, edi, ebp;
+	esi = (int)startTrackElement;
+	eax = *outX;
+	ebx = 0;
+	ecx = *outY;
+	edx = 0;
+	edi = 0;
+	ebp = 0;
+	RCT2_CALLFUNC_X(0x006CB02F, &eax, &ebx, &ecx, &edx, &esi, &edi, &ebp);
+
+	if (outX != NULL) *outX = eax & 0xFFFF;
+	if (outY != NULL) *outY = ecx & 0xFFFF;
+	return (rct_map_element*)esi;
+}
+
+/**
+ *
+ * rct2: 0x006B4800
+ */
+void ride_construct_new(int list_item)
+{
+	int eax, ebx, ecx, edx, esi, edi, ebp;
+	edx = list_item;
+	eax = 0;
+	ecx = 0;
+	ebx = 1;
+	edi = 0;
+	esi = 0;
+
+	RCT2_GLOBAL(RCT2_ADDRESS_GAME_COMMAND_ERROR_TITLE, uint16) = 0x3DC;
+
+	esi = GAME_COMMAND_6;
+	game_do_command_p(esi, &eax, &ebx, &ecx, &edx, &esi, &edi, &ebp);
+	if (ebx == 0x80000000) {
+		return;
+	}
+
+	//Looks like edi became the ride index after the command.
+	eax = edi;
+	rct_window *w;
+
+	//TODO: replace with window_ride_main_open(eax)
+	// window_ride_main_open(eax);
+	RCT2_CALLFUNC_X(0x006ACC28, &eax, &ebx, &ecx, &edx, &esi, &edi, &ebp);
+	window_get_register(w);
+
+	ecx = w->classification;
+	edx = 0x13;
+	ebp = (int)w;
+	//TODO: replace with window_ride_main_mouseup() after ride-window_merge
+	// window_ride_main_mouseup();
+	RCT2_CALLFUNC_X(0x006AF17E, &eax, &ebx, &ecx, &edx, &esi, &edi, &ebp);
+	rct_window *ride_window = window_find_by_id(w->classification, w->number); //class here
+	window_close(ride_window);
+}
+
+/**
+ * 
+ * rct2: 0x006CC056
+ */
+int ride_try_construct(rct_map_element *trackMapElement)
+{
+	// Success stored in carry flag which can't be accessed after call using is macro
+	RCT2_CALLPROC_X(0x006CC056, 0, 0, 0, (int)trackMapElement, 0, 0, 0);
+	return 1;
+}

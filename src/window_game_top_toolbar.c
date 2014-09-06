@@ -170,6 +170,7 @@ void window_game_top_toolbar_open()
 		(1 << WIDX_RIDES) | 
 		(1 << WIDX_PARK) |
 		(1 << WIDX_STAFF) | 
+		(1 << WIDX_GUESTS) |
 		(1 << WIDX_CLEAR_SCENERY) |
 		(1ULL << WIDX_FASTFORWARD) | 
 		(1ULL << WIDX_RESEARCH);
@@ -258,7 +259,8 @@ static void window_game_top_toolbar_mouseup()
 	case WIDX_SCENERY:
 		if (!tool_set(w, WIDX_SCENERY, 0)) {
 			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
-			RCT2_CALLPROC_EBPSAFE(0x006E0FEF);
+			window_scenery_open();
+			//RCT2_CALLPROC_EBPSAFE(0x006E0FEF);
 		}
 		break;
 	case WIDX_PATH:

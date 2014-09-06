@@ -23,9 +23,6 @@
 #include "date.h"
 #include "map.h"
 
-#define GET_MAP_ELEMENT(x) (&(RCT2_ADDRESS(RCT2_ADDRESS_MAP_ELEMENTS, rct_map_element)[x]))
-#define TILE_MAP_ELEMENT_POINTER(x) (RCT2_ADDRESS(RCT2_ADDRESS_TILE_MAP_ELEMENT_POINTERS, rct_map_element*)[x])
-
 static void tiles_init();
 
 void map_element_set_terrain(rct_map_element *element, int terrain)
@@ -141,7 +138,9 @@ void map_update_tile_pointers()
 
 /**
  * Return the absolute height of an element, given its (x,y) coordinates
- * 
+ *  ax: x
+ *  cx: y
+ *  dx: return
  *  rct2: 0x00662783
  */
 int map_element_height(int x, int y)

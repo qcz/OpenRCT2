@@ -21,7 +21,9 @@
 #include <string.h>
 #include "addresses.h"
 #include "audio.h"
+#include "game.h"
 #include "gfx.h"
+#include "map.h"
 #include "osinterface.h"
 #include "rct2.h"
 #include "widget.h"
@@ -829,6 +831,38 @@ rct_window *window_bring_to_front(rct_window *w)
 }
 
 /**
+ *
+ * rct2: 0x006EE65A
+ */
+void window_push_others_right(rct_window* window)
+{
+
+        for (rct_window* w = g_window_list; w < RCT2_GLOBAL(RCT2_ADDRESS_NEW_WINDOW_PTR, rct_window*); w++) {
+                if (w == window)
+                        continue;
+                if (w->flags & (WF_STICK_TO_BACK | WF_STICK_TO_FRONT))
+                        continue;
+                if (w->x >= window->x + window->width)
+                        continue;
+                if (w->x + w->width <= window->x)
+                        continue;
+                if (w->y >= window->y + window->height)
+                        continue;
+                if (w->y + w->height <= window->y)
+                        continue;
+
+                window_invalidate(w);
+                if (window->x + window->width + 13 >= RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, uint16))
+                        continue;
+                uint16 push_amount = window->x + window->width - w->x + 3;
+                w->x += push_amount;
+                window_invalidate(w);
+                if (w->viewport != NULL)
+                        w->viewport->x += push_amount;
+        }
+}
+
+/**
  * 
  *  rct2: 0x006EE6EA
  */
@@ -870,6 +904,7 @@ void window_push_others_below(rct_window *w1)
 			w2->viewport->y += push_amount;
 	}
 }
+
 
 /**
  * 
@@ -930,7 +965,49 @@ void window_scroll_to_location(rct_window *w, int x, int y, int z)
  */
 void window_rotate_camera(rct_window *w)
 {
-	RCT2_CALLPROC_X(0x0068881A, 0, 0, 0, 0, (int)w, 0, 0);
+	//RCT2_CALLPROC_X(0x0068881A, 0, 0, 0, 0, (int)w, 0, 0);
+
+	rct_viewport *viewport = w->viewport;
+	if (viewport == NULL)
+		return;
+
+	sint16 x = (viewport->width >> 1) + viewport->x;
+	sint16 y = (viewport->height >> 1) + viewport->y;
+	sint16 z;
+
+	uint8 rot = RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_ROTATION, uint8);
+
+	int ecx, edx, esi, edi = (int)viewport, ebp;
+	//has something to do with checking if middle of the viewport is obstructed
+	RCT2_CALLFUNC_X(0x00688972, (int*)&x, (int*)&y, &ecx, &edx, &esi, &edi, &ebp);
+	rct_viewport *other = (rct_viewport*)edi;
+
+	// other != viewport probably triggers on viewports in ride or guest window?
+	// x is 0x8000 if middle of viewport is obstructed by another window?
+	if (x == (sint16)SPRITE_LOCATION_NULL || other != viewport){
+		x = (viewport->view_width >> 1) + viewport->view_x;
+		y = (viewport->view_height >> 1) + viewport->view_y;
+
+		sub_689174(&x, &y, &z, rot);
+	} else {
+		z = map_element_height(x, y);
+	}
+
+	RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_ROTATION, uint32) = (rot + 1) % 4;
+
+	int new_x, new_y;
+	center_2d_coordinates(x, y, z, &new_x, &new_y, viewport);
+
+	w->saved_view_x = new_x;
+	w->saved_view_y = new_y;
+	viewport->view_x = new_x;
+	viewport->view_y = new_y;
+
+	window_invalidate(w);
+
+	RCT2_CALLPROC_EBPSAFE(0x00688956);
+
+	sub_0x0069E9A7();
 }
 
 /**
@@ -1150,7 +1227,7 @@ void window_draw_widgets(rct_window *w, rct_drawpixelinfo *dpi)
 	if ((w->flags & WF_TRANSPARENT) && !(w->flags & WF_5))
 		gfx_fill_rect(dpi, w->x, w->y, w->x + w->width - 1, w->y + w->height - 1, 0x2000000 | 51);
 
-	//some code missing here? Between 006EB18C and 006EB260
+	//todo: some code missing here? Between 006EB18C and 006EB260
 
 	widgetIndex = 0;
 	for (widget = w->widgets; widget->type != WWT_LAST; widget++) {
@@ -1162,7 +1239,7 @@ void window_draw_widgets(rct_window *w, rct_drawpixelinfo *dpi)
 		widgetIndex++;
 	}
 
-	//something missing here too? Between 006EC32B and 006EC369
+	//todo: something missing here too? Between 006EC32B and 006EC369
 
 	if (w->flags & WF_WHITE_BORDER_MASK) {
 		gfx_fill_rect_inset(dpi, w->x, w->y, w->x + w->width - 1, w->y + w->height - 1, 2, 0x10);
@@ -1496,3 +1573,19 @@ void RCT2_CALLPROC_WE_MOUSE_DOWN(int address,  int widgetIndex, rct_window*w, rc
 		);
 #endif
 }
+
+/* Based on rct2: 0x6987ED and another version from window_park */
+void window_align_tabs( rct_window *w, uint8 start_tab_id, uint8 end_tab_id )
+{
+	int x = w->widgets[start_tab_id].left;
+	int tab_width = w->widgets[start_tab_id].right - w->widgets[start_tab_id].left;
+	
+	for (int i = start_tab_id; i < end_tab_id; ++i){
+		if ( !(w->disabled_widgets & (1LL << i)) ){
+			w->widgets[i].left = x;
+			w->widgets[i].right = x + tab_width;
+			x += tab_width + 1;
+		}
+	}
+}
+
