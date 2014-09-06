@@ -23,6 +23,13 @@
 #include "widget.h"
 #include "window.h"
 
+enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
+	WIDX_IMGBUTTON1,		// 1
+	WIDX_FLATBUTTON1,		// 2
+	WIDX_IMGBUTTON2,		// 4
+	WIDX_FLATBUTTON2,		// 8
+};
+
 static rct_widget window_editor_bottom_toolbar_widgets[] = {
 	{ WWT_IMGBTN, 0, 0, 199, 0, 33, 0xFFFFFFFF, 0xFFFF },
 	{ WWT_FLATBTN, 0, 2, 197, 2, 31, 0xFFFFFFFF, 0xFFFF },
@@ -31,6 +38,58 @@ static rct_widget window_editor_bottom_toolbar_widgets[] = {
 	{ WIDGETS_END },
 };
 
+static void window_editor_bottom_toolbar_emptysub() { }
+
+static void* window_editor_bottom_toolbar_events[] = {
+	window_editor_bottom_toolbar_emptysub,
+	0x0066f5ae,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
+	0x0066f1c9,
+	0x0066f25c,
+	window_editor_bottom_toolbar_emptysub
+};
+
 void window_editor_bottom_toolbar_open()
 {
+	rct_window* window;
+
+	window = window_create(0, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16) - 32,
+		RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16), 32,
+		(uint32*)window_editor_bottom_toolbar_events,
+		WC_BOTTOM_TOOLBAR, WF_STICK_TO_FRONT | WF_TRANSPARENT | WF_5);
+	window->widgets = window_editor_bottom_toolbar_widgets;
+
+	window->enabled_widgets |=
+		(1 << WIDX_FLATBUTTON1) |
+		(1 << WIDX_FLATBUTTON2) |
+		(1 << WIDX_IMGBUTTON1) |
+		(1 << WIDX_IMGBUTTON2);
+
+	window_init_scroll_widgets(window);
+	window->colours[0] = 7;
+	window->colours[1] = 12;
+	window->colours[2] = 24;
+	window->colours[3] = 1;
 }
