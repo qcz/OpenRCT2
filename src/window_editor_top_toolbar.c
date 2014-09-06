@@ -101,7 +101,7 @@ static void* window_editor_top_toolbar_events[] = {
 
 /**
 * Creates the main editor top toolbar window.
-* rct2: 0x0066B485 (part of 0x0066B3E8)
+* rct2: 0x0066EFC8 (part of 0x0066EF38)
 */
 void window_editor_top_toolbar_open()
 {

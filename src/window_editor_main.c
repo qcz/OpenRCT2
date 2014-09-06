@@ -25,6 +25,8 @@
 
 static void window_editor_main_emptysub() { }
 
+static void window_editor_main_paint();
+
 static void* window_editor_main_events[] = {
 	window_editor_main_emptysub,
 	window_editor_main_emptysub,
@@ -52,7 +54,7 @@ static void* window_editor_main_events[] = {
 	window_editor_main_emptysub,
 	window_editor_main_emptysub,
 	window_editor_main_emptysub,
-	0x0066FC97, //window_editor_main_paint,
+	window_editor_main_paint,// 0x0066FC97, //window_editor_main_paint,
 	window_editor_main_emptysub,
 };
 
@@ -87,4 +89,18 @@ void window_editor_main_open()
 
 	window_editor_top_toolbar_open();
 	window_editor_bottom_toolbar_open();
+}
+
+/**
+*
+* rct2: 0x0066FC97
+* This function immediately jumps to 0x00685BE1
+*/
+static void window_editor_main_paint() {
+	rct_window* w;
+	rct_drawpixelinfo* dpi;
+
+	window_paint_get_registers(w, dpi);
+
+	viewport_render(dpi, w->viewport, dpi->x, dpi->y, dpi->x + dpi->width, dpi->y + dpi->height);
 }

@@ -31,14 +31,17 @@ enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 };
 
 static rct_widget window_editor_bottom_toolbar_widgets[] = {
-	{ WWT_IMGBTN, 0, 0, 199, 0, 33, 0xFFFFFFFF, 0xFFFF },
-	{ WWT_FLATBTN, 0, 2, 197, 2, 31, 0xFFFFFFFF, 0xFFFF },
-	{ WWT_IMGBTN, 0, 440, 639, 0, 33, 0xFFFFFFFF, 0xFFFF },
-	{ WWT_FLATBTN, 0, 442, 637, 2, 31, 0xFFFFFFFF, 0xFFFF },
+	{ WWT_IMGBTN, 0, 0, 199, 0, 33, 0xFFFFFFFF, 0xFFFF },			// 1		0x9A9958
+	{ WWT_FLATBTN, 0, 2, 197, 2, 31, 0xFFFFFFFF, 0xFFFF },			// 2		0x9A9968
+	{ WWT_IMGBTN, 0, 440, 639, 0, 33, 0xFFFFFFFF, 0xFFFF },			// 4		0x9A9978
+	{ WWT_FLATBTN, 0, 442, 637, 2, 31, 0xFFFFFFFF, 0xFFFF },		// 8		0x9A9988
 	{ WIDGETS_END },
 };
 
 static void window_editor_bottom_toolbar_emptysub() { }
+
+static void window_editor_bottom_toolbar_invalidate();
+static void window_editor_bottom_toolbar_paint();
 
 static void* window_editor_bottom_toolbar_events[] = {
 	window_editor_bottom_toolbar_emptysub,
@@ -66,11 +69,15 @@ static void* window_editor_bottom_toolbar_events[] = {
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub,
-	0x0066f1c9,
-	0x0066f25c,
+	window_editor_bottom_toolbar_invalidate, //0x0066f1c9,
+	window_editor_bottom_toolbar_paint, //0x0066f25c,
 	window_editor_bottom_toolbar_emptysub
 };
 
+/**
+* Creates the main editor top toolbar window.
+* rct2: 0x0066F052 (part of 0x0066EF38)
+*/
 void window_editor_bottom_toolbar_open()
 {
 	rct_window* window;
@@ -88,8 +95,92 @@ void window_editor_bottom_toolbar_open()
 		(1 << WIDX_IMGBUTTON2);
 
 	window_init_scroll_widgets(window);
-	window->colours[0] = 7;
-	window->colours[1] = 12;
-	window->colours[2] = 24;
-	window->colours[3] = 1;
+	window->colours[0] = 150;
+	window->colours[1] = 150;
+	window->colours[2] = 141;
+
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+		window->colours[0] = 135;
+		window->colours[1] = 135;
+		window->colours[2] = 135;
+	}
+}
+
+void hide_previous_step_button() {
+	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON1].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_EMPTY;
+}
+
+void hide_next_step_button() {
+	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON2].type = WWT_EMPTY;
+	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].type = WWT_EMPTY;
+}
+
+/**
+*
+*  rct2: 0x0066F1C9
+*/
+void window_editor_bottom_toolbar_invalidate() {
+	rct_window* w;
+
+	window_get_register(w);
+
+	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON1].type = WWT_FLATBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_FLATBUTTON2].type = WWT_FLATBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_IMGBTN;
+	window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].type = WWT_IMGBTN;
+
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+		hide_previous_step_button();
+		hide_next_step_button();
+	} else {
+		if (RCT2_GLOBAL(0x0141F570, uint8) == 0) {
+			hide_previous_step_button();
+		} else if (RCT2_GLOBAL(0x0141F570, uint8) == 6) {
+			hide_next_step_button();
+		} else if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_2)) {
+			if (RCT2_GLOBAL(0x13573C8, uint16) == 0x2710 || RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO) {
+				hide_next_step_button();
+			}
+		}
+	}
+}
+
+/**
+*
+*  rct2: 0x0066F25C
+*/
+void window_editor_bottom_toolbar_paint() {
+	rct_window *w;
+	rct_drawpixelinfo *dpi;
+
+	window_paint_get_registers(w, dpi);
+
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION) {
+		// TODO
+	}
+
+	window_draw_widgets(w, dpi);
+
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & WF_SCROLLING_TO_LOCATION)) {
+		// TODO
+
+		gfx_fill_rect_inset(dpi,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].left + 1 + w->x,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].top + 1 + w->y,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].right - 1 + w->x,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON1].bottom - 1 + w-> y,
+			w->colours[1], 0x30);
+
+		// TODO
+
+		gfx_fill_rect_inset(dpi,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].left + 1 + w->x,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].top + 1 + w->y,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].right - 1 + w->x,
+			window_editor_bottom_toolbar_widgets[WIDX_IMGBUTTON2].bottom - 1 + w->y,
+			w->colours[1], 0x30);
+
+		// TODO
+	}
 }
