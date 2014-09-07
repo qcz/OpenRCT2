@@ -97,11 +97,11 @@ static EMPTY_ARGS_VOID_POINTER* previous_button_mouseup_events[] = {
 };
 
 static void* next_button_mouseup_events[] = {
-	0x0066f6b0,
-	0x0066f758,
-	0x0066f790,
-	0x0066f7a8,
-	0x0066f7c0,
+	(void*)0x0066f6b0,
+	(void*)0x0066f758,
+	(void*)0x0066f790,
+	(void*)0x0066f7a8,
+	(void*)0x0066f7c0,
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub
@@ -216,7 +216,7 @@ static void window_editor_bottom_toolbar_mouseup()
 			previous_button_mouseup_events[g_editor_step]();
 		}
 	} else if (widgetIndex == WIDX_NEXT_STEP_BUTTON) {
-		RCT2_CALLPROC_X(next_button_mouseup_events[g_editor_step], 0, 0, 0, 0, (int)w, 0, 0);
+		RCT2_CALLPROC_X((int)next_button_mouseup_events[g_editor_step], 0, 0, 0, 0, 0, 0, 0);
 	}
 }
 
