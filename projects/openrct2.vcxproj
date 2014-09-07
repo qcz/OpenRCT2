@@ -50,6 +50,7 @@
     <ClInclude Include="..\src\sprites.h" />
     <ClInclude Include="..\src\string_ids.h" />
     <ClInclude Include="..\src\title.h" />
+    <ClInclude Include="..\src\toolbar.h" />
     <ClInclude Include="..\src\track.h" />
     <ClInclude Include="..\src\tutorial.h" />
     <ClInclude Include="..\src\util.h" />
@@ -99,6 +100,7 @@
     <ClCompile Include="..\src\sprite.c" />
     <ClCompile Include="..\src\string_ids.c" />
     <ClCompile Include="..\src\title.c" />
+    <ClCompile Include="..\src\toolbar.c" />
     <ClCompile Include="..\src\track.c" />
     <ClCompile Include="..\src\tutorial.c" />
     <ClCompile Include="..\src\util.c" />

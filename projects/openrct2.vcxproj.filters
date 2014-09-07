@@ -168,6 +168,9 @@
     <ClInclude Include="..\src\window_scenery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\toolbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -403,6 +406,9 @@
     </ClCompile>
     <ClCompile Include="..\src\window_editor_main.c">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\toolbar.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

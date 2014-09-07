@@ -22,6 +22,7 @@
 #include "string_ids.h"
 #include "sprites.h"
 #include "editor.h"
+#include "toolbar.h"
 #include "viewport.h"
 #include "widget.h"
 #include "window.h"
@@ -55,19 +56,6 @@ typedef enum {
 	DDIDX_SCREENSHOT = 5,
 	DDIDX_QUIT_GAME = 7,
 } FILE_MENU_DDIDX;
-
-typedef enum {
-	DDIDX_UNDERGROUND_INSIDE = 0,
-	DDIDX_HIDE_BASE = 1,
-	DDIDX_HIDE_VERTICAL = 2,
-	DDIDX_SEETHROUGH_RIDES = 4,
-	DDIDX_SEETHROUGH_SCENARY = 5,
-	DDIDX_INVISIBLE_SUPPORTS = 6,
-	DDIDX_INVISIBLE_PEEPS = 7,
-	DDIDX_LAND_HEIGHTS = 9,
-	DDIDX_TRACK_HEIGHTS = 10,
-	DDIDX_PATH_HEIGHTS = 11,
-} VIEW_MENU_DDIDX;
 
 static rct_widget window_editor_top_toolbar_widgets[] = {
 	{ WWT_EMPTY, 0, 0, 0, 0, 0, 0xFFFFFFFF, 0xFFFF },														// 1		0x009A9844
@@ -300,63 +288,7 @@ static void window_editor_top_toolbar_mousedown(int widgetIndex, rct_window*w, r
 		window_dropdown_show_text(w->x + widget->left, w->y + widget->top,
 			widget->bottom - widget->top + 1, w->colours[0] | 0x80, 0x80, dropdownItemCount);
 	} else if (widgetIndex == WIDX_VIEW_MENU) {
-		gDropdownItemsFormat[0] = 1156;
-		gDropdownItemsFormat[1] = 1156;
-		gDropdownItemsFormat[2] = 1156;
-		gDropdownItemsFormat[3] = 0;
-		gDropdownItemsFormat[4] = 1156;
-		gDropdownItemsFormat[5] = 1156;
-		gDropdownItemsFormat[6] = 1156;
-		gDropdownItemsFormat[7] = 1156;
-		gDropdownItemsFormat[8] = 0;
-		gDropdownItemsFormat[9] = 1156;
-		gDropdownItemsFormat[10] = 1156;
-		gDropdownItemsFormat[11] = 1156;
-
-		gDropdownItemsArgs[0] = 939;
-		gDropdownItemsArgs[1] = 940;
-		gDropdownItemsArgs[2] = 941;
-		gDropdownItemsArgs[4] = 942;
-		gDropdownItemsArgs[5] = 943;
-		gDropdownItemsArgs[6] = 1051;
-		gDropdownItemsArgs[7] = 1052;
-		gDropdownItemsArgs[9] = 1154;
-		gDropdownItemsArgs[10] = 1153;
-		gDropdownItemsArgs[11] = 1155;
-
-		window_dropdown_show_text(
-			w->x + widget->left,
-			w->y + widget->top,
-			widget->bottom - widget->top + 1,
-			w->colours[1] | 0x80,
-			0,
-			12
-			);
-
-		// Set checkmarks
-		mainViewport = window_get_main()->viewport;
-		if (mainViewport->flags & VIEWPORT_FLAG_UNDERGROUND_INSIDE)
-			gDropdownItemsChecked |= (1 << 0);
-		if (mainViewport->flags & VIEWPORT_FLAG_HIDE_BASE)
-			gDropdownItemsChecked |= (1 << 1);
-		if (mainViewport->flags & VIEWPORT_FLAG_HIDE_VERTICAL)
-			gDropdownItemsChecked |= (1 << 2);
-		if (mainViewport->flags & VIEWPORT_FLAG_SEETHROUGH_RIDES)
-			gDropdownItemsChecked |= (1 << 4);
-		if (mainViewport->flags & VIEWPORT_FLAG_SEETHROUGH_SCENERY)
-			gDropdownItemsChecked |= (1 << 5);
-		if (mainViewport->flags & VIEWPORT_FLAG_INVISIBLE_SUPPORTS)
-			gDropdownItemsChecked |= (1 << 6);
-		if (mainViewport->flags & VIEWPORT_FLAG_INVISIBLE_PEEPS)
-			gDropdownItemsChecked |= (1 << 7);
-		if (mainViewport->flags & VIEWPORT_FLAG_LAND_HEIGHTS)
-			gDropdownItemsChecked |= (1 << 9);
-		if (mainViewport->flags & VIEWPORT_FLAG_TRACK_HEIGHTS)
-			gDropdownItemsChecked |= (1 << 10);
-		if (mainViewport->flags & VIEWPORT_FLAG_PATH_HEIGHTS)
-			gDropdownItemsChecked |= (1 << 11);
-
-		RCT2_GLOBAL(0x9DEBA2, uint16) = 0;
+		top_toolbar_init_view_menu(w, widget);
 	}
 }
 
@@ -375,45 +307,7 @@ void window_editor_top_toolbar_dropdown() {
 			// TODO
 		}
 	} else if (widgetIndex == WIDX_VIEW_MENU) {
-		if (dropdownIndex == -1) dropdownIndex = RCT2_GLOBAL(0x9DEBA2, uint16);
-		w = window_get_main();
-		if (w) {
-			switch (dropdownIndex) {
-			case DDIDX_UNDERGROUND_INSIDE:
-				w->viewport->flags ^= VIEWPORT_FLAG_UNDERGROUND_INSIDE;
-				break;
-			case DDIDX_HIDE_BASE:
-				w->viewport->flags ^= VIEWPORT_FLAG_HIDE_BASE;
-				break;
-			case DDIDX_HIDE_VERTICAL:
-				w->viewport->flags ^= VIEWPORT_FLAG_HIDE_VERTICAL;
-				break;
-			case DDIDX_SEETHROUGH_RIDES:
-				w->viewport->flags ^= VIEWPORT_FLAG_SEETHROUGH_RIDES;
-				break;
-			case DDIDX_SEETHROUGH_SCENARY:
-				w->viewport->flags ^= VIEWPORT_FLAG_SEETHROUGH_SCENERY;
-				break;
-			case DDIDX_INVISIBLE_SUPPORTS:
-				w->viewport->flags ^= VIEWPORT_FLAG_INVISIBLE_SUPPORTS;
-				break;
-			case DDIDX_INVISIBLE_PEEPS:
-				w->viewport->flags ^= VIEWPORT_FLAG_INVISIBLE_PEEPS;
-				break;
-			case DDIDX_LAND_HEIGHTS:
-				w->viewport->flags ^= VIEWPORT_FLAG_LAND_HEIGHTS;
-				break;
-			case DDIDX_TRACK_HEIGHTS:
-				w->viewport->flags ^= VIEWPORT_FLAG_TRACK_HEIGHTS;
-				break;
-			case DDIDX_PATH_HEIGHTS:
-				w->viewport->flags ^= VIEWPORT_FLAG_PATH_HEIGHTS;
-				break;
-			default:
-				return;
-			}
-			window_invalidate(w);
-		}
+		top_toolbar_view_menu_dropdown(dropdownIndex);
 	} else if (widgetIndex == WIDX_PATH) {
 		// TODO
 	}
