@@ -44,12 +44,19 @@ static rct_widget window_editor_bottom_toolbar_widgets[] = {
 
 static void window_editor_bottom_toolbar_emptysub() { }
 
+static void window_editor_bottom_toolbar_mouseup();
 static void window_editor_bottom_toolbar_invalidate();
 static void window_editor_bottom_toolbar_paint();
 
+static void window_editor_bottom_toolbar_jump_back_to_object_selector();
+static void window_editor_bottom_toolbar_jump_back_to_landscape_editor();
+static void window_editor_bottom_toolbar_jump_back_to_invention_list_set_up();
+static void window_editor_bottom_toolbar_jump_back_to_options_selection();
+
+
 static void* window_editor_bottom_toolbar_events[] = {
 	window_editor_bottom_toolbar_emptysub,
-	0x0066f5ae,
+	window_editor_bottom_toolbar_mouseup,	//0x0066f5ae,
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub,
@@ -75,6 +82,28 @@ static void* window_editor_bottom_toolbar_events[] = {
 	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_invalidate, //0x0066f1c9,
 	window_editor_bottom_toolbar_paint, //0x0066f25c,
+	window_editor_bottom_toolbar_emptysub
+};
+
+static EMPTY_ARGS_VOID_POINTER* previous_button_mouseup_events[] = {
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_jump_back_to_object_selector,
+	window_editor_bottom_toolbar_jump_back_to_landscape_editor,
+	window_editor_bottom_toolbar_jump_back_to_invention_list_set_up,
+	window_editor_bottom_toolbar_jump_back_to_options_selection,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_jump_back_to_object_selector,
+	window_editor_bottom_toolbar_emptysub
+};
+
+static void* next_button_mouseup_events[] = {
+	0x0066f6b0,
+	0x0066f758,
+	0x0066f790,
+	0x0066f7a8,
+	0x0066f7c0,
+	window_editor_bottom_toolbar_emptysub,
+	window_editor_bottom_toolbar_emptysub,
 	window_editor_bottom_toolbar_emptysub
 };
 
@@ -107,6 +136,87 @@ void window_editor_bottom_toolbar_open()
 		window->colours[0] = 135;
 		window->colours[1] = 135;
 		window->colours[2] = 135;
+	}
+}
+
+/**
+*
+*  rct2: 0x0066F619
+*/
+
+void window_editor_bottom_toolbar_jump_back_to_object_selector() {
+	window_close_all();
+	g_editor_step = EDITOR_STEP_OBJECT_SELECTION;
+	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x0066F62C
+*/
+
+void window_editor_bottom_toolbar_jump_back_to_landscape_editor() {
+	window_close_all();
+	RCT2_CALLPROC(0x006DFED0);
+	RCT2_CALLPROC(0x006DFEE4);
+	g_editor_step = EDITOR_STEP_LANDSCAPE_EDITOR;
+	RCT2_CALLPROC(0x0068C88A); // Replace with window_map_open(); when the map window is done
+	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x0066F64E
+*/
+
+void window_editor_bottom_toolbar_jump_back_to_invention_list_set_up() {
+	window_close_all();
+	RCT2_CALLPROC(0x00684E04); // open invention list window
+	g_editor_step = EDITOR_STEP_INVENTIONS_LIST_SET_UP;
+	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x0066F666
+*/
+
+void window_editor_bottom_toolbar_jump_back_to_scenario_options() {
+	window_close_all();
+	RCT2_CALLPROC(0x00670138); // open scenario options
+	g_editor_step = EDITOR_STEP_OPTIONS_SELECTION;
+	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x0066F64E
+*/
+void window_editor_bottom_toolbar_jump_back_to_options_selection() {
+	window_close_all();
+	RCT2_CALLPROC(0x00670138); // open options selection window
+	g_editor_step = EDITOR_STEP_OPTIONS_SELECTION;
+	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x0066F5AE
+*/
+static void window_editor_bottom_toolbar_mouseup()
+{
+	short widgetIndex;
+	rct_window *w;
+
+	window_widget_get_registers(w, widgetIndex);
+
+	if (widgetIndex == WIDX_PREVIOUS_STEP_BUTTON) {
+		if ((RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) ||
+			RCT2_GLOBAL(0x13573C8, uint16) == 0x2710 && !(RCT2_GLOBAL(RCT2_ADDRESS_PARK_FLAGS, uint32) & PARK_FLAGS_NO_MONEY_SCENARIO)) {
+			previous_button_mouseup_events[g_editor_step]();
+		}
+	} else if (widgetIndex == WIDX_NEXT_STEP_BUTTON) {
+		RCT2_CALLPROC_X(next_button_mouseup_events[g_editor_step], 0, 0, 0, 0, (int)w, 0, 0);
 	}
 }
 
