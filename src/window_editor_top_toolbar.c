@@ -1,5 +1,5 @@
 /*****************************************************************************
-* Copyright (c) 2014 Dániel Tar
+* Copyright (c) 2014 Dániel Tar, Ted John
 * OpenRCT2, an open source clone of Roller Coaster Tycoon 2.
 *
 * This file is part of OpenRCT2.
@@ -25,26 +25,49 @@
 #include "viewport.h"
 #include "widget.h"
 #include "window.h"
+#include "window_dropdown.h"
 
 enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
-	WIDX_PAUSE,					// 1
-	WIDX_FILE_MENU,				// 2
-	WIDX_ZOOM_OUT,				// 4
-	WIDX_ZOOM_IN,				// 8
-	WIDX_ROTATE,				// 10
-	WIDX_VIEW_MENU,				// 20
-	WIDX_MAP,					// 40
-	WIDX_LAND,					// 80
-	WIDX_WATER,					// 100
-	WIDX_SCENERY,				// 200
-	WIDX_PATH,					// 400
-	WIDX_CONSTRUCT_RIDE,		// 800
-	WIDX_RIDES,					// 1000
-	WIDX_PARK,					// 2000
-	WIDX_STAFF,					// 4000
-	WIDX_GUESTS,				// 8000
-	WIDX_CLEAR_SCENERY,			// 10000
+	WIDX_PAUSE,					// 0, 1
+	WIDX_FILE_MENU,				// 1, 2
+	WIDX_ZOOM_OUT,				// 2, 4
+	WIDX_ZOOM_IN,				// 3, 8
+	WIDX_ROTATE,				// 4, 10
+	WIDX_VIEW_MENU,				// 5, 20
+	WIDX_MAP,					// 6, 40
+	WIDX_LAND,					// 7, 80
+	WIDX_WATER,					// 8, 100
+	WIDX_SCENERY,				// 9, 200
+	WIDX_PATH,					// 10, 400
+	WIDX_CONSTRUCT_RIDE,		// 11, 800
+	WIDX_RIDES,					// 12, 1000
+	WIDX_PARK,					// 13, 2000
+	WIDX_STAFF,					// 14, 4000
+	WIDX_GUESTS,				// 15, 8000
+	WIDX_CLEAR_SCENERY,			// 16, 10000
 };
+
+typedef enum {
+	DDIDX_LOAD_GAME = 0,
+	DDIDX_SAVE_GAME = 1,
+	DDIDX_ABOUT = 3,
+	DDIDX_OPTIONS = 4,
+	DDIDX_SCREENSHOT = 5,
+	DDIDX_QUIT_GAME = 7,
+} FILE_MENU_DDIDX;
+
+typedef enum {
+	DDIDX_UNDERGROUND_INSIDE = 0,
+	DDIDX_HIDE_BASE = 1,
+	DDIDX_HIDE_VERTICAL = 2,
+	DDIDX_SEETHROUGH_RIDES = 4,
+	DDIDX_SEETHROUGH_SCENARY = 5,
+	DDIDX_INVISIBLE_SUPPORTS = 6,
+	DDIDX_INVISIBLE_PEEPS = 7,
+	DDIDX_LAND_HEIGHTS = 9,
+	DDIDX_TRACK_HEIGHTS = 10,
+	DDIDX_PATH_HEIGHTS = 11,
+} VIEW_MENU_DDIDX;
 
 static rct_widget window_editor_top_toolbar_widgets[] = {
 	{ WWT_EMPTY, 0, 0, 0, 0, 0, 0xFFFFFFFF, 0xFFFF },														// 1		0x009A9844
@@ -69,15 +92,19 @@ static rct_widget window_editor_top_toolbar_widgets[] = {
 
 static void window_editor_top_toolbar_emptysub() { }
 
+static void window_editor_top_toolbar_mouseup();
+static void window_editor_top_toolbar_resize();
+static void window_editor_top_toolbar_mousedown(int widgetIndex, rct_window*w, rct_widget* widget);
+static void window_editor_top_toolbar_dropdown();
 static void window_editor_top_toolbar_invalidate();
 static void window_editor_top_toolbar_paint();
 
 static void* window_editor_top_toolbar_events[] = {
 	window_editor_top_toolbar_emptysub,
-	(void*)0x0066f9d7, // mouseup
-	(void*)0x0066fada, // resize
-	(void*)0x0066fa57, // mousedown
-	(void*)0x0066fa38, // dropdown
+	window_editor_top_toolbar_mouseup, //(void*)0x0066f9d7, // mouseup
+	window_editor_top_toolbar_resize, //(void*)0x0066fada, // resize
+	window_editor_top_toolbar_mousedown, //(void*)0x0066fa57, // mousedown
+	window_editor_top_toolbar_dropdown, //(void*)0x0066fa38, // dropdown
 	window_editor_top_toolbar_emptysub,
 	window_editor_top_toolbar_emptysub,
 	window_editor_top_toolbar_emptysub,
@@ -139,9 +166,264 @@ void window_editor_top_toolbar_open()
 
 /**
 *
+*  rct2: 0x0066C957
+*/
+static void window_editor_top_toolbar_mouseup()
+{
+	short widgetIndex;
+	rct_window *w, *mainWindow;
+
+	window_widget_get_registers(w, widgetIndex);
+
+	switch (widgetIndex) {
+	case WIDX_ZOOM_IN:
+		if ((mainWindow = window_get_main()) != NULL)
+			window_zoom_in(mainWindow);
+		break;
+	case WIDX_ZOOM_OUT:
+		if ((mainWindow = window_get_main()) != NULL)
+			window_zoom_out(mainWindow);
+		break;
+	case WIDX_ROTATE:
+		if ((mainWindow = window_get_main()) != NULL)
+			window_rotate_camera(mainWindow);
+		break;
+	case WIDX_SCENERY:
+		if (!tool_set(w, WIDX_SCENERY, 0)) {
+			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+			window_scenery_open();
+		}
+		break;
+	case WIDX_PATH:
+		if (window_find_by_id(WC_FOOTPATH, 0) == NULL) {
+			window_footpath_open();
+		} else {
+			tool_cancel();
+			window_close_by_id(0x80 | WC_FOOTPATH, 0);
+		}
+		break;
+	case WIDX_LAND:
+		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 7) {
+			tool_cancel();
+		} else {
+			show_gridlines();
+			tool_set(w, WIDX_LAND, 18);
+			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
+			window_land_open();
+		}
+		break;
+	case WIDX_CLEAR_SCENERY:
+		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 16) {
+			tool_cancel();
+		} else {
+			show_gridlines();
+			tool_set(w, WIDX_CLEAR_SCENERY, 12);
+			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 2;
+			window_clear_scenery_open();
+		}
+		break;
+	case WIDX_WATER:
+		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 8) {
+			tool_cancel();
+		} else {
+			show_gridlines();
+			tool_set(w, WIDX_WATER, 19);
+			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
+			window_water_open();
+		}
+		break;
+	case WIDX_MAP:
+		window_map_open();
+		break;
+	case WIDX_CONSTRUCT_RIDE:
+		window_new_ride_open();
+		break;
+	}
+}
+
+/**
+*
+* rct2: 0x0066FADA
+*/
+static void window_editor_top_toolbar_resize() {
+	rct_window *mainWindow = window_get_main();
+	rct_window *w;
+
+	window_get_register(w);
+
+	int eax = 0;
+
+	if ((w->disabled_widgets & 0xFF) == 0)
+		eax |= (1 << 3);
+
+	if ((w->disabled_widgets & 0xFF) == 3)
+		eax |= (1 << 2);
+
+	RCT2_CALLPROC_X(0x006ECE14, 0, 0, 0, 0, (int)w, 0, 0);
+}
+
+/**
+*
+*  rct2: 0x0066FA57
+*/
+static void window_editor_top_toolbar_mousedown(int widgetIndex, rct_window*w, rct_widget* widget)
+{
+	rct_viewport *mainViewport;
+
+	if (widgetIndex == WIDX_FILE_MENU) {
+		short dropdownItemCount = 8;
+		gDropdownItemsFormat[0] = 884;
+		gDropdownItemsFormat[1] = 885;
+		gDropdownItemsFormat[2] = 0;
+		gDropdownItemsFormat[3] = 847;
+		gDropdownItemsFormat[4] = 2327;
+		gDropdownItemsFormat[5] = 891;
+		gDropdownItemsFormat[6] = 0;
+		gDropdownItemsFormat[7] = 887;
+
+		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+			dropdownItemCount = 5;
+			gDropdownItemsFormat[0] = 847;
+			gDropdownItemsFormat[1] = 2327;
+			gDropdownItemsFormat[2] = 891;
+			gDropdownItemsFormat[3] = 0;
+			gDropdownItemsFormat[4] = 888;
+
+			if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
+				gDropdownItemsFormat[4] = 889;
+			}
+		}
+
+		window_dropdown_show_text(w->x + widget->left, w->y + widget->top,
+			widget->bottom - widget->top + 1, w->colours[0] | 0x80, 0x80, dropdownItemCount);
+	} else if (widgetIndex == WIDX_VIEW_MENU) {
+		gDropdownItemsFormat[0] = 1156;
+		gDropdownItemsFormat[1] = 1156;
+		gDropdownItemsFormat[2] = 1156;
+		gDropdownItemsFormat[3] = 0;
+		gDropdownItemsFormat[4] = 1156;
+		gDropdownItemsFormat[5] = 1156;
+		gDropdownItemsFormat[6] = 1156;
+		gDropdownItemsFormat[7] = 1156;
+		gDropdownItemsFormat[8] = 0;
+		gDropdownItemsFormat[9] = 1156;
+		gDropdownItemsFormat[10] = 1156;
+		gDropdownItemsFormat[11] = 1156;
+
+		gDropdownItemsArgs[0] = 939;
+		gDropdownItemsArgs[1] = 940;
+		gDropdownItemsArgs[2] = 941;
+		gDropdownItemsArgs[4] = 942;
+		gDropdownItemsArgs[5] = 943;
+		gDropdownItemsArgs[6] = 1051;
+		gDropdownItemsArgs[7] = 1052;
+		gDropdownItemsArgs[9] = 1154;
+		gDropdownItemsArgs[10] = 1153;
+		gDropdownItemsArgs[11] = 1155;
+
+		window_dropdown_show_text(
+			w->x + widget->left,
+			w->y + widget->top,
+			widget->bottom - widget->top + 1,
+			w->colours[1] | 0x80,
+			0,
+			12
+			);
+
+		// Set checkmarks
+		mainViewport = window_get_main()->viewport;
+		if (mainViewport->flags & VIEWPORT_FLAG_UNDERGROUND_INSIDE)
+			gDropdownItemsChecked |= (1 << 0);
+		if (mainViewport->flags & VIEWPORT_FLAG_HIDE_BASE)
+			gDropdownItemsChecked |= (1 << 1);
+		if (mainViewport->flags & VIEWPORT_FLAG_HIDE_VERTICAL)
+			gDropdownItemsChecked |= (1 << 2);
+		if (mainViewport->flags & VIEWPORT_FLAG_SEETHROUGH_RIDES)
+			gDropdownItemsChecked |= (1 << 4);
+		if (mainViewport->flags & VIEWPORT_FLAG_SEETHROUGH_SCENERY)
+			gDropdownItemsChecked |= (1 << 5);
+		if (mainViewport->flags & VIEWPORT_FLAG_INVISIBLE_SUPPORTS)
+			gDropdownItemsChecked |= (1 << 6);
+		if (mainViewport->flags & VIEWPORT_FLAG_INVISIBLE_PEEPS)
+			gDropdownItemsChecked |= (1 << 7);
+		if (mainViewport->flags & VIEWPORT_FLAG_LAND_HEIGHTS)
+			gDropdownItemsChecked |= (1 << 9);
+		if (mainViewport->flags & VIEWPORT_FLAG_TRACK_HEIGHTS)
+			gDropdownItemsChecked |= (1 << 10);
+		if (mainViewport->flags & VIEWPORT_FLAG_PATH_HEIGHTS)
+			gDropdownItemsChecked |= (1 << 11);
+
+		RCT2_GLOBAL(0x9DEBA2, uint16) = 0;
+	}
+}
+
+/**
+*
+*  rct2: 0x0066FA38
+*/
+void window_editor_top_toolbar_dropdown() {
+	short widgetIndex, dropdownIndex;
+	rct_window* w;
+
+	window_dropdown_get_registers(w, widgetIndex, dropdownIndex);
+
+	if (widgetIndex == WIDX_FILE_MENU) {
+		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+			// TODO
+		}
+	} else if (widgetIndex == WIDX_VIEW_MENU) {
+		if (dropdownIndex == -1) dropdownIndex = RCT2_GLOBAL(0x9DEBA2, uint16);
+		w = window_get_main();
+		if (w) {
+			switch (dropdownIndex) {
+			case DDIDX_UNDERGROUND_INSIDE:
+				w->viewport->flags ^= VIEWPORT_FLAG_UNDERGROUND_INSIDE;
+				break;
+			case DDIDX_HIDE_BASE:
+				w->viewport->flags ^= VIEWPORT_FLAG_HIDE_BASE;
+				break;
+			case DDIDX_HIDE_VERTICAL:
+				w->viewport->flags ^= VIEWPORT_FLAG_HIDE_VERTICAL;
+				break;
+			case DDIDX_SEETHROUGH_RIDES:
+				w->viewport->flags ^= VIEWPORT_FLAG_SEETHROUGH_RIDES;
+				break;
+			case DDIDX_SEETHROUGH_SCENARY:
+				w->viewport->flags ^= VIEWPORT_FLAG_SEETHROUGH_SCENERY;
+				break;
+			case DDIDX_INVISIBLE_SUPPORTS:
+				w->viewport->flags ^= VIEWPORT_FLAG_INVISIBLE_SUPPORTS;
+				break;
+			case DDIDX_INVISIBLE_PEEPS:
+				w->viewport->flags ^= VIEWPORT_FLAG_INVISIBLE_PEEPS;
+				break;
+			case DDIDX_LAND_HEIGHTS:
+				w->viewport->flags ^= VIEWPORT_FLAG_LAND_HEIGHTS;
+				break;
+			case DDIDX_TRACK_HEIGHTS:
+				w->viewport->flags ^= VIEWPORT_FLAG_TRACK_HEIGHTS;
+				break;
+			case DDIDX_PATH_HEIGHTS:
+				w->viewport->flags ^= VIEWPORT_FLAG_PATH_HEIGHTS;
+				break;
+			default:
+				return;
+			}
+			window_invalidate(w);
+		}
+	} else if (widgetIndex == WIDX_PATH) {
+		// TODO
+	}
+}
+
+/**
+*
 *  rct2: 0x0066F87D
 */
-static void window_editor_top_toolbar_invalidate()
+void window_editor_top_toolbar_invalidate()
 {
 	rct_window *w;
 

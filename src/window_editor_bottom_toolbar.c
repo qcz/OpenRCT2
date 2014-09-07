@@ -143,7 +143,6 @@ void window_editor_bottom_toolbar_open()
 *
 *  rct2: 0x0066F619
 */
-
 void window_editor_bottom_toolbar_jump_back_to_object_selector() {
 	window_close_all();
 	g_editor_step = EDITOR_STEP_OBJECT_SELECTION;
@@ -154,7 +153,6 @@ void window_editor_bottom_toolbar_jump_back_to_object_selector() {
 *
 *  rct2: 0x0066F62C
 */
-
 void window_editor_bottom_toolbar_jump_back_to_landscape_editor() {
 	window_close_all();
 	RCT2_CALLPROC(0x006DFED0);
@@ -168,7 +166,6 @@ void window_editor_bottom_toolbar_jump_back_to_landscape_editor() {
 *
 *  rct2: 0x0066F64E
 */
-
 void window_editor_bottom_toolbar_jump_back_to_invention_list_set_up() {
 	window_close_all();
 	RCT2_CALLPROC(0x00684E04); // open invention list window
@@ -180,7 +177,6 @@ void window_editor_bottom_toolbar_jump_back_to_invention_list_set_up() {
 *
 *  rct2: 0x0066F666
 */
-
 void window_editor_bottom_toolbar_jump_back_to_scenario_options() {
 	window_close_all();
 	RCT2_CALLPROC(0x00670138); // open scenario options
