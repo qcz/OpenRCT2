@@ -25,6 +25,10 @@
 #include "window.h"
 #include "window_dropdown.h"
 
+/**
+*
+*  rct2: 0x0066CDE4
+*/
 void top_toolbar_init_view_menu(rct_window* w, rct_widget* widget) {
 	gDropdownItemsFormat[0] = 1156;
 	gDropdownItemsFormat[1] = 1156;
@@ -85,6 +89,10 @@ void top_toolbar_init_view_menu(rct_window* w, rct_widget* widget) {
 	RCT2_GLOBAL(0x9DEBA2, uint16) = 0;
 }
 
+/**
+*
+*  rct2: 0x0066CF8A
+*/
 void top_toolbar_view_menu_dropdown(short dropdownIndex) {
 	if (dropdownIndex == -1) dropdownIndex = RCT2_GLOBAL(0x9DEBA2, uint16);
 	rct_window* w = window_get_main();
@@ -124,5 +132,67 @@ void top_toolbar_view_menu_dropdown(short dropdownIndex) {
 			return;
 		}
 		window_invalidate(w);
+	}
+}
+
+
+/**
+*
+*  rct2: 0x0066CCE7
+*/
+void toggle_footpath_window() {
+	if (window_find_by_id(WC_FOOTPATH, 0) == NULL) {
+		window_footpath_open();
+	} else {
+		tool_cancel();
+		window_close_by_id(0x80 | WC_FOOTPATH, 0);
+	}
+}
+
+/*
+*
+* rct2: 0x0066CD54
+*/
+void toggle_land_window(rct_window* topToolbar, int widgetIndex) {
+	if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 7) {
+		tool_cancel();
+	} else {
+		show_gridlines();
+		tool_set(topToolbar, widgetIndex, 18);
+		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+		RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
+		window_land_open();
+	}
+}
+
+/*
+*
+* rct2: 0x0066CD0C
+*/
+void toggle_clear_scenery_window(rct_window* topToolbar, int widgetIndex) {
+	if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 16) {
+		tool_cancel();
+	} else {
+		show_gridlines();
+		tool_set(topToolbar, widgetIndex, 12);
+		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+		RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 2;
+		window_clear_scenery_open();
+	}
+}
+
+/*
+*
+* rct2: 0x0066CD9C
+*/
+void toggle_water_window(rct_window* topToolbar, int widgetIndex) {
+	if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 8) {
+		tool_cancel();
+	} else {
+		show_gridlines();
+		tool_set(topToolbar, widgetIndex, 19);
+		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
+		RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
+		window_water_open();
 	}
 }

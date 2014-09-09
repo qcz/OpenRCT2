@@ -40,6 +40,8 @@ typedef enum {
 void top_toolbar_init_view_menu(rct_window* window, rct_widget* widget);
 void top_toolbar_view_menu_dropdown(short dropdownIndex);
 
-
-
+void toggle_footpath_window();
+void toggle_land_window(rct_window* topToolbar, int widgetIndex);
+void toggle_clear_scenery_window(rct_window* topToolbar, int widgetIndex);
+void toggle_water_window(rct_window* topToolbar, int widgetIndex);
 #endif

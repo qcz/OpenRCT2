@@ -41,10 +41,10 @@ enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 	WIDX_SCENERY,				// 9, 200
 	WIDX_PATH,					// 10, 400
 	WIDX_CONSTRUCT_RIDE,		// 11, 800
-	WIDX_RIDES,					// 12, 1000
-	WIDX_PARK,					// 13, 2000
-	WIDX_STAFF,					// 14, 4000
-	WIDX_GUESTS,				// 15, 8000
+	WIDX_UNUSED1,				// 12, 1000
+	WIDX_UNUSED2,				// 13, 2000
+	WIDX_UNUSED3,				// 14, 4000
+	WIDX_UNUSED4,				// 15, 8000
 	WIDX_CLEAR_SCENERY,			// 16, 10000
 };
 
@@ -183,45 +183,16 @@ static void window_editor_top_toolbar_mouseup()
 		}
 		break;
 	case WIDX_PATH:
-		if (window_find_by_id(WC_FOOTPATH, 0) == NULL) {
-			window_footpath_open();
-		} else {
-			tool_cancel();
-			window_close_by_id(0x80 | WC_FOOTPATH, 0);
-		}
+		toggle_footpath_window();
 		break;
 	case WIDX_LAND:
-		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 7) {
-			tool_cancel();
-		} else {
-			show_gridlines();
-			tool_set(w, WIDX_LAND, 18);
-			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
-			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
-			window_land_open();
-		}
+		toggle_land_window(w, WIDX_LAND);
 		break;
 	case WIDX_CLEAR_SCENERY:
-		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 16) {
-			tool_cancel();
-		} else {
-			show_gridlines();
-			tool_set(w, WIDX_CLEAR_SCENERY, 12);
-			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
-			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 2;
-			window_clear_scenery_open();
-		}
+		toggle_clear_scenery_window(w, WIDX_CLEAR_SCENERY);
 		break;
 	case WIDX_WATER:
-		if ((RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)) && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8) == 1 && RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16) == 8) {
-			tool_cancel();
-		} else {
-			show_gridlines();
-			tool_set(w, WIDX_WATER, 19);
-			RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 6);
-			RCT2_GLOBAL(RCT2_ADDRESS_LAND_TOOL_SIZE, sint16) = 1;
-			window_water_open();
-		}
+		toggle_water_window(w, WIDX_WATER);
 		break;
 	case WIDX_MAP:
 		window_map_open();
