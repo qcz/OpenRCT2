@@ -21,6 +21,7 @@
 #include "addresses.h"
 #include "string_ids.h"
 #include "sprites.h"
+#include "game.h"
 #include "editor.h"
 #include "toolbar.h"
 #include "viewport.h"
@@ -49,13 +50,20 @@ enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 };
 
 typedef enum {
-	DDIDX_LOAD_GAME = 0,
-	DDIDX_SAVE_GAME = 1,
-	DDIDX_ABOUT = 3,
-	DDIDX_OPTIONS = 4,
-	DDIDX_SCREENSHOT = 5,
-	DDIDX_QUIT_GAME = 7,
-} FILE_MENU_DDIDX;
+	DDIDX_SE_LOAD_LANDSCAPE = 0,
+	DDIDX_SE_SAVE_LANDSCAPE = 1,
+	DDIDX_SE_ABOUT = 3,
+	DDIDX_SE_OPTIONS = 4,
+	DDIDX_SE_SCREENSHOT = 5,
+	DDIDX_SE_QUIT_GAME = 7,
+} SCENARIO_EDITOR_FILE_MENU_DDIDX;
+
+typedef enum {
+	DDIDX_TD_ABOUT = 0,
+	DDIDX_TD_OPTIONS = 1,
+	DDIDX_TD_SCREENSHOT = 2,
+	DDIDX_TD_QUIT_GAME = 4,
+} TRACK_DESINGER_FILE_MENU_DDIDX;
 
 static rct_widget window_editor_top_toolbar_widgets[] = {
 	{ WWT_EMPTY, 0, 0, 0, 0, 0, 0xFFFFFFFF, 0xFFFF },														// 1		0x009A9844
@@ -230,29 +238,27 @@ static void window_editor_top_toolbar_resize() {
 */
 static void window_editor_top_toolbar_mousedown(int widgetIndex, rct_window*w, rct_widget* widget)
 {
-	rct_viewport *mainViewport;
-
 	if (widgetIndex == WIDX_FILE_MENU) {
 		short dropdownItemCount = 8;
-		gDropdownItemsFormat[0] = 884;
-		gDropdownItemsFormat[1] = 885;
+		gDropdownItemsFormat[0] = STR_LOAD_LANDSCAPE;
+		gDropdownItemsFormat[1] = STR_SAVE_LANDSCAPE;
 		gDropdownItemsFormat[2] = 0;
-		gDropdownItemsFormat[3] = 847;
-		gDropdownItemsFormat[4] = 2327;
-		gDropdownItemsFormat[5] = 891;
+		gDropdownItemsFormat[3] = STR_ABOUT;
+		gDropdownItemsFormat[4] = STR_OPTIONS;
+		gDropdownItemsFormat[5] = STR_SCREENSHOT;
 		gDropdownItemsFormat[6] = 0;
-		gDropdownItemsFormat[7] = 887;
+		gDropdownItemsFormat[7] = STR_QUIT_SCENARIO_EDITOR;
 
 		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
 			dropdownItemCount = 5;
-			gDropdownItemsFormat[0] = 847;
-			gDropdownItemsFormat[1] = 2327;
-			gDropdownItemsFormat[2] = 891;
+			gDropdownItemsFormat[0] = STR_ABOUT;
+			gDropdownItemsFormat[1] = STR_OPTIONS;
+			gDropdownItemsFormat[2] = STR_SCREENSHOT;
 			gDropdownItemsFormat[3] = 0;
-			gDropdownItemsFormat[4] = 888;
+			gDropdownItemsFormat[4] = STR_QUIT_TRACK_DESIGNS_MANAGER;
 
 			if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
-				gDropdownItemsFormat[4] = 889;
+				gDropdownItemsFormat[4] = STR_QUIT_ROLLERCOASTER_DESIGNER;
 			}
 		}
 
@@ -275,12 +281,36 @@ void window_editor_top_toolbar_dropdown() {
 
 	if (widgetIndex == WIDX_FILE_MENU) {
 		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
-			// TODO
+			if (dropdownIndex == DDIDX_TD_ABOUT) {
+				window_about_open();
+			} else if (dropdownIndex == DDIDX_TD_OPTIONS) {
+				window_options_open();
+			} else if (dropdownIndex == DDIDX_TD_SCREENSHOT) {
+				RCT2_GLOBAL(RCT2_ADDRESS_SCREENSHOT_COUNTDOWN, sint8) = 10;
+			} else if (dropdownIndex == DDIDX_TD_QUIT_GAME) {
+				window_close_by_id(WC_2F, w->number);
+				window_close_by_id(WC_30, w->number);
+				game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 1, 0);
+			}
+		} else {
+			if (dropdownIndex == DDIDX_SE_LOAD_LANDSCAPE) {
+				game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 0, 0);
+			} else if (dropdownIndex == DDIDX_SE_SAVE_LANDSCAPE) {
+				RCT2_CALLPROC(0x0066FE2A);
+			} else if (dropdownIndex == DDIDX_SE_ABOUT) {
+				window_about_open();
+			} else if (dropdownIndex == DDIDX_SE_OPTIONS) {
+				window_options_open();
+			} else if (dropdownIndex == DDIDX_SE_SCREENSHOT) {
+				RCT2_GLOBAL(RCT2_ADDRESS_SCREENSHOT_COUNTDOWN, sint8) = 10;
+			} else if (dropdownIndex == DDIDX_SE_QUIT_GAME) {
+				window_close_by_id(WC_2F, w->number);
+				window_close_by_id(WC_30, w->number);
+				game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 1, 0);
+			}
 		}
 	} else if (widgetIndex == WIDX_VIEW_MENU) {
 		top_toolbar_view_menu_dropdown(dropdownIndex);
-	} else if (widgetIndex == WIDX_PATH) {
-		// TODO
 	}
 }
 

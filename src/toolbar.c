@@ -20,6 +20,7 @@
 
 #include "rct2.h"
 #include "addresses.h"
+#include "string_ids.h"
 #include "toolbar.h"
 #include "viewport.h"
 #include "window.h"
@@ -43,16 +44,16 @@ void top_toolbar_init_view_menu(rct_window* w, rct_widget* widget) {
 	gDropdownItemsFormat[10] = 1156;
 	gDropdownItemsFormat[11] = 1156;
 
-	gDropdownItemsArgs[0] = 939;
-	gDropdownItemsArgs[1] = 940;
-	gDropdownItemsArgs[2] = 941;
-	gDropdownItemsArgs[4] = 942;
-	gDropdownItemsArgs[5] = 943;
-	gDropdownItemsArgs[6] = 1051;
-	gDropdownItemsArgs[7] = 1052;
-	gDropdownItemsArgs[9] = 1154;
-	gDropdownItemsArgs[10] = 1153;
-	gDropdownItemsArgs[11] = 1155;
+	gDropdownItemsArgs[0] = STR_UNDERGROUND_VIEW;
+	gDropdownItemsArgs[1] = STR_REMOVE_BASE_LAND;
+	gDropdownItemsArgs[2] = STR_REMOVE_VERTICAL_FACES;
+	gDropdownItemsArgs[4] = STR_SEE_THROUGH_RIDES;
+	gDropdownItemsArgs[5] = STR_SEE_THROUGH_SCENERY;
+	gDropdownItemsArgs[6] = STR_INVISIBLE_SUPPORTS;
+	gDropdownItemsArgs[7] = STR_INVISIBLE_PEOPLE;
+	gDropdownItemsArgs[9] = STR_HEIGHT_MARKS_ON_LAND;
+	gDropdownItemsArgs[10] = STR_HEIGHT_MARKS_ON_RIDE_TRACKS;
+	gDropdownItemsArgs[11] = STR_HEIGHT_MARKS_ON_PATHS;
 
 	window_dropdown_show_text(
 		w->x + widget->left,

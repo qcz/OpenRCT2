@@ -257,17 +257,15 @@ static void window_game_top_toolbar_mouseup()
  */
 static void window_game_top_toolbar_mousedown(int widgetIndex, rct_window*w, rct_widget* widget)
 {
-	rct_viewport *mainViewport;
-
 	if (widgetIndex == WIDX_FILE_MENU) {
-		gDropdownItemsFormat[0] = 882;
-		gDropdownItemsFormat[1] = 883;
+		gDropdownItemsFormat[0] = STR_LOAD_GAME;
+		gDropdownItemsFormat[1] = STR_SAVE_GAME;
 		gDropdownItemsFormat[2] = 0;
-		gDropdownItemsFormat[3] = 847;
-		gDropdownItemsFormat[4] = 2327;
-		gDropdownItemsFormat[5] = 891;
+		gDropdownItemsFormat[3] = STR_ABOUT;
+		gDropdownItemsFormat[4] = STR_OPTIONS;
+		gDropdownItemsFormat[5] = STR_SCREENSHOT;
 		gDropdownItemsFormat[6] = 0;
-		gDropdownItemsFormat[7] = 886;
+		gDropdownItemsFormat[7] = STR_QUIT_GAME;
 		window_dropdown_show_text(
 			w->x + widget->left,
 			w->y + widget->top,
