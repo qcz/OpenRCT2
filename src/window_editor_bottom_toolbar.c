@@ -26,6 +26,7 @@
 #include "viewport.h"
 #include "widget.h"
 #include "window.h"
+#include "window_error.h"
 
 enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 	WIDX_PREVIOUS_IMAGE,		// 1
@@ -48,7 +49,7 @@ static void window_editor_bottom_toolbar_mouseup();
 static void window_editor_bottom_toolbar_invalidate();
 static void window_editor_bottom_toolbar_paint();
 
-static void window_editor_bottom_toolbar_jump_back_to_object_selector();
+static void window_editor_bottom_toolbar_jump_back_to_object_selection();
 static void window_editor_bottom_toolbar_jump_back_to_landscape_editor();
 static void window_editor_bottom_toolbar_jump_back_to_invention_list_set_up();
 static void window_editor_bottom_toolbar_jump_back_to_options_selection();
@@ -87,12 +88,12 @@ static void* window_editor_bottom_toolbar_events[] = {
 
 static EMPTY_ARGS_VOID_POINTER* previous_button_mouseup_events[] = {
 	window_editor_bottom_toolbar_emptysub,
-	window_editor_bottom_toolbar_jump_back_to_object_selector,
+	window_editor_bottom_toolbar_jump_back_to_object_selection,
 	window_editor_bottom_toolbar_jump_back_to_landscape_editor,
 	window_editor_bottom_toolbar_jump_back_to_invention_list_set_up,
 	window_editor_bottom_toolbar_jump_back_to_options_selection,
 	window_editor_bottom_toolbar_emptysub,
-	window_editor_bottom_toolbar_jump_back_to_object_selector,
+	window_editor_bottom_toolbar_jump_back_to_object_selection,
 	window_editor_bottom_toolbar_emptysub
 };
 
@@ -143,7 +144,7 @@ void window_editor_bottom_toolbar_open()
 *
 *  rct2: 0x0066F619
 */
-void window_editor_bottom_toolbar_jump_back_to_object_selector() {
+void window_editor_bottom_toolbar_jump_back_to_object_selection() {
 	window_close_all();
 	g_editor_step = EDITOR_STEP_OBJECT_SELECTION;
 	gfx_invalidate_screen();
@@ -193,6 +194,88 @@ void window_editor_bottom_toolbar_jump_back_to_options_selection() {
 	RCT2_CALLPROC(0x00670138); // open options selection window
 	g_editor_step = EDITOR_STEP_OPTIONS_SELECTION;
 	gfx_invalidate_screen();
+}
+
+/**
+*
+*  rct2: 0x006AB9B8
+*/
+bool sub_6AB9B8(int* widgetIndex) {
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+		uint32 edi = RCT2_GLOBAL(0x009ADAEC, uint32);
+		uint32* objectList = RCT2_ADDRESS(RCT2_ADDRESS_INSTALLED_OBJECT_LIST, uint32);
+		uint32 objectCount = RCT2_GLOBAL(0x00F42B6C, uint32);
+
+		if (objectCount == 0) {
+			*widgetIndex = 5;
+			RCT2_GLOBAL(RCT2_ADDRESS_GAME_COMMAND_ERROR_TEXT, uint16) = STR_AT_LEAST_ONE_PATH_OBJECT_MUST_BE_SELECTED;
+			return false;
+		}
+
+
+	} else {
+		
+	}
+
+	return true;
+}
+
+/**
+*
+*  rct2: 0x006AB1CE
+*/
+bool sub_6AB1CE() {
+	rct_window* optionsWindow = window_find_by_id(WC_EDITOR_OBJECT_SELECTION);
+	int widgetIndex = 0;
+
+	if (sub_6AB9B8(&widgetIndex)) {
+		if (optionsWindow != NULL)
+			window_close(optionsWindow);
+
+		return true;
+	} else {
+		window_error_open(STR_INVALID_SELECTION_OF_OBJECTS, RCT2_GLOBAL(RCT2_ADDRESS_GAME_COMMAND_ERROR_TEXT, uint16));
+		if (optionsWindow != NULL)
+			RCT2_CALLPROC_X(optionsWindow->event_handlers[WE_MOUSE_UP], 0, 0, 0, widgetIndex + 4, (int)optionsWindow, 0, 0);
+
+		return false;
+	}
+}
+
+/**
+*
+*  rct2: 0x0066F6B0
+*/
+void window_editor_bottom_toolbar_jump_forward_from_object_selection() {
+	if (sub_6AB1CE()) {
+		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & (SCREEN_FLAGS_SCENARIO_EDITOR)) {
+			RCT2_CALLPROC(0x006DFED0);
+			RCT2_CALLPROC(0x006DFEE4);
+			g_editor_step = EDITOR_STEP_LANDSCAPE_EDITOR;
+			RCT2_CALLPROC(0x0068C88A); // Replace with window_map_open(); when the map window is done
+			gfx_invalidate_screen();
+		} else {
+			RCT2_GLOBAL(0x01357404, uint32) = 0xFFFFFFFF;
+			RCT2_GLOBAL(0x01357408, uint32) = 0xFFFFFFFF;
+			RCT2_GLOBAL(0x0135740C, uint32) = 0xFFFFFFFF;
+			RCT2_GLOBAL(0x01357410, uint32) = 0xFFFFFFFF;
+
+			for (int i = 0; i < 128; i++) {
+				int eax = RCT2_ADDRESS(0x0097C468, uint32)[i];
+				RCT2_ADDRESS(0x01357444, uint32)[i] = eax;
+				eax = RCT2_ADDRESS(0x0097C5D4, uint32)[i];
+				RCT2_ADDRESS(0x01357644, uint32)[i] = eax;
+			}
+
+			for (int i = 0; i < 8; i++) {
+				RCT2_ADDRESS(0x01357424, uint32)[i] = 0xFFFFFFFF;
+			}
+
+			g_editor_step = EDITOR_STEP_ROLLERCOASTER_DESIGNER;
+			window_new_ride_open();
+			gfx_invalidate_screen();
+		}
+	}
 }
 
 /**
