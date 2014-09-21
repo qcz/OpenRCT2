@@ -26,9 +26,40 @@
 #include "rct2.h"
 #include "ride.h"
 #include "sprite.h"
+#include "sprites.h"
+#include "staff.h"
 #include "window.h"
 
 static void peep_update(rct_peep *peep);
+
+const char *gPeepEasterEggNames[] = {
+	"MICHAEL SCHUMACHER",
+	"JACQUES VILLENEUVE",
+	"DAMON HILL",
+	"MR BEAN",
+	"CHRIS SAWYER",
+	"KATIE BRAYSHAW",
+	"MELANIE WARN",
+	"SIMON FOSTER",
+	"JOHN WARDLEY",
+	"LISA STIRLING",
+	"DONALD MACRAE",
+	"KATHERINE MCGOWAN",
+	"FRANCES MCGOWAN",
+	"CORINA MASSOURA",
+	"CAROL YOUNG",
+	"MIA SHERIDAN",
+	"KATIE RODGER",
+	"EMMA GARRELL",
+	"JOANNE BARTON",
+	"FELICITY ANDERSON",
+	"KATIE SMITH",
+	"EILIDH BELL",
+	"NANCY STILLWAGON",
+	"ANDY HINE",
+	"ELISSA WHITE",
+	"DAVID ELLIS"
+};
 
 int peep_get_staff_count()
 {
@@ -177,31 +208,31 @@ void peep_problem_warnings_update()
 			break;
 
 		case PEEP_THOUGHT_TYPE_HUNGRY: // 0x14
-			if (peep->var_C5 == -1){
+			if (peep->guest_heading_to_ride_id == -1){
 				hunger_counter++;
 				break;
 			}
-			ride = &g_ride_list[peep->var_C5];
+			ride = &g_ride_list[peep->guest_heading_to_ride_id];
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_RIDE_FLAGS + ride->type * 8, uint32) & 0x80000))
 				hunger_counter++;
 			break;
 
 		case PEEP_THOUGHT_TYPE_THIRSTY:
-			if (peep->var_C5 == -1){
+			if (peep->guest_heading_to_ride_id == -1){
 				thirst_counter++;
 				break;
 			}
-			ride = &g_ride_list[peep->var_C5];
+			ride = &g_ride_list[peep->guest_heading_to_ride_id];
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_RIDE_FLAGS + ride->type * 8, uint32) & 0x1000000))
 				thirst_counter++;
 			break;
 
 		case PEEP_THOUGHT_TYPE_BATHROOM:
-			if (peep->var_C5 == -1){
+			if (peep->guest_heading_to_ride_id == -1){
 				bathroom_counter++;
 				break;
 			}
-			ride = &g_ride_list[peep->var_C5];
+			ride = &g_ride_list[peep->guest_heading_to_ride_id];
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_RIDE_FLAGS + ride->type * 8, uint32) & 0x2000000))
 				bathroom_counter++;
 			break;
@@ -393,7 +424,7 @@ void peep_applause()
 	}
 
 	// Play applause noise
-	sound_play_panned(SOUND_APPLAUSE, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, uint16) / 2);
+	sound_play_panned(SOUND_APPLAUSE, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, uint16) / 2, 0, 0, 0);
 }
 
 /**
@@ -447,8 +478,8 @@ void get_arguments_from_action(rct_peep* peep, uint32 *argument_1, uint32* argum
 		break;
 	case PEEP_STATE_WALKING:
 	case 0x14:
-		if (peep->var_C5 != 0xFF){
-			ride = g_ride_list[peep->var_C5];
+		if (peep->guest_heading_to_ride_id != 0xFF){
+			ride = g_ride_list[peep->guest_heading_to_ride_id];
 			*argument_1 = STR_HEADING_FOR | (ride.name << 16);
 			*argument_2 = ride.name_arguments;
 		}
@@ -586,4 +617,137 @@ void get_arguments_from_thought(rct_peep_thought thought, uint32* argument_1, ui
  */
 int peep_can_be_picked_up(rct_peep* peep){
 	return RCT2_ADDRESS(0x982004, uint8)[peep->state] & 1;
+}
+
+enum{
+	PEEP_FACE_OFFSET_ANGRY = 0,
+	PEEP_FACE_OFFSET_VERY_VERY_SICK,
+	PEEP_FACE_OFFSET_VERY_SICK,
+	PEEP_FACE_OFFSET_SICK,
+	PEEP_FACE_OFFSET_VERY_TIRED,
+	PEEP_FACE_OFFSET_TIRED,
+	PEEP_FACE_OFFSET_VERY_VERY_UNHAPPY,
+	PEEP_FACE_OFFSET_VERY_UNHAPPY,
+	PEEP_FACE_OFFSET_UNHAPPY,
+	PEEP_FACE_OFFSET_NORMAL,
+	PEEP_FACE_OFFSET_HAPPY,
+	PEEP_FACE_OFFSET_VERY_HAPPY,
+	PEEP_FACE_OFFSET_VERY_VERY_HAPPY,
+};
+
+const int face_sprite_small[] = {
+	SPR_PEEP_SMALL_FACE_ANGRY,
+	SPR_PEEP_SMALL_FACE_VERY_VERY_SICK,
+	SPR_PEEP_SMALL_FACE_VERY_SICK,
+	SPR_PEEP_SMALL_FACE_SICK,
+	SPR_PEEP_SMALL_FACE_VERY_TIRED,
+	SPR_PEEP_SMALL_FACE_TIRED,
+	SPR_PEEP_SMALL_FACE_VERY_VERY_UNHAPPY,
+	SPR_PEEP_SMALL_FACE_VERY_UNHAPPY,
+	SPR_PEEP_SMALL_FACE_UNHAPPY,
+	SPR_PEEP_SMALL_FACE_NORMAL,
+	SPR_PEEP_SMALL_FACE_HAPPY,
+	SPR_PEEP_SMALL_FACE_VERY_HAPPY,
+	SPR_PEEP_SMALL_FACE_VERY_VERY_HAPPY,
+};
+
+const int face_sprite_large[] = {
+	SPR_PEEP_LARGE_FACE_ANGRY,
+	SPR_PEEP_LARGE_FACE_VERY_VERY_SICK,
+	SPR_PEEP_LARGE_FACE_VERY_SICK,
+	SPR_PEEP_LARGE_FACE_SICK,
+	SPR_PEEP_LARGE_FACE_VERY_TIRED,
+	SPR_PEEP_LARGE_FACE_TIRED,
+	SPR_PEEP_LARGE_FACE_VERY_VERY_UNHAPPY,
+	SPR_PEEP_LARGE_FACE_VERY_UNHAPPY,
+	SPR_PEEP_LARGE_FACE_UNHAPPY,
+	SPR_PEEP_LARGE_FACE_NORMAL,
+	SPR_PEEP_LARGE_FACE_HAPPY,
+	SPR_PEEP_LARGE_FACE_VERY_HAPPY,
+	SPR_PEEP_LARGE_FACE_VERY_VERY_HAPPY,
+};
+
+int get_face_sprite_offset(rct_peep *peep){
+
+	// ANGRY
+	if (peep->var_F3) return PEEP_FACE_OFFSET_ANGRY;
+
+	// VERY_VERY_SICK
+	if (peep->nausea > 200) return PEEP_FACE_OFFSET_VERY_VERY_SICK;
+
+	// VERY_SICK
+	if (peep->nausea > 170) return PEEP_FACE_OFFSET_VERY_SICK;
+
+	// SICK
+	if (peep->nausea > 140) return PEEP_FACE_OFFSET_SICK;
+
+	// VERY_TIRED
+	if (peep->energy < 46) return PEEP_FACE_OFFSET_VERY_TIRED;
+
+	// TIRED
+	if (peep->energy < 70) return PEEP_FACE_OFFSET_TIRED;
+
+	int offset = PEEP_FACE_OFFSET_VERY_VERY_UNHAPPY;
+	//There are 7 different happiness based faces
+	for (int i = 37; peep->happiness >= i; i += 37)
+	{
+		offset++;
+	}
+
+	return offset;
+}
+
+/**
+ *  Function split into large and small sprite
+ *  rct2: 0x00698721
+ */
+int get_peep_face_sprite_small(rct_peep *peep){
+	return face_sprite_small[get_face_sprite_offset(peep)];
+}
+
+/**
+ *  Function split into large and small sprite
+ *  rct2: 0x00698721
+ */
+int get_peep_face_sprite_large(rct_peep *peep){
+	return face_sprite_large[get_face_sprite_offset(peep)];
+}
+
+/**
+ *
+ *  rct2: 0x0069A5A0
+ * tests if a peep's name matches a cheat code, normally returns using a register flag
+ * @param index (eax)
+ * @param ride (esi)
+ */
+int peep_check_easteregg_name(int index, rct_peep *peep)
+{
+	char buffer[256];
+
+	format_string(buffer, peep->name_string_idx, &peep->id);
+	return _stricmp(buffer, gPeepEasterEggNames[index]) == 0;
+}
+
+int peep_get_easteregg_name_id(rct_peep *peep)
+{
+	char buffer[256];
+	int i;
+	
+	format_string(buffer, peep->name_string_idx, &peep->id);
+
+	for (i = 0; i < countof(gPeepEasterEggNames); i++)
+		if (_stricmp(buffer, gPeepEasterEggNames[i]) == 0)
+			return i;
+
+	return -1;
+
+}
+
+int peep_is_mechanic(rct_peep *peep)
+{
+	return (
+		peep->sprite_identifier == SPRITE_IDENTIFIER_PEEP &&
+		peep->type == PEEP_TYPE_STAFF &&
+		peep->staff_type == STAFF_TYPE_MECHANIC
+	);
 }

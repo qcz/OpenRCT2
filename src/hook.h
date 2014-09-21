@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2014 Kevin Burke
+ * Copyright (c) 2014 Ted John
  * OpenRCT2, an open source clone of Roller Coaster Tycoon 2.
  *
  * This file is part of OpenRCT2.
@@ -18,29 +18,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************************/
 
-#ifndef _RIDE_DATA_H_
-#define _RIDE_DATA_H_
+#ifndef _HOOK_H_
+#define _HOOK_H_
 
-#include <stdbool.h>
-#include "rct2.h"
-#include "string_ids.h"
+enum REGISTER_ARGS {
+	EAX = 1 << 0,
+	EBX = 1 << 1,
+	ECX = 1 << 2,
+	EDX = 1 << 3,
+	ESI = 1 << 4,
+	EDI = 1 << 5,
+	EBP = 1 << 6,
+	END = 0
+};
 
-typedef struct {
-	rct_string_id vehicle_name;
-	rct_string_id structure_name;
-	rct_string_id station_name;
-	rct_string_id unk_name;
-} rct_ride_name_convention;
-
-extern const bool hasRunningTrack[0x60];
-extern const uint8 initialUpkeepCosts[0x60];
-extern const uint8 costPerTrackPiece[0x60];
-
-extern const uint8 rideUnknownData1[0x60];
-extern const bool rideUnknownData2[0x60];
-extern const uint8 rideUnknownData3[0x60];
-
-extern const rct_ride_name_convention RideNameConvention[96];
-extern const uint8 RideAvailableModes[];
+void addhook(int address, int newaddress, int stacksize, int registerargs[], int registersreturned);
 
 #endif

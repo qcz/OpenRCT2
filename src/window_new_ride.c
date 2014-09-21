@@ -279,19 +279,6 @@ void window_new_ride_init_vars() {
 	RCT2_GLOBAL(RCT2_ADDRESS_WINDOW_RIDE_LIST_INFORMATION_TYPE, uint8) = 0;
 }
 
-uint8 *get_ride_entry_indices_for_ride_type(uint8 rideType)
-{
-	uint8 *typeToRideEntryIndexMap = (uint8*)0x009E32F8;
-	uint8 *entryIndexList = typeToRideEntryIndexMap;
-	while (rideType > 0) {
-		do {
-			entryIndexList++;
-		} while (*(entryIndexList - 1) != 255);
-		rideType--;
-	}
-	return entryIndexList;
-}
-
 /**
  *
  *  rct2: 0x006B6F3E
@@ -658,7 +645,7 @@ static void window_new_ride_scrollmousedown()
 	RCT2_ADDRESS(RCT2_ADDRESS_WINDOW_RIDE_LIST_HIGHLIGHTED_ITEM, ride_list_item)[_window_new_ride_current_tab] = item;
 	w->new_ride.selected_ride_id = *((sint16*)&item);
 
-	sound_play_panned(SOUND_CLICK_1, w->x + (w->width / 2));
+	sound_play_panned(SOUND_CLICK_1, w->x + (w->width / 2), 0, 0, 0);
 	w->new_ride.selected_ride_countdown = 8;
 	window_invalidate(w);
 }
@@ -870,7 +857,7 @@ static ride_list_item window_new_ride_scroll_get_ride_list_item_at(rct_window *w
 
 	int column = x / 116;
 	int row = y / 116;
-	if (row >= 5)
+	if (column >= 5)
 		return result;
 
 	int index = column + (row * 5);

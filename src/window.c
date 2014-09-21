@@ -234,7 +234,7 @@ static int window_wheel_input(rct_window *w, int wheel)
 			continue;
 
 		// Originally always checked first scroll view, bug maybe?
-		scroll = &w->scrolls[i * sizeof(rct_scroll)];
+		scroll = &w->scrolls[i];
 		if (scroll->flags & (HSCROLLBAR_VISIBLE | VSCROLLBAR_VISIBLE)) {
 			window_scroll_wheel_input(w, i, wheel);
 			return 1;
@@ -308,7 +308,7 @@ static void window_all_wheel_input()
 			if (widgetIndex != -1) {
 				widget = &w->widgets[widgetIndex];
 				if (widget->type == WWT_SCROLL) {
-					scroll = &w->scrolls[RCT2_GLOBAL(0x01420075, uint8) * sizeof(rct_scroll)];
+					scroll = &w->scrolls[RCT2_GLOBAL(0x01420075, uint8)];
 					if (scroll->flags & (HSCROLLBAR_VISIBLE | VSCROLLBAR_VISIBLE)) {
 						window_scroll_wheel_input(w, window_get_scroll_index(w, widgetIndex), wheel);
 						return;
@@ -383,7 +383,7 @@ rct_window *window_create(int x, int y, int width, int height, uint32 *event_han
 	// Play sounds and flash the window
 	if (!(flags & (WF_STICK_TO_BACK | WF_STICK_TO_FRONT))){
 		w->flags |= WF_WHITE_BORDER_MASK;
-		sound_play_panned(SOUND_WINDOW_OPEN, x + (width / 2));
+		sound_play_panned(SOUND_WINDOW_OPEN, x + (width / 2), 0, 0, 0);
 	}
 
 	w->number = 0;
@@ -720,6 +720,7 @@ void window_init_scroll_widgets(rct_window *w)
 		}
 
 		scroll = &w->scrolls[scroll_index];
+		scroll->flags = 0;
 		window_get_scroll_size(w, scroll_index, &width, &height);
 		scroll->h_left = 0;
 		scroll->h_right = width + 1;
@@ -1576,13 +1577,13 @@ void RCT2_CALLPROC_WE_MOUSE_DOWN(int address,  int widgetIndex, rct_window*w, rc
 }
 
 /* Based on rct2: 0x6987ED and another version from window_park */
-void window_align_tabs( rct_window *w, uint8 start_tab_id, uint8 end_tab_id )
+void window_align_tabs(rct_window *w, uint8 start_tab_id, uint8 end_tab_id)
 {
-	int x = w->widgets[start_tab_id].left;
+	int i, x = w->widgets[start_tab_id].left;
 	int tab_width = w->widgets[start_tab_id].right - w->widgets[start_tab_id].left;
 	
-	for (int i = start_tab_id; i < end_tab_id; ++i){
-		if ( !(w->disabled_widgets & (1LL << i)) ){
+	for (i = start_tab_id; i <= end_tab_id; i++) {
+		if (!(w->disabled_widgets & (1LL << i))) {
 			w->widgets[i].left = x;
 			w->widgets[i].right = x + tab_width;
 			x += tab_width + 1;

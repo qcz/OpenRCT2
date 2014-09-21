@@ -391,7 +391,7 @@ static void window_footpath_toolupdate()
 	if (widgetIndex == WIDX_CONSTRUCT_ON_LAND) {
 		window_footpath_set_provisional_path_at_point(x, y);
 	} else if (widgetIndex == WIDX_CONSTRUCT_BRIDGE_OR_TUNNEL) {
-		RCT2_CALLPROC_X(0x006A8388, 0, 0, 0, 0, (int)w, 0, 0);
+		RCT2_CALLPROC_X(0x006A8388, x, y, 0, 0, (int)w, 0, 0);
 	}
 }
 
@@ -730,7 +730,7 @@ static void window_footpath_place_path_at_point(int x, int y)
 		// bp = 0x009DEA62
 		// dx = 0x009DEA60
 		// cx = 0x009DEA5E
-		sound_play_panned(SOUND_PLACE_ITEM, 0x8001);
+		sound_play_panned(SOUND_PLACE_ITEM, 0x8001, RCT2_GLOBAL(0x009DEA5E, uint16), RCT2_GLOBAL(0x009DEA60, uint16), RCT2_GLOBAL(0x009DEA62, uint16));
 	}
 }
 
