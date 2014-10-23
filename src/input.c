@@ -21,19 +21,19 @@
 #include <SDL_keycode.h>
 #include <windows.h>
 #include "addresses.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "config.h"
 #include "game.h"
 #include "input.h"
-#include "map.h"
-#include "osinterface.h"
-#include "sprite.h"
+#include "interface/viewport.h"
+#include "interface/widget.h"
+#include "interface/window.h"
+#include "platform/osinterface.h"
 #include "tutorial.h"
-#include "viewport.h"
-#include "widget.h"
-#include "window.h"
-#include "window_tooltip.h"
-#include "window_dropdown.h"
+#include "windows/tooltip.h"
+#include "windows/dropdown.h"
+#include "world/map.h"
+#include "world/sprite.h"
 
 POINT _dragPosition;
 
@@ -61,17 +61,16 @@ static rct_mouse_data* get_mouse_input();
  */
 static void input_hscrollbar_leftbutton(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 left;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -89,11 +88,10 @@ static void input_hscrollbar_leftbutton(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 
@@ -103,17 +101,16 @@ static void input_hscrollbar_leftbutton(rct_window* w)
  */
 static void input_hscrollbar_rightbutton(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 left, widgetWidth;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -140,11 +137,10 @@ static void input_hscrollbar_rightbutton(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -153,17 +149,16 @@ static void input_hscrollbar_rightbutton(rct_window* w)
  */
 static void input_hscrollbar_left_trough(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 left, widgetWidth;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -185,11 +180,10 @@ static void input_hscrollbar_left_trough(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -198,17 +192,16 @@ static void input_hscrollbar_left_trough(rct_window* w)
  */
 static void input_hscrollbar_right_trough(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 left, widgetWidth;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -235,11 +228,10 @@ static void input_hscrollbar_right_trough(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -248,17 +240,16 @@ static void input_hscrollbar_right_trough(rct_window* w)
  */
 static void input_vscrollbar_topbutton(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 top;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -276,11 +267,10 @@ static void input_vscrollbar_topbutton(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -289,17 +279,16 @@ static void input_vscrollbar_topbutton(rct_window* w)
 */
 static void input_vscrollbar_bottombutton(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 top, widgetHeight;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -326,11 +315,10 @@ static void input_vscrollbar_bottombutton(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -339,17 +327,16 @@ static void input_vscrollbar_bottombutton(rct_window* w)
 */
 static void input_vscrollbar_top_trough(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 top, widgetHeight;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -371,11 +358,10 @@ static void input_vscrollbar_top_trough(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 /**
@@ -384,17 +370,16 @@ static void input_vscrollbar_top_trough(rct_window* w)
 */
 static void input_vscrollbar_bottom_trough(rct_window* w)
 {
-	rct_windowclass windowClass;
-	rct_windownumber windowNumber;
 	rct_window* w2;
 	rct_widget* widget;
 	rct_scroll* scroll;
 	uint16 widgetIndex;
 	sint16 top, widgetHeight;
 
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass);
-	windowNumber = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
-	w2 = window_find_by_id(windowClass, windowNumber);
+	w2 = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber)
+	);
 
 	if (w2 == NULL)
 		return;
@@ -421,11 +406,10 @@ static void input_vscrollbar_bottom_trough(rct_window* w)
 
 	widget_scroll_update_thumbs(w, widgetIndex);
 
-	widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8);
-	windowClass = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-	windowClass |= 0x80;
-
-	window_invalidate_by_id(widgetIndex, windowClass);
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8)
+	);
 }
 
 #pragma endregion
@@ -447,10 +431,10 @@ static void input_leftmousedown(int x, int y, rct_window *w, int widgetIndex)
 		windowNumber = w->number;
 	}
 
-	window_close_by_id(WC_ERROR, 0);
-	window_close_by_id(WC_TOOLTIP, 0);
+	window_close_by_class(WC_ERROR);
+	window_close_by_class(WC_TOOLTIP);
 
-	w = window_find_by_id(windowClass, windowNumber);
+	w = window_find_by_number(windowClass, windowNumber);
 	if (w == NULL)
 		return;
 
@@ -483,15 +467,18 @@ static void input_leftmousedown(int x, int y, rct_window *w, int widgetIndex)
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_LAST_Y, uint16) = y;
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass) = windowClass;
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber) = windowNumber;
-		if (!(RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3)))
+		if (!(RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) & INPUT_FLAG_TOOL_ACTIVE))
 			break;
 
-		w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber));
+		w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber)
+		);
 		if (w == NULL)
 			break;
 
 		RCT2_CALLPROC_X(w->event_handlers[WE_TOOL_DOWN], x, y, 0, RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16), (int)w, 0, 0);
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 4);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_4;
 		break;
 	case WWT_CAPTION:
 		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = INPUT_STATE_DRAGGING;
@@ -542,11 +529,11 @@ static void input_leftmousedown(int x, int y, rct_window *w, int widgetIndex)
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, rct_windowclass) = windowClass;
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber) = windowNumber;
 		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint16) = widgetIndex;
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 0);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_WIDGET_PRESSED;
 		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = INPUT_STATE_WIDGET_PRESSED;
 		RCT2_GLOBAL(0x009DE528, uint16) = 1;
 
-		widget_invalidate(windowClass, windowNumber, widgetIndex);
+		widget_invalidate_by_number(windowClass, windowNumber, widgetIndex);
 		RCT2_CALLPROC_WE_MOUSE_DOWN(w->event_handlers[WE_MOUSE_DOWN], widgetIndex, w, widget);
 		break;
 	}
@@ -565,13 +552,11 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 	cursor_w_number = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, rct_windownumber);
 	int cursor_widgetIndex = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WIDGETINDEX, uint32);
 
-	rct_window* cursor_w = window_find_by_id(cursor_w_class, cursor_w_number);
-	if (!cursor_w){
+	rct_window* cursor_w = window_find_by_number(cursor_w_class, cursor_w_number);
+	if (cursor_w == NULL) {
 		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = 0;
 		return;
 	}
-
-
 
 	switch (state){
 	case 0:
@@ -592,7 +577,7 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 		if (RCT2_GLOBAL(0x9DE518, uint32) & 1) return;
 
 		RCT2_GLOBAL(0x9DE518, uint32) |= 1;
-		widget_invalidate(cursor_w_class, cursor_w_number, widgetIndex);
+		widget_invalidate_by_number(cursor_w_class, cursor_w_number, widgetIndex);
 		return;
 	case 3:
 	case 2:
@@ -622,11 +607,11 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 					}
 				}
 
-				window_close_by_id(WC_DROPDOWN, 0);
-				cursor_w = window_find_by_id(cursor_w_class, cursor_w_number);
+				window_close_by_class(WC_DROPDOWN);
+				cursor_w = window_find_by_number(cursor_w_class, cursor_w_number);
 				if (RCT2_GLOBAL(0x9DE518, uint32) & 1){
 					RCT2_GLOBAL(0x9DE518, uint32) &= 0xFFFE;
-					widget_invalidate(cursor_w_class, cursor_w_number, cursor_widgetIndex);
+					widget_invalidate_by_number(cursor_w_class, cursor_w_number, cursor_widgetIndex);
 				}
 
 				RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = 1;
@@ -637,7 +622,7 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 				RCT2_CALLPROC_X(cursor_w->event_handlers[WE_DROPDOWN], dropdown_index, 0, 0, cursor_widgetIndex, (int)cursor_w, 0, 0);
 			}
 		dropdown_cleanup:
-			window_close_by_id(WC_DROPDOWN, 0);
+			window_close_by_class(WC_DROPDOWN);
 		}
 		if (state == 3) return;
 
@@ -656,7 +641,7 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 		if (w->disabled_widgets & (1ULL << widgetIndex))
 			break;
 
-		widget_invalidate(cursor_w_class, cursor_w_number, widgetIndex);
+		widget_invalidate_by_number(cursor_w_class, cursor_w_number, widgetIndex);
 		window_event_helper(w, widgetIndex, WE_MOUSE_UP);
 	default:
 		return;
@@ -667,7 +652,7 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 		// Hold down widget and drag outside of area??
 		if (RCT2_GLOBAL(0x9DE518, uint32) & 1){
 			RCT2_GLOBAL(0x9DE518, uint32) &= 0xFFFE;
-			widget_invalidate(cursor_w_class, cursor_w_number, cursor_widgetIndex);
+			widget_invalidate_by_number(cursor_w_class, cursor_w_number, cursor_widgetIndex);
 		}
 		return;
 	}
@@ -687,7 +672,7 @@ void input_state_widget_pressed( int x, int y, int state, int widgetIndex, rct_w
 
 		// _dropdown_highlighted_index
 		RCT2_GLOBAL(0x009DEBA2, sint16) = dropdown_index;
-		window_invalidate_by_id(WC_DROPDOWN, 0);
+		window_invalidate_by_class(WC_DROPDOWN);
 	}
 }
 
@@ -719,8 +704,7 @@ static void game_handle_input_mouse(int x, int y, int state)
 			input_leftmousedown(x, y, w, widgetIndex);
 			break;
 		case 3:
-			// Close tooltip
-			window_close_by_id(5, 0);
+			window_close_by_class(WC_TOOLTIP);
 			
 			if (w != NULL)
 				w = window_bring_to_front(w);
@@ -740,7 +724,7 @@ static void game_handle_input_mouse(int x, int y, int state)
 				RCT2_GLOBAL(0x009DE540, sint16) = 0;
 				// hide cursor
 				// RCT2_CALLPROC_X(0x00407045, 0, 0, 0, 0, 0, 0, 0);
-				// RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 5);
+				// RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_5;
 
 				GetCursorPos(&_dragPosition);
 				ShowCursor(FALSE);
@@ -760,7 +744,10 @@ static void game_handle_input_mouse(int x, int y, int state)
 	case INPUT_STATE_DRAGGING:
 		// RCT2_CALLPROC_X(0x006E8C5C, x, y, state, widgetIndex, w, widget, 0);
 
-		w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber));
+		w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber)
+		);
 		if (w == NULL) {
 			RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = INPUT_STATE_RESET;
 			break;
@@ -802,7 +789,10 @@ static void game_handle_input_mouse(int x, int y, int state)
 		
 		dx = newDragPosition.x - _dragPosition.x;
 		dy = newDragPosition.y - _dragPosition.y;
-		w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber));
+		w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber)
+		);
 		if (state == 0) {
 			rct_viewport *viewport = w->viewport;
 			RCT2_GLOBAL(0x009DE540, sint16) += RCT2_GLOBAL(0x009DE588, sint16);
@@ -876,7 +866,10 @@ static void game_handle_input_mouse(int x, int y, int state)
 		break;
 	case INPUT_STATE_VIEWPORT_LEFT:
 		//RCT2_CALLPROC_X(0x006E87B4, x, y, state, widgetIndex, (int)w, (int)widget, 0);
-		w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber));
+		w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber)
+		);
 		if (!w){
 			RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = 0;
 			break;
@@ -892,9 +885,12 @@ static void game_handle_input_mouse(int x, int y, int state)
 				w->number != RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber) ||
 				!(RCT2_GLOBAL(0x9DE518, uint32)&(1 << 3)))break;
 			
-			w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber));
-
-			if (!w)break;
+			w = window_find_by_number(
+				RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass),
+				RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber)
+			);
+			if (w == NULL)
+				break;
 
 			RCT2_CALLPROC_X(w->event_handlers[WE_TOOL_DRAG], x, y, 0, (int)RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16), (int)w, 0, 0);
 		}
@@ -903,8 +899,12 @@ static void game_handle_input_mouse(int x, int y, int state)
 			RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = 0;
 			if (RCT2_GLOBAL(0x9DE52E, rct_windownumber) != w->number)break;
 			if ((RCT2_GLOBAL(0x9DE518, uint32)&(1 << 3))){
-				w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber));
-				if (!w)break;
+				w = window_find_by_number(
+					RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass),
+					RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber)
+				);
+				if (w == NULL)
+					break;
 				RCT2_CALLPROC_X(w->event_handlers[WE_TOOL_UP], x, y, 0, (int)RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WIDGETINDEX, uint16), (int)w, 0, 0);
 			}
 			else{
@@ -919,7 +919,7 @@ static void game_handle_input_mouse(int x, int y, int state)
 						RCT2_CALLPROC_X(0x6ACAC2, eax, ebx, ecx, (int)spr, esi, edi, ebp);
 					}
 					else if (spr->unknown.sprite_identifier == SPRITE_IDENTIFIER_PEEP){
-						window_peep_open(&spr->peep);
+						window_guest_open(&spr->peep);
 					}
 					else if (spr->unknown.sprite_identifier == SPRITE_IDENTIFIER_FLOATING_TEXT){
 						//Unknown for now
@@ -933,7 +933,7 @@ static void game_handle_input_mouse(int x, int y, int state)
 						eax = RCT2_ADDRESS(0x0099BA64, uint8)[16 * map_element->properties.track.type];
 						if (!(eax & 0x10)){//If not station track
 							//Open ride window in overview mode.
-							RCT2_CALLPROC_X(0x6ACC28, map_element->properties.track.ride_index, ebx, ecx, (int)map_element, esi, edi, ebp);
+							window_ride_main_open(map_element->properties.track.ride_index);
 							break;
 						}
 					}
@@ -1022,7 +1022,10 @@ static void game_handle_input_mouse(int x, int y, int state)
 	case INPUT_STATE_RESIZING:
 		// RCT2_CALLPROC_X(0x006E8B46, x, y, state, widgetIndex, w, widget, 0);
 
-		w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber));
+		w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DRAG_WINDOWNUMBER, rct_windownumber)
+		);
 		if (w == NULL) {
 			RCT2_GLOBAL(RCT2_ADDRESS_INPUT_STATE, uint8) = INPUT_STATE_RESET;
 			break;
@@ -1062,7 +1065,7 @@ static void input_mouseover(int x, int y, rct_window *w, int widgetIndex)
 {
 	rct_windowclass windowClass = 255;
 	rct_windownumber windowNumber = 0;
-	rct_widget *widget;
+	rct_widget *widget = NULL;
 
 	if (w != NULL) {
 		windowClass = w->classification;
@@ -1113,7 +1116,7 @@ static void input_mouseover(int x, int y, rct_window *w, int widgetIndex)
 			RCT2_GLOBAL(RCT2_ADDRESS_TOOLTIP_TIMEOUT, uint16) += RCT2_GLOBAL(0x009DE588, uint16);
 			if (RCT2_GLOBAL(RCT2_ADDRESS_TOOLTIP_TIMEOUT, uint16) < 8000)
 				return;
-			window_close_by_id(WC_TOOLTIP, 0);
+			window_close_by_class(WC_TOOLTIP);
 		}
 	}
 
@@ -1150,13 +1153,21 @@ static void input_mouseover_widget_check(rct_windowclass windowClass, rct_window
 
 static void input_mouseover_widget_flatbutton_invalidate()
 {
-	rct_window *w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWNUMBER, rct_windownumber));
+	rct_window *w = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, rct_windowclass),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWNUMBER, rct_windownumber)
+	);
 	if (w == NULL)
 		return;
 
 	RCT2_CALLPROC_X(w->event_handlers[WE_INVALIDATE], 0, 0, 0, 0, (int)w, 0, 0);
-	if (w->widgets[RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, rct_windownumber)].type == WWT_FLATBTN)
-		widget_invalidate(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWNUMBER, rct_windownumber), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, rct_windownumber));
+	if (w->widgets[RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, rct_windownumber)].type == WWT_FLATBTN) {
+		widget_invalidate_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWCLASS, rct_windowclass),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WINDOWNUMBER, rct_windownumber),
+			RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_OVER_WIDGETINDEX, rct_windownumber)
+		);
+	}
 }
 
 void game_handle_edge_scroll()
@@ -1190,11 +1201,11 @@ void game_handle_edge_scroll()
 	// Scroll viewport
 	if (scrollX != 0) {
 		mainWindow->saved_view_x += scrollX * (12 << mainWindow->viewport->zoom);
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 7);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_VIEWPORT_SCROLLING;
 	}
 	if (scrollY != 0) {
 		mainWindow->saved_view_y += scrollY * (12 << mainWindow->viewport->zoom);
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 7);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_VIEWPORT_SCROLLING;
 	}
 }
 
@@ -1210,6 +1221,11 @@ void game_handle_key_scroll()
 		return;
 	if (mainWindow->viewport == NULL)
 		return;
+
+	rct_window *textWindow;
+
+	textWindow = window_find_by_class(WC_TEXTINPUT);
+	if (textWindow) return;
 
 	scrollX = 0;
 	scrollY = 0;
@@ -1229,11 +1245,11 @@ void game_handle_key_scroll()
 	// Scroll viewport
 	if (scrollX != 0) {
 		mainWindow->saved_view_x += scrollX * (12 << mainWindow->viewport->zoom);
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 7);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_VIEWPORT_SCROLLING;
 	}
 	if (scrollY != 0) {
 		mainWindow->saved_view_y += scrollY * (12 << mainWindow->viewport->zoom);
-		RCT2_GLOBAL(0x009DE518, uint32) |= (1 << 7);
+		RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) |= INPUT_FLAG_VIEWPORT_SCROLLING;
 	}
 }
 
@@ -1269,15 +1285,15 @@ void handle_shortcut_command(int shortcutIndex)
 			window_close_top();
 		break;
 	case SHORTCUT_CANCEL_CONSTRUCTION_MODE:
-		window = window_find_by_id(WC_ERROR, 0);
+		window = window_find_by_class(WC_ERROR);
 		if (window != NULL)
 			window_close(window);
-		else if (RCT2_GLOBAL(0x009DE518, uint32) & (1 << 3))
+		else if (RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) & INPUT_FLAG_TOOL_ACTIVE)
 			tool_cancel();
 		break;
 	case SHORTCUT_PAUSE_GAME:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 10)) {
-			window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+			window = window_find_by_class(WC_TOP_TOOLBAR);
 			if (window != NULL) {
 				window_invalidate(window);
 				window_event_helper(window, 0, WE_MOUSE_UP);
@@ -1287,7 +1303,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_ZOOM_VIEW_OUT:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 8)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 2, WE_MOUSE_UP);
@@ -1298,7 +1314,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_ZOOM_VIEW_IN:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 8)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 3, WE_MOUSE_UP);
@@ -1309,7 +1325,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_ROTATE_VIEW:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 8)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 4, WE_MOUSE_UP);
@@ -1393,7 +1409,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_ADJUST_LAND:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 7, WE_MOUSE_UP);
@@ -1404,7 +1420,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_ADJUST_WATER:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 8, WE_MOUSE_UP);
@@ -1415,7 +1431,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_BUILD_SCENERY:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 9, WE_MOUSE_UP);
@@ -1426,7 +1442,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_BUILD_PATHS:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 10, WE_MOUSE_UP);
@@ -1437,7 +1453,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_BUILD_NEW_RIDE:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 11, WE_MOUSE_UP);
@@ -1454,14 +1470,14 @@ void handle_shortcut_command(int shortcutIndex)
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0E)) {
 			// Open new ride window
 			RCT2_CALLPROC_EBPSAFE(0x006B3CFF);
-			window = window_find_by_id(WC_CONSTRUCT_RIDE, 0);
+			window = window_find_by_class(WC_CONSTRUCT_RIDE);
 			if (window != NULL)
 				RCT2_CALLPROC_WE_MOUSE_DOWN(window->event_handlers[WE_MOUSE_DOWN], 10, window, NULL);
 		}
 		break;
 	case SHORTCUT_SHOW_RIDES_LIST:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0E)) {
-			window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+			window = window_find_by_class(WC_TOP_TOOLBAR);
 			if (window != NULL) {
 				window_invalidate(window);
 				window_event_helper(window, 12, WE_MOUSE_UP);
@@ -1470,7 +1486,7 @@ void handle_shortcut_command(int shortcutIndex)
 		break;
 	case SHORTCUT_SHOW_PARK_INFORMATION:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0E)) {
-			window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+			window = window_find_by_class(WC_TOP_TOOLBAR);
 			if (window != NULL) {
 				window_invalidate(window);
 				window_event_helper(window, 13, WE_MOUSE_UP);
@@ -1479,7 +1495,7 @@ void handle_shortcut_command(int shortcutIndex)
 		break;
 	case SHORTCUT_SHOW_GUEST_LIST:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0E)) {
-			window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+			window = window_find_by_class(WC_TOP_TOOLBAR);
 			if (window != NULL) {
 				window_invalidate(window);
 				window_event_helper(window, 15, WE_MOUSE_UP);
@@ -1488,7 +1504,7 @@ void handle_shortcut_command(int shortcutIndex)
 		break;
 	case SHORTCUT_SHOW_STAFF_LIST:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0E)) {
-		  window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+		  window = window_find_by_class(WC_TOP_TOOLBAR);
 			if (window != NULL) {
 				window_invalidate(window);
 				window_event_helper(window, 14, WE_MOUSE_UP);
@@ -1502,7 +1518,7 @@ void handle_shortcut_command(int shortcutIndex)
 	case SHORTCUT_SHOW_MAP:
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 2) || RCT2_GLOBAL(0x0141F570, uint8) == 1) {
 			if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & 0x0C)) {
-				window = window_find_by_id(WC_TOP_TOOLBAR, 0);
+				window = window_find_by_class(WC_TOP_TOOLBAR);
 				if (window != NULL) {
 					window_invalidate(window);
 					window_event_helper(window, 6, WE_MOUSE_UP);
@@ -1567,8 +1583,8 @@ void set_shortcut(int key)
 
 	// Map shortcut to this key
 	gShortcutKeys[RCT2_GLOBAL(0x009DE511, uint8)] = key;
-	window_close_by_id(WC_CHANGE_KEYBOARD_SHORTCUT, 0);
-	window_invalidate_by_id(WC_KEYBOARD_SHORTCUT_LIST, 0);
+	window_close_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
+	window_invalidate_by_class(WC_KEYBOARD_SHORTCUT_LIST);
 	config_save();
 }
 
@@ -1607,13 +1623,21 @@ void game_handle_keyboard_input()
 
 		key |= RCT2_GLOBAL(RCT2_ADDRESS_PLACE_OBJECT_MODIFIER, uint8) << 8;
 
-		w = window_find_by_id(WC_CHANGE_KEYBOARD_SHORTCUT, 0);
+		w = window_find_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
 		if (w != NULL)
 			set_shortcut(key);
 		else if (RCT2_GLOBAL(RCT2_ADDRESS_ON_TUTORIAL, uint8) == 1)
 			tutorial_stop();
-		else
-			handle_shortcut(key);
+		else{
+			w = window_find_by_class(WC_TEXTINPUT);
+			if (w != NULL){
+				((void(*)(int, rct_window*))w->event_handlers[WE_TEXT_INPUT])(key,w);
+			}
+			else{
+				handle_shortcut(key);
+			}
+		}
+			
 	}
 
 	if (RCT2_GLOBAL(RCT2_ADDRESS_ON_TUTORIAL, uint8) == 0)
@@ -1653,6 +1677,7 @@ void game_handle_keyboard_input()
 void game_handle_input()
 {
 	rct_window *w;
+	int x, y, state;
 
 	if (RCT2_GLOBAL(0x009DEA64, uint16) & 2) {
 		RCT2_GLOBAL(0x009DEA64, uint16) &= ~2;
@@ -1663,36 +1688,26 @@ void game_handle_input()
 		for (w = g_window_list; w < RCT2_GLOBAL(RCT2_ADDRESS_NEW_WINDOW_PTR, rct_window*); w++)
 			RCT2_CALLPROC_X(w->event_handlers[WE_UNKNOWN_07], 0, 0, 0, 0, (int)w, 0, 0);
 
-		RCT2_CALLPROC_EBPSAFE(0x006EA73F);
+		sub_6EA73F();
 		RCT2_CALLPROC_EBPSAFE(0x006E8346); // update_cursor_position
 
-		{
-			// int eax, ebx, ecx, edx, esi, edi, ebp;
-			int eax, ebx, ecx;
+		for (;;) {
+			game_get_next_input(&x, &y, &state);
+			if (state == 0)
+				break;
 
-			for (;;) {
-				game_get_next_input(&eax, &ebx, &ecx);
-				if (ecx == 0)
-					break;
+			game_handle_input_mouse(x, y, state & 0xFF);
+		}
 
-				game_handle_input_mouse(eax, ebx, ecx & 0xFF);
-				// RCT2_CALLPROC_X(0x006E8655, eax, ebx, ecx, 0, 0, 0, 0); // window_process_mouse_input
-			}
+		if (RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) & INPUT_FLAG_5) {
+			game_handle_input_mouse(x, y, state);
+		} else if (x != 0x80000000) {
+			x = clamp(0, x, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16) - 1);
+			y = clamp(0, y, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_HEIGHT, sint16) - 1);
 
-			if (RCT2_GLOBAL(0x009DE518, uint32) & (1 << 5)) {
-				game_handle_input_mouse(eax, ebx, ecx);
-				// RCT2_CALLPROC_X(0x006E8655, eax, ebx, 0, 0, 0, 0, 0); // window_process_mouse_input
-			} else if (eax != 0x80000000) {
-				eax = clamp(0, eax, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, sint16) - 1);
-				ebx = clamp(0, ebx, RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_HEIGHT, sint16) - 1);
-
-				game_handle_input_mouse(eax, ebx, ecx);
-				// RCT2_CALLPROC_X(0x006E8655, eax, ebx, 0, 0, 0, 0, 0); // window_process_mouse_input
-				process_mouse_over(eax, ebx);
-				//RCT2_CALLPROC_X(0x006ED833, eax, ebx, 0, 0, 0, 0, 0);
-				process_mouse_tool(eax, ebx);
-				//RCT2_CALLPROC_EBPSAFE(0x006ED801);
-			}
+			game_handle_input_mouse(x, y, state);
+			process_mouse_over(x, y);
+			process_mouse_tool(x, y);
 		}
 	}
 
@@ -1726,7 +1741,7 @@ static void game_get_next_input(int *x, int *y, int *state)
 	//return;
 
 	//int on_tutorial = RCT2_GLOBAL(RCT2_ADDRESS_ON_TUTORIAL, uint8);
-	//if (RCT2_GLOBAL(0x009DE518, uint32) & (1 << 5)) {
+	//if (RCT2_GLOBAL(RCT2_ADDRESS_INPUT_FLAGS, uint32) & INPUT_FLAG_5) {
 	//	if (on_tutorial == 1) {
 
 	//	} else {
@@ -1749,7 +1764,10 @@ void process_mouse_tool(int x, int y)
 {
 	if (RCT2_GLOBAL(0x9DE518, uint32) & (1 << 3))
 	{
-		rct_window* w = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8), RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, uint16));
+		rct_window* w = window_find_by_number(
+			RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, uint8),
+			RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, uint16)
+		);
 
 		if (!w)
 			tool_cancel();
@@ -1821,7 +1839,10 @@ void process_mouse_over(int x, int y)
 					break;
 				}
 				cursorId = RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_TOOL, uint8);
-				subWindow = window_find_by_id(RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass), RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber));
+				subWindow = window_find_by_number(
+					RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWCLASS, rct_windowclass),
+					RCT2_GLOBAL(RCT2_ADDRESS_TOOL_WINDOWNUMBER, rct_windownumber)
+				);
 				ebp = (int)subWindow;
 				if (subWindow == NULL)
 				{
@@ -1901,17 +1922,20 @@ void process_mouse_over(int x, int y)
  */
 void invalidate_scroll()
 {
-	int window_no = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, uint16);
-	int window_cls = RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8);
-
-	rct_window* wind = window_find_by_id(window_cls, window_no);
+	rct_window* wind = window_find_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, uint16)
+	);
 	if (wind == NULL) return;
 
 	int scroll_id = RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_SCROLL_ID, uint32);
 	//Reset to basic scroll
 	wind->scrolls[scroll_id / sizeof(rct_scroll)].flags &= 0xFF11;
 
-	window_invalidate_by_id(RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8), RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, uint16));
+	window_invalidate_by_number(
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS, uint8),
+		RCT2_GLOBAL(RCT2_ADDRESS_CURSOR_DOWN_WINDOWNUMBER, uint16)
+	);
 }
 
 /**

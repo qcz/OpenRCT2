@@ -44,7 +44,7 @@ enum GAME_COMMAND {
 	GAME_COMMAND_REMOVE_PATH, // 19
 	GAME_COMMAND_20,
 	GAME_COMMAND_21,
-	GAME_COMMAND_22,
+	GAME_COMMAND_22, //To do with text input
 	GAME_COMMAND_23,
 	GAME_COMMAND_24,
 	GAME_COMMAND_25,
@@ -52,9 +52,9 @@ enum GAME_COMMAND {
 	GAME_COMMAND_27,
 	GAME_COMMAND_28,
 	GAME_COMMAND_HIRE_NEW_STAFF_MEMBER, // 29
-	GAME_COMMAND_30,
-	GAME_COMMAND_31,
-	GAME_COMMAND_SET_STAFF_ORDER,
+	GAME_COMMAND_SET_STAFF_PATROL, //30
+	GAME_COMMAND_FIRE_STAFF_MEMBER, // 31
+	GAME_COMMAND_SET_STAFF_ORDER, // 32
 	GAME_COMMAND_33,
 	GAME_COMMAND_SET_PARK_OPEN, // 34
 	GAME_COMMAND_35,
@@ -90,17 +90,16 @@ void game_create_windows();
 void game_update();
 void game_logic_update();
 void sub_0x0069E9A7(); 
-void update_rain_animation();
-void update_water_animation();
+void update_palette_effects();
 
 int game_do_command(int eax, int ebx, int ecx, int edx, int esi, int edi, int ebp);
-int game_do_command_p(int command, int *eax, int *ebx, int *ecx, int *edx, int *edi, int *esi, int *ebp);
+int game_do_command_p(int command, int *eax, int *ebx, int *ecx, int *edx, int *esi, int *edi, int *ebp);
 
 void game_increase_game_speed();
 void game_reduce_game_speed();
 
 void game_load_or_quit_no_save_prompt();
-int game_load_save();
+int game_load_save(const char *path);
 void game_pause_toggle();
 char save_game();
 void rct2_exit();

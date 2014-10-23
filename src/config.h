@@ -21,9 +21,9 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#include "currency.h"
-#include "rct2.h"
-#include <windows.h> // for MAX_PATH
+#include "common.h"
+#include "localisation/currency.h"
+#include "platform/platform.h"
 
 enum {
 	CONFIG_FLAG_ALWAYS_SHOW_GRIDLINES = (1 << 0),
@@ -130,6 +130,8 @@ typedef struct general_configuration {
 
 	//new
 	uint8 fullscreen_mode;
+	sint16 window_width;
+	sint16 window_height;
 	uint16 language;
 } general_configuration_t;
 
@@ -153,12 +155,15 @@ static const struct { const char *key; int value; } _currencyLookupTable[] = {
 	{ "\xB5", CURRENCY_EUROS }
 };
 
+typedef struct shortcut_entry{
+	uint8 key;
+	uint8 modifier;
+}shortcut_entry;
+
 //typedef struct hotkey_configuration{
 
 //};
 extern general_configuration_t gGeneral_config;
 extern sound_configuration_t gSound_config;
-
-void config_init();
 
 #endif

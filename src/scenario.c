@@ -19,51 +19,47 @@
  *****************************************************************************/
 
 #include <windows.h>
-#include <string.h>
 #include "addresses.h"
-#include "award.h"
-#include "date.h"
-#include "finance.h"
 #include "game.h"
-#include "map.h"
-#include "marketing.h"
-#include "news_item.h"
+#include "interface/viewport.h"
+#include "localisation/date.h"
+#include "localisation/localisation.h"
+#include "management/award.h"
+#include "management/finance.h"
+#include "management/marketing.h"
+#include "management/news_item.h"
 #include "object.h"
-#include "park.h"
-#include "rct2.h"
-#include "ride.h"
-#include "sawyercoding.h"
+#include "ride/ride.h"
 #include "scenario.h"
-#include "string_ids.h"
-#include "sprite.h"
-#include "viewport.h"
+#include "util/sawyercoding.h"
+#include "world/map.h"
+#include "world/park.h"
+#include "world/sprite.h"
 
 /**
  * Loads only the basic information from a scenario.
  *  rct2: 0x006761D6
  */
-int scenario_load_basic(const char *path)
+int scenario_load_basic(const char *path, rct_s6_header *header, rct_s6_info *info)
 {
 	FILE *file;
-	rct_s6_header *s6Header = (rct_s6_header*)0x009E34E4;
-	rct_s6_info *s6Info = (rct_s6_info*)0x0141F570;
 
 	file = fopen(path, "rb");
 	if (file != NULL) {
 		// Read first chunk
-		sawyercoding_read_chunk(file, (uint8*)s6Header);
-		if (s6Header->type == S6_TYPE_SCENARIO) {
+		sawyercoding_read_chunk(file, (uint8*)header);
+		if (header->type == S6_TYPE_SCENARIO) {
 			// Read second chunk
-			sawyercoding_read_chunk(file, (uint8*)s6Info);
+			sawyercoding_read_chunk(file, (uint8*)info);
 			fclose(file);
 			RCT2_GLOBAL(0x009AA00C, uint8) = 0;
 
 			// Checks for a scenario string object (possibly for localisation)
-			if ((s6Info->entry.flags & 0xFF) != 255) {
-				if (object_get_scenario_text(&s6Info->entry)) {
+			if ((info->entry.flags & 0xFF) != 255) {
+				if (object_get_scenario_text(&info->entry)) {
 					int ebp = RCT2_GLOBAL(0x009ADAF8, uint32);
-					format_string(s6Info->name, RCT2_GLOBAL(ebp, sint16), NULL);
-					format_string(s6Info->details, RCT2_GLOBAL(ebp + 4, sint16), NULL);
+					format_string(info->name, RCT2_GLOBAL(ebp, sint16), NULL);
+					format_string(info->details, RCT2_GLOBAL(ebp + 4, sint16), NULL);
 					RCT2_GLOBAL(0x009AA00C, uint8) = RCT2_GLOBAL(ebp + 6, uint8);
 					object_free_scenario_text();
 				}
@@ -83,7 +79,7 @@ int scenario_load_basic(const char *path)
  *  rct2: 0x00676053
  * scenario (ebx)
  */
-void scenario_load(const char *path)
+int scenario_load(const char *path)
 {
 	FILE *file;
 	int i, j;
@@ -96,7 +92,7 @@ void scenario_load(const char *path)
 			fclose(file);
 			RCT2_GLOBAL(0x009AC31B, uint8) = 255;
 			RCT2_GLOBAL(0x009AC31C, uint16) = STR_FILE_CONTAINS_INVALID_DATA;
-			return;
+			return 0;
 		}
 
 		// Read first chunk
@@ -109,7 +105,7 @@ void scenario_load(const char *path)
 			if (s6Header->num_packed_objects > 0) {
 				j = 0;
 				for (i = 0; i < s6Header->num_packed_objects; i++)
-					j += object_load_packed();
+					j += object_load_packed(file);
 				if (j > 0)
 					object_list_load();
 			}
@@ -158,7 +154,7 @@ void scenario_load(const char *path)
 			RCT2_CALLPROC_EBPSAFE(0x006A9FC0);
 			map_update_tile_pointers();
 			reset_0x69EBE4();// RCT2_CALLPROC_EBPSAFE(0x0069EBE4);
-			return;
+			return 1;
 		}
 
 		fclose(file);
@@ -166,6 +162,7 @@ void scenario_load(const char *path)
 
 	RCT2_GLOBAL(0x009AC31B, uint8) = 255;
 	RCT2_GLOBAL(0x009AC31C, uint16) = STR_FILE_CONTAINS_INVALID_DATA;
+	return 0;
 }
 
 /**
@@ -173,7 +170,15 @@ void scenario_load(const char *path)
  *  rct2: 0x00678282
  * scenario (ebx)
  */
-void scenario_load_and_play(const rct_scenario_basic *scenario)
+int scenario_load_and_play(const rct_scenario_basic *scenario)
+{
+	char path[MAX_PATH];
+
+	subsitute_path(path, RCT2_ADDRESS(RCT2_ADDRESS_SCENARIOS_PATH, char), scenario->path);
+	return scenario_load_and_play_from_path(path);
+}
+
+int scenario_load_and_play_from_path(const char *path)
 {
 	rct_window *mainWindow;
 	rct_s6_info *s6Info = (rct_s6_info*)0x0141F570;
@@ -183,14 +188,11 @@ void scenario_load_and_play(const rct_scenario_basic *scenario)
 	srand0 = RCT2_GLOBAL(RCT2_ADDRESS_SCENARIO_SRAND_0, uint32) ^ timeGetTime();
 	srand1 = RCT2_GLOBAL(RCT2_ADDRESS_SCENARIO_SRAND_1, uint32) ^ timeGetTime();
 
-	RCT2_CALLPROC_EBPSAFE(0x006CBCC3);
+	window_close_construction_windows();
 
-	subsitute_path(
-		RCT2_ADDRESS(0x0141EF68, char),
-		RCT2_ADDRESS(RCT2_ADDRESS_SCENARIOS_PATH, char),
-		scenario->path
-	);
-	scenario_load((char*)0x0141EF68);
+	if (!scenario_load(path))
+		return 0;
+
 	RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) = SCREEN_FLAGS_PLAYING;
 	viewport_init_all();
 	game_create_windows();
@@ -313,13 +315,15 @@ void scenario_load_and_play(const rct_scenario_basic *scenario)
 	gfx_invalidate_screen();
 	RCT2_GLOBAL(0x009DEA66, uint16) = 0;
 	RCT2_GLOBAL(0x009DEA5C, uint16) = 62000; // (doesn't appear to ever be read)
+
+	return 1;
 }
 
 
 void scenario_end()
 {
 	rct_window* w;
-	window_close_by_id(WC_DROPDOWN, 0);
+	window_close_by_class(WC_DROPDOWN);
 	
 	for (w = g_window_list; w < RCT2_GLOBAL(RCT2_ADDRESS_NEW_WINDOW_PTR, rct_window*); w++){
 		if (!(w->flags & (WF_STICK_TO_BACK | WF_STICK_TO_FRONT)))
@@ -580,7 +584,7 @@ void scenario_update()
 			scenario_objectives_check();
 		}
 
-		window_invalidate_by_id(WC_BOTTOM_TOOLBAR, 0);
+		window_invalidate_by_class(WC_BOTTOM_TOOLBAR);
 	}
 
 	

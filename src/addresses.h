@@ -41,16 +41,30 @@
 #define RCT2_CALLPROC_4(address, a1, a2, a3, a4, v1, v2, v3, v4)			RCT2_CALLFUNC_4(address, void, a1, a2, a3, a4, v1, v2, v3, v4)
 #define RCT2_CALLPROC_5(address, a1, a2, a3, a4, a5, v1, v2, v3, v4, v5)	RCT2_CALLFUNC_5(address, void, a1, a2, a3, a4, a5, v1, v2, v3, v4, v5)
 
+#pragma region Memory locations
+
+// The following memory locations represent memory in RCT2 that is still used
+// by OpenRCT2. Only when the memory is no longer needed due to them being
+// stored in a new C module or changed behaviour of code that used them.
+// This generally can happen once all functions that referenced the location
+// are implemented in C. Sometimes memory locations are still used even if
+// they aren't directly referenced, for example when a game is saved and
+// loaded, large chunks of data is read and written to.
+
 #define RCT2_ADDRESS_EASTEREGG_NAMES				0x00988C20
 
 #define RCT2_ADDRESS_RIDE_PROPERTIES				0x00997C9D
 #define RCT2_ADDRESS_LAND_TOOL_SIZE					0x009A9800
 #define RCT2_ADDRESS_SAVE_PROMPT_MODE				0x009A9802
 
+#define RCT2_ADDRESS_MAP_TOOLTIP_ARGS				0x009A9808
+
 // #define RCT2_ADDRESS_SCENARIO_LIST				0x009A9FF4
 // #define RCT2_ADDRESS_NUM_SCENARIOS				0x009AA008
 
 #define RCT2_ADDRESS_APP_PATH						0x009AA214
+
+#define RCT2_ADDRESS_DSOUND_GUID					0x009AAC5D
 
 #define RCT2_ADDRESS_CONFIG_SOUND_SW_BUFFER			0x009AAC6E
 #define RCT2_ADDRESS_CONFIG_MUSIC					0x009AAC72
@@ -115,6 +129,7 @@
 
 #define RCT2_ADDRESS_VEHICLE_SOUND_LIST				0x009AF288
 
+#define RCT2_ADDRESS_INPUT_FLAGS					0x009DE518
 #define RCT2_ADDRESS_CURENT_CURSOR					0x009DE51C
 #define RCT2_ADDRESS_INPUT_STATE					0x009DE51D
 #define RCT2_ADDRESS_CURSOR_DOWN_WINDOWCLASS		0x009DE51F
@@ -166,7 +181,7 @@
 #define RCT2_ADDRESS_DSOUND_BUFFERS					0x009E1AB0
 #define RCT2_ADDRESS_NUM_DSOUND_DEVICES				0x009E2B88
 #define RCT2_ADDRESS_DSOUND_DEVICES					0x009E2B8C
-#define RCT2_ADDRESS_SOUND_INFO_LIST_MAPPING		0x009E2B94
+#define RCT2_ADDRESS_SOUND_EFFECTS_MAPPING			0x009E2B94
 #define RCT2_ADDRESS_SOUNDLIST_BEGIN				0x009E2B98
 #define RCT2_ADDRESS_SOUNDLIST_END					0x009E2B9C
 #define RCT2_ADDRESS_DIRECTSOUND					0x009E2BA0
@@ -216,6 +231,8 @@
 #define RCT2_ADDRESS_CONSTRUCT_PATH_FROM_Y			0x00F3EF8C
 #define RCT2_ADDRESS_CONSTRUCT_PATH_FROM_Z			0x00F3EF8E
 #define RCT2_ADDRESS_CONSTRUCT_PATH_DIRECTION		0x00F3EF90
+
+#define RCT2_ADDRESS_VOLUME_ADJUST_ZOOM				0x00F438AC
 
 #define RCT2_ADDRESS_STAFF_HIGHLIGHTED_INDEX		0x00F43908
 
@@ -281,6 +298,11 @@
 #define RCT2_ADDRESS_SECURITY_COLOUR				0x01357BCF
 
 #define RCT2_ADDRESS_ACTIVE_RESEARCH_TYPES			0x01357CF2
+#define RCT2_ADDRESS_RESEARH_PROGRESS_STAGE			0x01357CF3
+
+#define RCT2_ADDRESS_NEXT_RESEARCH_ITEM				0x013580E0
+#define RCT2_ADDRESS_RESEARH_PROGRESS				0x013580E4
+#define RCT2_ADDRESS_NEXT_RESEARCH_CATEGORY			0x013580E6
 #define RCT2_ADDRESS_NEXT_RESEARCH_EXPECTED_DAY		0x013580E7
 #define RCT2_ADDRESS_NEXT_RESEARCH_EXPECTED_MONTH	0x013580E8
 
@@ -289,6 +311,8 @@
 #define RCT2_ADDRESS_PARK_SIZE						0x013580EA
 
 #define RCT2_TOTAL_RIDE_VALUE						0x013580EE
+
+#define RCT2_RESEARCH_ITEMS							0x01358844
 
 #define RCT2_ADDRESS_SCENARIO_NAME					0x0135920A
 #define RCT2_ADDRESS_SCENARIO_DETAILS				0x0135924A
@@ -429,6 +453,24 @@
 
 #define RCT2_ADDRESS_STAFF_MODE_ARRAY               0x013CA672
 
+#pragma endregion
+
+#pragma region Obsolete
+
+// The following addresses relate to memory locations that no longer used by
+// OpenRCT2. This may be due to the data at those locations being stored in
+// the new C modules or changed behaviour of code that used them.
+
+#define RCT2_ADDRESS_Y_RELATED_GLOBAL_1				0x9E3D12	//uint16
+#define RCT2_ADDRESS_Y_END_POINT_GLOBAL				0x9ABDAC	//sint16
+#define RCT2_ADDRESS_Y_START_POINT_GLOBAL			0xEDF808	//sint16
+#define RCT2_ADDRESS_X_RELATED_GLOBAL_1				0x9E3D10	//uint16
+#define RCT2_ADDRESS_X_END_POINT_GLOBAL				0x9ABDA8	//sint16
+#define RCT2_ADDRESS_X_START_POINT_GLOBAL			0xEDF80C	//sint16
+#define RCT2_ADDRESS_DPI_LINE_LENGTH_GLOBAL			0x9ABDB0	//uint16 width+pitch
+
+#pragma endregion
+
 static void RCT2_CALLPROC_EBPSAFE(int address)
 {
 	#ifdef _MSC_VER
@@ -444,10 +486,22 @@ static void RCT2_CALLPROC_EBPSAFE(int address)
 	#endif
 }
 
+/* Returns the flags register
+ *
+ *Flags register is as follows:
+ *0bSZ0A_0P0C_0000_00000
+ *S = Signed flag
+ *Z = Zero flag
+ *C = Carry flag
+ *A = Adjust flag
+ *P = Parity flag
+ *All other bits are undefined.
+ */
 static int RCT2_CALLPROC_X(int address, int _eax, int _ebx, int _ecx, int _edx, int _esi, int _edi, int _ebp)
 {
 	#ifdef _MSC_VER
 	__asm {
+		push ebp
 		push address
 		mov eax, _eax
 		mov ebx, _ebx
@@ -458,7 +512,8 @@ static int RCT2_CALLPROC_X(int address, int _eax, int _ebx, int _ecx, int _edx, 
 		mov ebp, _ebp
 		call [esp]
 		lahf
-		add esp, 4
+		pop ebp
+		pop ebp
 	}
 	#else
 	__asm__ ( "\
@@ -526,13 +581,24 @@ static void RCT2_CALLPROC_X_EBPSAFE(int address, int _eax, int _ebx, int _ecx, i
 	#endif
 }
 
-static void RCT2_CALLFUNC_X(int address, int *_eax, int *_ebx, int *_ecx, int *_edx, int *_esi, int *_edi, int *_ebp)
+/* Returns the flags register
+ *
+ *Flags register is as follows:
+ *0bSZ0A_0P0C_0000_00000
+ *S = Signed flag
+ *Z = Zero flag
+ *C = Carry flag
+ *A = Adjust flag
+ *P = Parity flag
+ *All other bits are undefined.
+ */
+static int RCT2_CALLFUNC_X(int address, int *_eax, int *_ebx, int *_ecx, int *_edx, int *_esi, int *_edi, int *_ebp)
 {
 	#ifdef _MSC_VER
 	__asm {
 		// Store C's base pointer
 		push ebp
-
+		push ebx
 		// Store address to call
 		push address
 
@@ -554,29 +620,16 @@ static void RCT2_CALLFUNC_X(int address, int *_eax, int *_ebx, int *_ecx, int *_
 
 		// Call function
 		call [esp]
-		add esp, 4
-
+		
 		// Store output eax
 		push eax
-		
-		// Put original C base pointer into eax
-		mov eax, [esp+4]
-
-		// Store output ebp
 		push ebp
-
-		// Set ebp to the original C base pointer
-		mov ebp, eax
-
-		// Put output ebp into ebp parameter
-		mov eax, [esp]
 		push ebx
-		mov ebx, [_ebp]
-		mov [ebx], eax
-		pop ebx
-		add esp, 4
+		mov ebp, [esp + 20]
+		mov ebx, [esp + 16]
 
-		// Get resulting ebx, ecx, edx, esi, edi registers
+		// Get resulting ecx, edx, esi, edi registers
+
 		mov eax, [_edi]
 		mov [eax], edi
 		mov eax, [_esi]
@@ -585,85 +638,96 @@ static void RCT2_CALLFUNC_X(int address, int *_eax, int *_ebx, int *_ecx, int *_
 		mov [eax], edx
 		mov eax, [_ecx]
 		mov [eax], ecx
+
+		// Pop ebx reg into ecx
+		pop ecx		
 		mov eax, [_ebx]
-		mov [eax], ebx
+		mov[eax], ecx
+
+		// Pop ebp reg into ecx
+		pop ecx
+		mov eax, [_ebp]
+		mov[eax], ecx
+
 		pop eax
-
 		// Get resulting eax register
-		mov ebx, [_eax]
-		mov [ebx], eax
+		mov ecx, [_eax]
+		mov [ecx], eax
 
-		add esp, 4
+		// Save flags as return in eax
+		lahf
+		// Pop address
+		pop ebp
+		
+		pop ebx
+		pop ebp
 	}
 	#else
 	__asm__ ( "\
-	\n\
-		/* Store C's base pointer*/ 	\n\
-		push ebx 	\n\
-		push ebp 	\n\
-	\n\
-		/* Store %[address] to call*/ 	\n\
-		push %[address] 	\n\
-	\n\
-		/* Set all registers to the input values*/ 	\n\
-		mov eax, [%[_eax]] 	\n\
-		mov eax, [eax] 	\n\
-		mov ebx, [%[_ebx]] 	\n\
-		mov ebx, [ebx] 	\n\
-		mov ecx, [%[_ecx]] 	\n\
-		mov ecx, [ecx] 	\n\
-		mov edx, [%[_edx]] 	\n\
-		mov edx, [edx] 	\n\
-		mov esi, [%[_esi]] 	\n\
-		mov esi, [esi] 	\n\
-		mov edi, [%[_edi]] 	\n\
-		mov edi, [edi] 	\n\
-		mov ebp, [%[_ebp]] 	\n\
-		mov ebp, [ebp] 	\n\
-	\n\
-		/* Call function*/ 	\n\
-		call [esp] 	\n\
-		add esp, 4 	\n\
-	\n\
-		/* Store output eax*/ 	\n\
-		push eax 	\n\
-			\n\
-		/* Put original C base pointer into eax*/ 	\n\
-		mov eax, [esp+4] 	\n\
-	\n\
-		/* Store output ebp*/ 	\n\
-		push ebp 	\n\
-	\n\
-		/* Set ebp to the original C base pointer*/ 	\n\
-		mov ebp, eax 	\n\
-	\n\
-		/* Put output ebp into ebp parameter*/ 	\n\
-		mov eax, [esp] 	\n\
-		push ebx 	\n\
-		mov ebx, [%[_ebp]] 	\n\
-		mov [ebx], eax 	\n\
-		pop ebx 	\n\
-		add esp, 4 	\n\
-	\n\
-		/* Get resulting ebx, ecx, edx, esi, edi registers*/ 	\n\
-		mov eax, [%[_edi]] 	\n\
-		mov [eax], edi 	\n\
-		mov eax, [%[_esi]] 	\n\
-		mov [eax], esi 	\n\
-		mov eax, [%[_edx]] 	\n\
-		mov [eax], edx 	\n\
-		mov eax, [%[_ecx]] 	\n\
-		mov [eax], ecx 	\n\
-		mov eax, [%[_ebx]] 	\n\
-		mov [eax], ebx 	\n\
-		pop eax 	\n\
-	\n\
-		/* Get resulting eax register*/ 	\n\
-		mov ebx, [%[_eax]] 	\n\
-		mov [ebx], eax 	\n\
-	\n\
-		add esp, 4 	\n\
-		pop ebx 	\n\
+	       \n\
+                /* Store C's base pointer*/     \n\
+                push ebx        \n\
+                push ebp        \n\
+        \n\
+                /* Store %[address] to call*/   \n\
+                push %[address]         \n\
+        \n\
+                /* Set all registers to the input values*/      \n\
+                mov eax, [%[_eax]]      \n\
+                mov eax, [eax]  \n\
+                mov ebx, [%[_ebx]]      \n\
+                mov ebx, [ebx]  \n\
+                mov ecx, [%[_ecx]]      \n\
+                mov ecx, [ecx]  \n\
+                mov edx, [%[_edx]]      \n\
+                mov edx, [edx]  \n\
+                mov esi, [%[_esi]]      \n\
+                mov esi, [esi]  \n\
+                mov edi, [%[_edi]]      \n\
+                mov edi, [edi]  \n\
+                mov ebp, [%[_ebp]]      \n\
+                mov ebp, [ebp]  \n\
+        \n\
+                /* Call function*/      \n\
+                call [esp]      \n\
+        \n\
+				/* Store output eax */ \n\
+				push eax \n\
+				push ebp \n\
+				push ebx \n\
+				mov ebp, [esp + 20] \n\
+				mov ebx, [esp + 16] \n\
+                /* Get resulting ecx, edx, esi, edi registers*/       \n\
+                mov eax, [%[_edi]]      \n\
+                mov [eax], edi  \n\
+                mov eax, [%[_esi]]      \n\
+                mov [eax], esi  \n\
+                mov eax, [%[_edx]]      \n\
+                mov [eax], edx  \n\
+                mov eax, [%[_ecx]]      \n\
+                mov [eax], ecx  \n\
+				/* Pop ebx reg into ecx*/ \n\
+				pop ecx		\n\
+				mov eax, [%[_ebx]] \n\
+				mov [eax], ecx \n\
+				\n\
+				/* Pop ebp reg into ecx */\n\
+				pop ecx \n\
+				mov eax, [%[_ebp]] \n\
+				mov [eax], ecx \n\
+				\n\
+				pop eax \n\
+				/* Get resulting eax register*/ \n\
+				mov ecx, [%[_eax]] \n\
+				mov [ecx], eax \n\
+				\n\
+				/* Save flags as return in eax*/  \n\
+				lahf \n\
+				/* Pop address*/ \n\
+				pop ebp \n\
+				\n\
+				pop ebx \n\
+				pop ebp \n\
 	 " : [address] "+m" (address), [_eax] "+m" (_eax), [_ebx] "+m" (_ebx), [_ecx] "+m" (_ecx), [_edx] "+m" (_edx), [_esi] "+m" (_esi), [_edi] "+m" (_edi), [_ebp] "+m" (_ebp) 
 		:
 		: "eax","ecx","edx","esi","edi"
