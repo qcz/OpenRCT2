@@ -23,14 +23,14 @@
 #include "../game.h"
 #include "../input.h"
 #include "../sprites.h"
-#include "../localisation/localisation.h"
-#include "toolbar.h"
+#include "../toolbar.h"
+#include "../audio/audio.h"
 #include "../interface/widget.h"
 #include "../interface/window.h"
-#include "dropdown.h"
 #include "../interface/viewport.h"
+#include "../localisation/localisation.h"
+#include "dropdown.h"
 #include "scenery.h"
-#include "../audio/audio.h"
 
 enum {
 	WIDX_PAUSE,

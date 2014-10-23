@@ -19,14 +19,14 @@
 *****************************************************************************/
 
 #include <stdbool.h>
-#include "addresses.h"
-#include "editor.h"
-#include "sprites.h"
-#include "string_ids.h"
-#include "viewport.h"
-#include "widget.h"
-#include "window.h"
-#include "window_error.h"
+#include "../addresses.h"
+#include "../editor.h"
+#include "../sprites.h"
+#include "../localisation/string_ids.h"
+#include "../interface/viewport.h"
+#include "../interface/widget.h"
+#include "../interface/window.h"
+#include "error.h"
 
 enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 	WIDX_PREVIOUS_IMAGE,		// 1
@@ -225,7 +225,7 @@ bool sub_6AB9B8(int* widgetIndex) {
 *  rct2: 0x006AB1CE
 */
 bool sub_6AB1CE() {
-	rct_window* optionsWindow = window_find_by_id(WC_EDITOR_OBJECT_SELECTION);
+	rct_window* optionsWindow = window_find_by_class(WC_EDITOR_OBJECT_SELECTION);
 	int widgetIndex = 0;
 
 	if (sub_6AB9B8(&widgetIndex)) {

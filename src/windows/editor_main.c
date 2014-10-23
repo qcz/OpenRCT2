@@ -18,10 +18,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
-#include "addresses.h"
-#include "viewport.h"
-#include "widget.h"
-#include "window.h"
+#include "../addresses.h"
+#include "../interface/viewport.h"
+#include "../interface/widget.h"
+#include "../interface/window.h"
 
 static void window_editor_main_emptysub() { }
 

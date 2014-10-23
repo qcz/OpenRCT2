@@ -21,8 +21,8 @@
 #ifndef _TOOLBAR_H_
 #define _TOOLBAR_H_
 
-#include "window.h"
-#include "widget.h"
+#include "interface/window.h"
+#include "interface/widget.h"
 
 typedef enum {
 	DDIDX_UNDERGROUND_INSIDE = 0,

@@ -18,16 +18,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
-#include "addresses.h"
-#include "string_ids.h"
-#include "sprites.h"
-#include "game.h"
-#include "editor.h"
-#include "toolbar.h"
-#include "viewport.h"
-#include "widget.h"
-#include "window.h"
-#include "window_dropdown.h"
+#include "../addresses.h"
+#include "../localisation/string_ids.h"
+#include "../sprites.h"
+#include "../game.h"
+#include "../editor.h"
+#include "../toolbar.h"
+#include "../interface/viewport.h"
+#include "../interface/widget.h"
+#include "../interface/window.h"
+#include "dropdown.h"
 
 enum WINDOW_EDITOR_TOP_TOOLBAR_WIDGET_IDX {
 	WIDX_PAUSE,					// 0, 1
@@ -288,8 +288,8 @@ void window_editor_top_toolbar_dropdown() {
 			} else if (dropdownIndex == DDIDX_TD_SCREENSHOT) {
 				RCT2_GLOBAL(RCT2_ADDRESS_SCREENSHOT_COUNTDOWN, sint8) = 10;
 			} else if (dropdownIndex == DDIDX_TD_QUIT_GAME) {
-				window_close_by_id(WC_2F, w->number);
-				window_close_by_id(WC_30, w->number);
+				window_close_by_number(WC_47, w->number);
+				window_close_by_number(WC_48, w->number);
 				game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 1, 0);
 			}
 		} else {
@@ -304,8 +304,8 @@ void window_editor_top_toolbar_dropdown() {
 			} else if (dropdownIndex == DDIDX_SE_SCREENSHOT) {
 				RCT2_GLOBAL(RCT2_ADDRESS_SCREENSHOT_COUNTDOWN, sint8) = 10;
 			} else if (dropdownIndex == DDIDX_SE_QUIT_GAME) {
-				window_close_by_id(WC_2F, w->number);
-				window_close_by_id(WC_30, w->number);
+				window_close_by_number(WC_47, w->number);
+				window_close_by_number(WC_48, w->number);
 				game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 1, 0);
 			}
 		}
@@ -386,7 +386,7 @@ void window_editor_top_toolbar_invalidate()
 		window_editor_top_toolbar_widgets[WIDX_CONSTRUCT_RIDE].type = WWT_TRNBTN;
 	}
 
-	if (window_find_by_id(0x94, 0) == NULL)
+	if (window_find_by_class(0x94) == NULL)
 		w->pressed_widgets &= ~(1 << WIDX_PATH);
 	else
 		w->pressed_widgets |= (1 << WIDX_PATH);
