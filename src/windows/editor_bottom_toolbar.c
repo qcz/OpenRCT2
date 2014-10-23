@@ -252,7 +252,7 @@ void window_editor_bottom_toolbar_jump_forward_from_object_selection() {
 			RCT2_CALLPROC(0x006DFED0);
 			RCT2_CALLPROC(0x006DFEE4);
 			g_editor_step = EDITOR_STEP_LANDSCAPE_EDITOR;
-			RCT2_CALLPROC(0x0068C88A); // Replace with window_map_open(); when the map window is done
+			window_map_open();
 			gfx_invalidate_screen();
 		} else {
 			RCT2_GLOBAL(0x01357404, uint32) = 0xFFFFFFFF;
