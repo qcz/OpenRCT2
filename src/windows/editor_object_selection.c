@@ -50,25 +50,25 @@ enum WINDOW_STAFF_LIST_WIDGET_IDX {
 };
 
 static rct_widget window_editor_object_selection_widgets[] = {
-	{ WWT_FRAME,			0, 0, 599, 0, 399,		0xFFFFFFFF,	STR_NONE },
-	{ WWT_CAPTION,			0, 1, 598, 1, 14,		3181,		829 },
-	{ WWT_CLOSEBOX,			0, 587, 597, 2, 13,		824,		828 },
-	{ WWT_RESIZE,			1, 0, 599, 43, 399,		0xFFFFFFFF, STR_NONE },
-	{ WWT_TAB,				1, 3, 33, 17, 43,		0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 34, 64, 17, 43,		0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 65, 95, 17, 43,		0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 96, 126, 17, 43,		0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 127, 157, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 158, 188, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 189, 219, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 220, 250, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 251, 281, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 282, 312, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_TAB,				1, 313, 343, 17, 43,	0x20000000 | 5198, 1812 },
-	{ WWT_DROPDOWN_BUTTON,	0, 470, 591, 23, 34,	3364,		3365 },
-	{ WWT_SCROLL,			1, 4, 291, 46, 386,		2,			STR_NONE },
-	{ WWT_FLATBTN,			1, 391, 504, 46, 159,	0xFFFFFFFF,	STR_NONE },
-	{ WWT_DROPDOWN_BUTTON,	0, 384, 595, 24, 35,	3376,		3377 },
+	{ WWT_FRAME,			0, 0, 599, 0, 399,		0xFFFFFFFF,	STR_NONE },		// 09ADB00
+	{ WWT_CAPTION,			0, 1, 598, 1, 14,		3181,		829 },			// 09ADB10
+	{ WWT_CLOSEBOX,			0, 587, 597, 2, 13,		824,		828 },			// 09ADB20
+	{ WWT_RESIZE,			1, 0, 599, 43, 399,		0xFFFFFFFF, STR_NONE },		// 09ADB30
+	{ WWT_TAB,				1, 3, 33, 17, 43,		0x20000000 | 5198, 1812 },	// 09ADB40
+	{ WWT_TAB,				1, 34, 64, 17, 43,		0x20000000 | 5198, 1812 },	// 09ADB50
+	{ WWT_TAB,				1, 65, 95, 17, 43,		0x20000000 | 5198, 1812 },	// 09ADB60
+	{ WWT_TAB,				1, 96, 126, 17, 43,		0x20000000 | 5198, 1812 },	// 09ADB70
+	{ WWT_TAB,				1, 127, 157, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADB80
+	{ WWT_TAB,				1, 158, 188, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADB90
+	{ WWT_TAB,				1, 189, 219, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADBA0
+	{ WWT_TAB,				1, 220, 250, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADBB0
+	{ WWT_TAB,				1, 251, 281, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADBC0
+	{ WWT_TAB,				1, 282, 312, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADBD0
+	{ WWT_TAB,				1, 313, 343, 17, 43,	0x20000000 | 5198, 1812 },	// 09ADBE0
+	{ WWT_DROPDOWN_BUTTON,	0, 470, 591, 23, 34,	3364,		3365 },			// 09ADBF0
+	{ WWT_SCROLL,			1, 4, 291, 46, 386,		2,			STR_NONE },		// 09ADC00
+	{ WWT_FLATBTN,			1, 391, 504, 46, 159,	0xFFFFFFFF,	STR_NONE },		// 09ADC10
+	{ WWT_DROPDOWN_BUTTON,	0, 384, 595, 24, 35,	3376,		3377 },			// 09ADC20
 	{ WIDGETS_END },
 };
 
@@ -76,6 +76,11 @@ static void window_editor_object_selection_emptysub() { }
 
 static void window_editor_object_selection_close();
 static void window_editor_object_selection_mouseup();
+static void window_editor_object_selection_scrollgetsize();
+static void window_editor_object_selection_scrollmousedown();
+static void window_editor_object_selection_scrollmouseover();
+static void window_editor_object_selection_tooltip();
+static void window_editor_object_selection_invalidate();
 static void window_editor_object_selection_paint();
 static void window_editor_object_selection_scrollpaint();
 
@@ -95,17 +100,17 @@ static void* window_editor_object_selection_events[] = {
 	window_editor_object_selection_emptysub,
 	window_editor_object_selection_emptysub,
 	window_editor_object_selection_emptysub,
-	0x006ab031, // scrollgetsize
-	0x006ab0b6, // scrollmousedown
+	window_editor_object_selection_scrollgetsize, //0x006ab031, // scrollgetsize
+	window_editor_object_selection_scrollmousedown, //0x006ab0b6, // scrollmousedown
 	window_editor_object_selection_emptysub,
-	0x006ab079, // scrollmouseup
-	window_editor_object_selection_emptysub,
-	window_editor_object_selection_emptysub,
-	window_editor_object_selection_emptysub,
-	0x006ab058, // tooltip
+	window_editor_object_selection_scrollmouseover, //0x006ab079, // scrollmouseover
 	window_editor_object_selection_emptysub,
 	window_editor_object_selection_emptysub,
-	0x006aa9fd, // invalidate
+	window_editor_object_selection_emptysub,
+	window_editor_object_selection_tooltip, //0x006ab058, // tooltip
+	window_editor_object_selection_emptysub,
+	window_editor_object_selection_emptysub,
+	window_editor_object_selection_invalidate, //0x006aa9fd, // invalidate
 	window_editor_object_selection_paint, //0x006aab56, // paint
 	window_editor_object_selection_scrollpaint, //0x006aada3, // scrollpaint
 };
@@ -212,6 +217,147 @@ void window_editor_object_selection_mouseup() {
 
 		break;
 	}
+}
+
+/**
+*
+*  rct2: 0x006ab031
+*/
+void window_editor_object_selection_scrollgetsize() {
+	rct_window *w;
+
+	window_get_register(w);
+
+int scrollHeight = 0;
+
+if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
+	(SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+	scrollHeight = RCT2_GLOBAL(0x00F43412, uint16) * 12;
+} else {
+	scrollHeight = RCT2_ADDRESS(0x00F433E1, uint16)[w->selected_tab] * 12;
+}
+
+#ifdef _MSC_VER
+__asm mov edx, scrollHeight
+#else
+__asm__("mov edx, %[scrollHeight] " : [scrollHeight] "+m" (scrollHeight));
+#endif
+}
+
+/**
+*
+*  rct2: 0x006ab0b6
+*/
+void window_editor_object_selection_scrollmousedown() {
+	short x, y;
+	rct_window *w;
+
+	window_scrollmouse_get_registers(w, x, y);
+}
+
+/**
+*
+*  rct2: 0x006ab079
+*/
+void window_editor_object_selection_scrollmouseover() {
+	short x, y;
+	rct_window *w;
+
+	window_scrollmouse_get_registers(w, x, y);
+}
+
+/**
+*
+*  rct2: 0x006AB058
+*/
+void window_editor_object_selection_tooltip() {
+	uint16 tooltipIndex;
+
+#ifdef _MSC_VER
+	__asm mov tooltipIndex, ax
+#else
+	__asm__("mov %[tooltipIndex], ax " : [tooltipIndex] "+m" (tooltipIndex));
+#endif
+
+	if (tooltipIndex >= WIDX_EDITOR_OBJECT_SELECTION_TAB_1 &&
+		tooltipIndex <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11) {
+		RCT2_GLOBAL(0x013CE952, uint16) = tooltipIndex - 4 + 0xC70;
+	} else {
+		RCT2_GLOBAL(0x013CE952, uint16) = STR_LIST;
+	}
+}
+
+/**
+*
+*  rct2: 0x006aa9fd
+*/
+void window_editor_object_selection_invalidate() {
+	rct_window* w;
+
+	window_get_register(w);
+
+	int selectedTab = w->selected_tab;
+
+	w->pressed_widgets |= (1 << WIDX_EDITOR_OBJECT_SELECTION_FLATBTN);
+	uint32 pw = w->pressed_widgets & 0xFFFF800F;
+	pw |= (1 << (selectedTab + 4));
+	pw &= ~(1 << WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1);
+	if (w->list_information_type == 1)
+		pw |= (1 << WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1);
+	w->pressed_widgets = pw;
+
+	RCT2_GLOBAL(0x013CE952, uint16) = 0xC70 + selectedTab;
+
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN2].type = WWT_EMPTY;
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_TITLE].image = 0xC6D;
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER) {
+		window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_TITLE].image = 0xD07;
+	}
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
+		window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_TITLE].image = 0xD08;
+		window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN2].type = WWT_DROPDOWN_BUTTON;
+	}
+	
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_CLOSE].type = WWT_CLOSEBOX;
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
+		(SCREEN_FLAGS_SCENARIO_EDITOR | SCREEN_FLAGS_TRACK_MANAGER)) {
+		window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_CLOSE].type = WWT_EMPTY;
+	}
+
+	int left = 3;
+	for (int i = WIDX_EDITOR_OBJECT_SELECTION_TAB_1; i <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11; i++) {
+		int tabIndex = i - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
+
+		if (!w->list_information_type && ((tabIndex >= 1 && tabIndex <= 4) || tabIndex != 6)) {
+			window_editor_object_selection_widgets[i].type = WWT_EMPTY;
+		} else {
+			window_editor_object_selection_widgets[i].type = WWT_TAB;
+			window_editor_object_selection_widgets[i].left = left;
+			window_editor_object_selection_widgets[i].right = left + 30;
+			left += 31;
+		}
+	}
+
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1].type = WWT_DROPDOWN_BUTTON;
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
+		(SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+		
+		for (int i = WIDX_EDITOR_OBJECT_SELECTION_TAB_2; i <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11; i++)
+			window_editor_object_selection_widgets[i].type = WWT_EMPTY;
+
+		window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1].type = WWT_EMPTY;
+	}
+
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_TAB_11].type = WWT_EMPTY;
+	int dx = 300;
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
+		(SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER))) {
+		dx = 150;
+	}
+
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_LIST].right = 587 - dx;
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_FLATBTN].left = -(dx / 2) + 537;
+	window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_FLATBTN].right = -(dx / 2) + 537 + 113;
 }
 
 /**
