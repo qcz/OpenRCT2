@@ -399,7 +399,6 @@ static int editor_read_s6(const char *path)
 	return 1;
 }
 
-
 /**
 *
 *  rct2: 0x0067009A
@@ -418,9 +417,10 @@ void editor_open_windows_for_current_step() {
 
 		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
 			object_unload_all();
-		} 
+		}
 
-		RCT2_CALLPROC_EBPSAFE(0x006AA64E); // window_editor_object_selection_open();
+		window_editor_object_selection_open();
+		//RCT2_CALLPROC_EBPSAFE(0x006AA64E); // window_editor_object_selection_open();
 		break;
 	case EDITOR_STEP_INVENTIONS_LIST_SET_UP:
 		if (window_find_by_class(WC_EDITOR_INVENTION_LIST))
