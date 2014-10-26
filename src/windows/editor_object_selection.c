@@ -19,32 +19,34 @@
 *****************************************************************************/
 
 #include "../addresses.h"
-#include "../localisation/string_ids.h"
+#include "../game.h"
+#include "../object.h"
 #include "../sprites.h"
+#include "../localisation/string_ids.h"
 #include "../interface/viewport.h"
 #include "../interface/widget.h"
 #include "../interface/window.h"
 
 enum WINDOW_STAFF_LIST_WIDGET_IDX {
-	WIDX_EDITOR_OBJECT_SELECTION_BACKGROUND,			// 1
-	WIDX_EDITOR_OBJECT_SELECTION_TITLE,					// 2
-	WIDX_EDITOR_OBJECT_SELECTION_CLOSE,					// 4
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_CONTENT_PANEL,		// 8
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_1,					// 10
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_2,					// 20
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_3,					// 40
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_4,					// 80
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_5,					// 100
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_6,					// 200
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_7,					// 400
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_8,					// 800
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_9,					// 1000
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_10,				// 2000
-	WIDX_EDITOR_OBJECT_SELECTION_TAB_11,				// 4000
-	WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1,				// 8000
-	WIDX_EDITOR_OBJECT_SELECTION_LIST,					// 10000
-	WIDX_EDITOR_OBJECT_SELECTION_FLATBTN,				// 20000
-	WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN2,				// 40000
+	WIDX_EDITOR_OBJECT_SELECTION_BACKGROUND,			// 0, 1
+	WIDX_EDITOR_OBJECT_SELECTION_TITLE,					// 1, 2
+	WIDX_EDITOR_OBJECT_SELECTION_CLOSE,					// 2, 4
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_CONTENT_PANEL,		// 3, 8
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_1,					// 4, 10
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_2,					// 5, 20
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_3,					// 6, 40
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_4,					// 7, 80
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_5,					// 8, 100
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_6,					// 9, 200
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_7,					// 10, 400
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_8,					// 11, 800
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_9,					// 12, 1000
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_10,				// 13, 2000
+	WIDX_EDITOR_OBJECT_SELECTION_TAB_11,				// 14, 4000
+	WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1,				// 15, 8000
+	WIDX_EDITOR_OBJECT_SELECTION_LIST,					// 16, 10000
+	WIDX_EDITOR_OBJECT_SELECTION_FLATBTN,				// 17, 20000
+	WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN2,				// 18, 40000
 };
 
 static rct_widget window_editor_object_selection_widgets[] = {
@@ -72,12 +74,14 @@ static rct_widget window_editor_object_selection_widgets[] = {
 
 static void window_editor_object_selection_emptysub() { }
 
+static void window_editor_object_selection_close();
+static void window_editor_object_selection_mouseup();
 static void window_editor_object_selection_paint();
 static void window_editor_object_selection_scrollpaint();
 
 static void* window_editor_object_selection_events[] = {
-	0x006ab199, // close
-	0x006aafab, // mouseup
+	window_editor_object_selection_close, //0x006ab199, // close
+	window_editor_object_selection_mouseup, //0x006aafab, // mouseup
 	window_editor_object_selection_emptysub,
 	window_editor_object_selection_emptysub,
 	window_editor_object_selection_emptysub,
@@ -141,6 +145,73 @@ void window_editor_object_selection_open() {
 	window->colours[0] = 4;
 	window->colours[1] = 1;
 	window->colours[2] = 1;
+}
+
+/**
+*
+*  rct2: 0x006ab199
+*/
+void window_editor_object_selection_close() {
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_EDITOR))
+		return;
+
+	RCT2_CALLPROC_EBPSAFE(0x006ABB66);
+	RCT2_CALLPROC_EBPSAFE(0x006ABBBE);
+	RCT2_CALLPROC_EBPSAFE(0x006A9FC0);
+	object_free_scenario_text();
+	RCT2_CALLPROC_EBPSAFE(0x006AB316);
+	RCT2_CALLPROC_EBPSAFE(0x00685675);
+	RCT2_CALLPROC_EBPSAFE(0x0068585B);
+	window_new_ride_init_vars();
+}
+
+/**
+*
+*  rct2: 0x006aafab
+*/
+void window_editor_object_selection_mouseup() {
+	short widgetIndex;
+	rct_window *w;
+
+	window_widget_get_registers(w, widgetIndex);
+
+	switch (widgetIndex) {
+	case WIDX_EDITOR_OBJECT_SELECTION_CLOSE:
+		game_do_command(0, 1, 0, 0, GAME_COMMAND_LOAD_OR_QUIT, 1, 0);
+		break;
+	case WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN1:
+		w->list_information_type ^= 1;
+		window_invalidate(w);
+		break;
+	case WIDX_EDITOR_OBJECT_SELECTION_DROPDOWN2:
+		if (w->selected_list_item != -1) {
+			w->selected_list_item = -1;
+			object_free_scenario_text();
+		}
+		window_invalidate(w);
+
+		int eax, ebx, ecx, edx, esi, edi, ebp;
+		RCT2_CALLFUNC_X(0x00674FCE, &eax, &ebx, &ecx, &edx, &esi, &edi, &ebp);
+		if (eax == 1) {
+			window_close(w);
+			RCT2_CALLPROC_EBPSAFE(0x006D386D);
+		}
+		break;
+	default:
+		if (widgetIndex >= WIDX_EDITOR_OBJECT_SELECTION_TAB_1 &&
+			widgetIndex <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11 &&
+			w->selected_tab != widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1)
+		{
+			w->selected_tab = widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
+			w->selected_list_item = -1;
+			w->var_494 = 0xFFFFFFFF;
+			w->scrolls[0].v_top = 0;
+			object_free_scenario_text();
+			window_invalidate(w);
+		}
+
+		break;
+	}
 }
 
 /**
