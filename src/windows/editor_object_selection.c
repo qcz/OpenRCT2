@@ -23,6 +23,7 @@
 #include "../object.h"
 #include "../sprites.h"
 #include "../localisation/string_ids.h"
+#include "../localisation/format_codes.h"
 #include "../interface/viewport.h"
 #include "../interface/widget.h"
 #include "../interface/window.h"
@@ -126,6 +127,9 @@ void window_editor_object_selection_open() {
 	if (window != NULL)
 		return;
 
+	RCT2_CALLPROC_EBPSAFE(0x006AB211);
+	RCT2_CALLPROC_EBPSAFE(0x006AA770);
+
 	int top = max(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_HEIGHT, uint16) / 2 - 200, 28);
 	int left = RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_WIDTH, uint16) / 2 - 300;
 
@@ -139,8 +143,7 @@ void window_editor_object_selection_open() {
 		(1 << WIDX_EDITOR_OBJECT_SELECTION_CLOSE);
 
 	for (int i = WIDX_EDITOR_OBJECT_SELECTION_TAB_1; i <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11; i++)
-		window->enabled_widgets |= i;
-
+		window->enabled_widgets |= (1 << i);
 	window_init_scroll_widgets(window);
 
 	window->var_4AE = 0;
@@ -202,20 +205,17 @@ void window_editor_object_selection_mouseup() {
 			RCT2_CALLPROC_EBPSAFE(0x006D386D);
 		}
 		break;
-	default:
-		if (widgetIndex >= WIDX_EDITOR_OBJECT_SELECTION_TAB_1 &&
-			widgetIndex <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11 &&
-			w->selected_tab != widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1)
-		{
-			w->selected_tab = widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
-			w->selected_list_item = -1;
-			w->var_494 = 0xFFFFFFFF;
-			w->scrolls[0].v_top = 0;
-			object_free_scenario_text();
-			window_invalidate(w);
-		}
+	}
 
-		break;
+	if (widgetIndex >= WIDX_EDITOR_OBJECT_SELECTION_TAB_1 &&
+		widgetIndex <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11 &&
+		w->selected_tab != widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1) {
+		w->selected_tab = widgetIndex - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
+		w->selected_list_item = -1;
+		w->var_494 = 0xFFFFFFFF;
+		w->scrolls[0].v_top = 0;
+		object_free_scenario_text();
+		window_invalidate(w);
 	}
 }
 
@@ -228,20 +228,50 @@ void window_editor_object_selection_scrollgetsize() {
 
 	window_get_register(w);
 
-int scrollHeight = 0;
+	int scrollHeight = 0;
 
-if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
-	(SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
-	scrollHeight = RCT2_GLOBAL(0x00F43412, uint16) * 12;
-} else {
-	scrollHeight = RCT2_ADDRESS(0x00F433E1, uint16)[w->selected_tab] * 12;
-}
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) &
+		(SCREEN_FLAGS_TRACK_DESIGNER | SCREEN_FLAGS_TRACK_MANAGER)) {
+		scrollHeight = RCT2_GLOBAL(0x00F43412, uint16) * 13;
+	} else {
+		scrollHeight = RCT2_ADDRESS(0x00F433E1, uint16)[w->selected_tab] * 13;
+	}
 
 #ifdef _MSC_VER
 __asm mov edx, scrollHeight
 #else
 __asm__("mov edx, %[scrollHeight] " : [scrollHeight] "+m" (scrollHeight));
 #endif
+}
+
+/**
+*
+*  rct2: 0x006AA703
+*/
+rct_object_entry* find_object_at_cursor(rct_window *w, int y, uint16* itemIndex, int* edi) {
+	uint32 objectCount = RCT2_GLOBAL(0x00F42B6C, uint32);
+
+	*edi = 0x9ADAEC;
+
+	if (objectCount == 0) {
+		// TODO
+	} else {
+		rct_object_entry* object = RCT2_GLOBAL(RCT2_ADDRESS_INSTALLED_OBJECT_LIST, rct_object_entry*);
+		for (*itemIndex = 0; *itemIndex < objectCount; (*itemIndex)++, object = object_get_next(object), (*edi)++) {
+			if ((object->flags & 0x0F) != w->selected_tab ||
+				(RCT2_GLOBAL(*edi, uint8) & 0x20))
+				continue;
+
+			y -= 13;
+
+			if (y < 0)
+				return object;
+		}
+
+		*itemIndex = 0xFFFF;
+	}
+
+	return NULL;
 }
 
 /**
@@ -264,6 +294,25 @@ void window_editor_object_selection_scrollmouseover() {
 	rct_window *w;
 
 	window_scrollmouse_get_registers(w, x, y);
+
+	sint16 itemIndex;
+	int edi;
+	rct_object_entry* obj = find_object_at_cursor(w, y, &itemIndex, &edi);
+	
+	if (RCT2_GLOBAL(edi, uint8) & 0x20) {
+		itemIndex = -1;
+	}
+	
+	if (itemIndex == w->selected_list_item)
+		return;
+
+	w->selected_list_item = itemIndex;
+	w->var_494 = obj;
+	object_free_scenario_text();
+	if (itemIndex != -1) {
+		object_get_scenario_text(obj);
+	}
+	window_invalidate(w);
 }
 
 /**
@@ -328,7 +377,7 @@ void window_editor_object_selection_invalidate() {
 	for (int i = WIDX_EDITOR_OBJECT_SELECTION_TAB_1; i <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11; i++) {
 		int tabIndex = i - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
 
-		if (!w->list_information_type && ((tabIndex >= 1 && tabIndex <= 4) || tabIndex != 6)) {
+		if (!w->list_information_type && ((tabIndex >= 1 && tabIndex <= 4) || tabIndex == 6)) {
 			window_editor_object_selection_widgets[i].type = WWT_EMPTY;
 		} else {
 			window_editor_object_selection_widgets[i].type = WWT_TAB;
@@ -371,7 +420,46 @@ void window_editor_object_selection_paint() {
 	window_paint_get_registers(w, dpi);
 
 	window_draw_widgets(w, dpi);
-	// TODO
+
+	for (int i = WIDX_EDITOR_OBJECT_SELECTION_TAB_1; i <= WIDX_EDITOR_OBJECT_SELECTION_TAB_11; i++) {
+		rct_widget* currentWidget = &window_editor_object_selection_widgets[i];
+		if (currentWidget->type == WWT_EMPTY)
+			continue;
+
+		int tabIndex = i - WIDX_EDITOR_OBJECT_SELECTION_TAB_1;
+		
+		gfx_draw_sprite(dpi, 0x1552 + tabIndex, currentWidget->left + w->x, currentWidget->top + w->y, 0);
+	}
+	
+	int colour = RCT2_GLOBAL(0x0141FC44 + (w->colours[0] * 8), uint8);
+	rct_widget* flatBtn = &window_editor_object_selection_widgets[WIDX_EDITOR_OBJECT_SELECTION_FLATBTN];
+	gfx_fill_rect(dpi, flatBtn->left + w->x, flatBtn->top + w->y, flatBtn->right + w->x, flatBtn->bottom + w->y, colour);
+
+	if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
+		uint16 selectedOnTab = RCT2_ADDRESS(0x00F433F7, uint16)[w->selected_tab];
+		RCT2_GLOBAL(0x013CE952, uint16) = selectedOnTab;
+
+		uint16 maximumSelectableOnTab = object_entry_group_counts[w->selected_tab];
+		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_DESIGNER)
+			maximumSelectableOnTab = 4;
+		RCT2_GLOBAL(0x013CE952 + 2, uint16) = maximumSelectableOnTab;
+
+		gfx_draw_string_left(dpi, 0xC5C, (void*)0x013CE952, 0, w->x + 3, w->y + w->height - 12);
+	}
+
+	if (w->selected_list_item == -1)
+		return;
+	if (RCT2_GLOBAL(0x009ADAF8, uint32) == 0xFFFFFFFF)
+		return;
+
+	/*int objectText = RCT2_GLOBAL(0x009ADAF8, uint32);
+	rct_object_entry* obj = (rct_object_entry*)w->var_494;
+	object_paint(obj->flags & 0x0F, 3, obj->flags & 0x0F,
+		((flatBtn->left + flatBtn->right) / 2) + w->x,
+		((flatBtn->top + flatBtn->bottom) / 2) + w->y, 
+		(int)w, 0, RCT2_GLOBAL(0x009ADAF8, uint32));*/
+
+
 }
 
 /**
@@ -386,5 +474,75 @@ void window_editor_object_selection_scrollpaint()
 	window_paint_get_registers(w, dpi);
 
 	gfx_clear(dpi, ((char*)0x0141FC48)[w->colours[1] * 8] * 0x1010101);
-	// TODO
+
+	int esi = 0x9ADAEC;
+	int dx = 0; // height
+	uint32 objectCount = RCT2_GLOBAL(0x00F42B6C, uint32);
+	rct_object_entry* object = RCT2_GLOBAL(RCT2_ADDRESS_INSTALLED_OBJECT_LIST, rct_object_entry*);
+	for	(int itemIndex = 0;
+		itemIndex < objectCount;
+		itemIndex++, object = object_get_next(object), esi++)
+	{
+		if ((object->flags & 0x0F) != w->selected_tab)
+		//	(RCT2_GLOBAL(esi, uint8) & 0x20))
+			continue;
+
+		if (dx + 13 < dpi->y || dpi->y + dpi->height < dx) {
+			dx += 13;
+			continue;
+		}
+
+		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
+			gfx_fill_rect_inset(dpi, 2, dx, 11, dx + 10,  w->colours[1], 0xE0);
+		}
+
+		int textFormat = FORMAT_BLACK;
+
+		if (object == w->var_494) {
+			gfx_fill_rect(dpi, 0, dx, w->width, dx + 11, 0x2000031);
+			textFormat = FORMAT_WINDOW_COLOUR_2;
+		}
+
+		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) &&
+			(RCT2_GLOBAL(esi, uint8) & 1)) {
+
+			RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_FONT_SPRITE_BASE, uint16) = 224;
+
+			int colour = w->colours[1] & 0x7F;
+
+			if (object->flags & 0x1C)
+				colour |= 0x40;
+
+			gfx_draw_string(dpi, (char*)0x009DED72, colour, 2, dx);
+		}
+
+
+		char *pos = (char*)object;
+		// Skip sizeof(rct_object_entry)
+		pos += 16;
+		// Skip filename
+		do {
+			pos++;
+		} while (*(pos - 1) != 0);
+
+		pos += 4;
+				
+		uint8* text_buffer = RCT2_ADDRESS(RCT2_ADDRESS_COMMON_STRING_FORMAT_BUFFER, uint8);
+
+		if (!(RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)) {
+			text_buffer[0] = textFormat;
+			strncpy(text_buffer + 1, (char*)pos, 255);
+		} else {
+			// TODO
+		}
+
+		RCT2_GLOBAL(RCT2_ADDRESS_CURRENT_FONT_SPRITE_BASE, uint16) = 0xE0;
+		int left = 15;
+		if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER)
+			left = 0;
+		
+		gfx_draw_string(dpi, text_buffer, (w->colours[1] & 0x7F), left, dx);
+
+		dx += 13;
+	}
 }
