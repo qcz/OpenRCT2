@@ -22,6 +22,7 @@
 #include "../game.h"
 #include "../object.h"
 #include "../sprites.h"
+#include "../audio/audio.h"
 #include "../localisation/string_ids.h"
 #include "../localisation/format_codes.h"
 #include "../interface/viewport.h"
@@ -283,6 +284,31 @@ void window_editor_object_selection_scrollmousedown() {
 	rct_window *w;
 
 	window_scrollmouse_get_registers(w, x, y);
+
+	sint16 itemIndex;
+	int edi;
+	rct_object_entry* obj = find_object_at_cursor(w, y, &itemIndex, &edi);
+
+	if (itemIndex == -1)
+		return;
+
+	if (RCT2_GLOBAL(edi, uint8) & 0x20)
+		return;
+
+	window_invalidate(w);
+	int ebp = RCT2_GLOBAL(0x0142406C, int);
+	sound_play_panned(4, ebp, 0, 0, RCT2_GLOBAL(0x0142406C, int));
+
+	if (RCT2_GLOBAL(RCT2_ADDRESS_SCREEN_FLAGS, uint8) & SCREEN_FLAGS_TRACK_MANAGER) {
+		int bx = 0;
+		if (!(RCT2_GLOBAL(edi, uint8) & 1)) {
+			bx |= 1;
+		}
+		bx |= 6;
+		RCT2_GLOBAL(0xF43411, uint8) = 0;
+	} else {
+
+	}
 }
 
 /**
